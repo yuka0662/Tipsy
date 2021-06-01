@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './Top.dart';
 
 void main() => runApp(Home());
 
@@ -8,7 +9,7 @@ class Home extends StatelessWidget {
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
-        child: Scaffold(
+        child:Scaffold(
           body: Center(
             child: ChoiceCard(),
           ),
@@ -27,6 +28,7 @@ class Choice {
 }
 
 final List<Choice> choices = [
+  Choice('ホーム', Top()),
   Choice('ビール', Beer()),
   Choice('日本酒', Sake()),
   Choice('ワイン', Wine()),
@@ -38,7 +40,7 @@ final List<Choice> choices = [
   Choice('おつまみ', Snacks()),
 ];
 
-class ChoiceCard extends StatefulWidget{
+class ChoiceCard extends StatefulWidget {
   @override
   _ChoiceCardState createState() => _ChoiceCardState();
 }
@@ -48,25 +50,28 @@ class _ChoiceCardState extends State<ChoiceCard> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        appBar:TabBar(
+        resizeToAvoidBottomInset: false,
+        appBar: TabBar(
           unselectedLabelColor: Colors.grey,
           labelColor: Colors.blueAccent,
           isScrollable: true,
           tabs: choices.map((Choice choice) {
             return Tab(
-              text:choice.label,
+              text: choice.label,
             );
           }).toList(),
         ),
-        body: TabBarView(children: choices.map((tab) => tab.widget).toList()),
+        body:TabBarView(
+          children: choices.map((tab) => tab.widget).toList()
+        ),
       ),
     );
   }
 }
 
-class Beer extends StatelessWidget{
+class Beer extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -77,9 +82,9 @@ class Beer extends StatelessWidget{
   }
 }
 
-class Sake extends StatelessWidget{
+class Sake extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -90,9 +95,9 @@ class Sake extends StatelessWidget{
   }
 }
 
-class Wine extends StatelessWidget{
+class Wine extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -103,9 +108,9 @@ class Wine extends StatelessWidget{
   }
 }
 
-class Sour extends StatelessWidget{
+class Sour extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -116,9 +121,9 @@ class Sour extends StatelessWidget{
   }
 }
 
-class Whisky extends StatelessWidget{
+class Whisky extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -129,9 +134,9 @@ class Whisky extends StatelessWidget{
   }
 }
 
-class Shochu extends StatelessWidget{
+class Shochu extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -142,9 +147,9 @@ class Shochu extends StatelessWidget{
   }
 }
 
-class Liqueur extends StatelessWidget{
+class Liqueur extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -155,27 +160,285 @@ class Liqueur extends StatelessWidget{
   }
 }
 
-class Cocktail extends StatelessWidget{
+class Cocktail extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
-    return Column(
+  Widget build(BuildContext context) {
+    return ListView(
       children: <Widget>[
         Container(
-          child: Text('カクテル一覧表示！！'),
-        )
+          padding: const EdgeInsets.all(30),
+          child: Text(
+            'ベース選択',
+            style: TextStyle(
+              fontSize: 22.0,
+              letterSpacing: 5.0,
+            ),
+          ),
+        ),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(30),
+            child: Text(
+              '全体ランキング　TOP10',
+              style: TextStyle(
+                fontSize: 22.0,
+                letterSpacing: 5.0,
+              ),
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              '1.カシスオレンジ',
+              style: TextStyle(
+                fontSize: 20.0,
+                letterSpacing: 5.0,
+              ),
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              '2.カシスウーロン',
+              style: TextStyle(
+                fontSize: 20.0,
+                letterSpacing: 5.0,
+              ),
+            ),
+          )
+        ]),
       ],
     );
   }
 }
 
-class Snacks extends StatelessWidget{
+class Snacks extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
-    return Column(
+  Widget build(BuildContext context) {
+    return ListView(
       children: <Widget>[
         Container(
-          child: Text('おつまみ一覧表示！！'),
-        )
+          padding: const EdgeInsets.all(30),
+          child: Text(
+            'ジャンル選択',
+            style: TextStyle(
+              fontSize: 22.0,
+              letterSpacing: 5.0,
+            ),
+          ),
+        ),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            height: 150,
+            child: RaisedButton(
+              child: const Text(
+                '',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                ),
+              ),
+              color: Colors.blueAccent,
+              shape: const CircleBorder(
+                side: BorderSide(
+                  color: Colors.blueGrey,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(30),
+            child: Text(
+              '全体ランキング　TOP10',
+              style: TextStyle(
+                fontSize: 22.0,
+                letterSpacing: 5.0,
+              ),
+            ),
+          )
+        ]),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              '1.からあげ',
+              style: TextStyle(
+                fontSize: 20.0,
+                letterSpacing: 5.0,
+              ),
+            ),
+          )
+        ]),
       ],
     );
   }
