@@ -3,6 +3,7 @@ import './home.dart';
 import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
+import 'New_post.dart';
 
 void main() {
   runApp(MyApp());
@@ -113,7 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       body:_pageWidgets.elementAt(_currentIndex),
       floatingActionButton: FloatingActionButton(
-        //onPressed:タップ時のイベント,
+        //新規投稿ボタンのタップ時のイベント,
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => New_post(),
+              )
+            );
+        },
         tooltip: 'Increment',
         backgroundColor: Colors.grey,
         child: Icon(Icons.add),
