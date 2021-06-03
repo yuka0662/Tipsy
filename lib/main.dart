@@ -3,7 +3,7 @@ import './home.dart';
 import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
-import 'New_post.dart';
+import 'Newpost.dart';
 
 void main() {
   runApp(MyApp());
