@@ -3,7 +3,8 @@ import './home.dart';
 import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
-import 'Newpost.dart';
+import './Newpost.dart';
+import './Header.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,19 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('tipsy'),
-        backgroundColor: Colors.black,
-        leading:Icon(Icons.menu),
-        actions:<Widget> [
-          IconButton(
-            onPressed: (){
-
-            },
-            icon: Icon(Icons.search),
-          )
-        ],
-      ),
+      appBar:Bar_nav(),
       drawer: Drawer(
           child: ListView(
             children: <Widget>[
