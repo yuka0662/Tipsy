@@ -40,6 +40,14 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+
+	<!--追加-->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>requires to access photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>requires to use your camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>requires to use your microphone</string>
 	<false/>
 </dict>
 </plist>

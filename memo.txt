@@ -1,0 +1,46 @@
+import 'dartio';
+import 'packageimage_pickerimage_picker.dart';
+変数の宣言
+class _HomePageState extends StateHomePage 内部の1行目と2行目に下記の記述をし、変数の宣言を行います。
+
+File _image;
+final picker = ImagePicker();
+カメラから画像を取得
+カメラから画像を取得するメソッド(関数)を宣言します。これらは後に参照するために使います。
+
+Future getImageFromCamera() async {
+   final pickedFile = await picker.getImage(source ImageSource.camera);
+
+   setState(() {
+     _image = File(pickedFile.path);
+   });
+ }
+ギャラリーから画像を取得
+ギャラリーから画像を取得するメソッド(関数)を宣言します。
+
+Future getImageFromGallery() async {
+   final pickedFile = await picker.getImage(source ImageSource.gallery);
+
+   setState(() {
+     _image = File(pickedFile.path);
+   });
+ }
+bodyに選択された画像を表示するための処理を追加する
+
+Image.fileというメソッドを使用することでローカル上のファイルを画像としてUI上に表示することが可能です。Imageウィジェットは他にも.networkや.assetなど状況に応じて使い方を変えることができます。
+
+body Center(
+       child Column(
+         crossAxisAlignment CrossAxisAlignment.center,
+         children [
+           Padding(
+             padding const EdgeInsets.all(8.0),
+             child Container(
+                 width 300,
+                 child _image == null
+                      Text('No image selected.')
+                      Image.file(_image)),
+           ),
+         ],
+       ),
+     ),
