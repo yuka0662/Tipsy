@@ -14,11 +14,12 @@ class Newpost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Bar_nav(),
-      body: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        FloatingActionButton(
-          onPressed: image_picker.Getim_camera(),
-        )
-      ],),
+      // body: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      //   FloatingActionButton(
+      //     onPressed: image_picker.Getim_camera(),
+      //   )
+      // ],),
+      
     );
 
   }
