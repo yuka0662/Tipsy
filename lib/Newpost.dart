@@ -29,9 +29,11 @@ class Newpost extends StatelessWidget
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>
         [
+          Text("aaa"),
               Expanded(
                 child:
                   //レシピ名入力欄
+                  
                   TextFormField
                   (
                     decoration: const InputDecoration
