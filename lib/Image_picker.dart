@@ -9,14 +9,14 @@ import 'package:sample/main.dart';
 //runAppメソッドの引数のWidgetが画面いっぱいに表示する
 void main() => runApp(new MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  Widget build(BuildContext context){
-    return MaterialApp(
-      home: Image(),
-    );
-  }
-}
+// class MyApp extends StatefulWidget {
+//   @override
+//   Widget build(BuildContext context){
+//     return MaterialApp(
+//       home: Image(),
+//     );
+//   }
+// }
 class Image extends StatefulWidget{
   @override
   Image_picker createState() => Image_picker();
@@ -26,7 +26,7 @@ class Image_picker extends State<Image>{
   Widget build(BuildContext context){
     File _image;
     final picker = ImagePicker();
-    
+
 
     //カメラから画像を取得
     //カメラから画像を取得する関数
@@ -36,7 +36,7 @@ class Image_picker extends State<Image>{
 
       setState((){
           if(kIsWeb){
-            _image = Image.network(pickedFile.path);
+            //_image = Image.network(pickedFile.path);
           }
       });
     }
