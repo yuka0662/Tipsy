@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sample/main.dart';
 import './Header.dart';
+import './Color.dart';
 import './Image_picker.dart';
 
 
@@ -24,23 +25,31 @@ class Newpost extends StatelessWidget
       //     onPressed: image_picker.Getim_camera(),
       //   )
       // ],),
-      body:Column
+      body:
+
+      Center
       (
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>
-        [
-          Text("aaa"),
+        child:
+        Container
+        (
+          width: 1000,
+          child:
+          Column
+          (
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>
+            [
+              Text("aaa"),
               Expanded(
                 child:
                   //レシピ名入力欄
-                  
                   TextFormField
                   (
-                    decoration: const InputDecoration
+                    decoration: InputDecoration
                     (
                       enabledBorder: OutlineInputBorder
                       (
-                        borderSide: BorderSide(color: Colors.blueGrey,)
+                        borderSide: BorderSide(color: HexColor('212738')),
                       ),
                       labelText: "レシピ名",
                       hintText: "レシピ名を入力してください"
@@ -55,10 +64,12 @@ class Newpost extends StatelessWidget
                       return null;  //問題ない場合、nullを返す
                     },
                   ),//レシピ名入力欄end
-                  //材料
-                  
-              )
+                      //材料
+              ),
+
             ],
+          ),
+        ),
       )
     );
   }
