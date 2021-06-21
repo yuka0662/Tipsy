@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './Top.dart';
+import './Color.dart';
 
 void main() => runApp(Home());
 
@@ -53,7 +54,8 @@ class _ChoiceCardState extends State<ChoiceCard> {
         resizeToAvoidBottomInset: false,
         appBar: TabBar(
           unselectedLabelColor: Colors.grey,
-          labelColor: Colors.blueAccent,
+          labelColor: HexColor('43AA8B'),
+          indicatorColor: HexColor('43AA8B'),
           isScrollable: true,
           tabs: choices.map((Choice choice) {
             return Tab(
@@ -166,16 +168,18 @@ class Cocktail extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.fromLTRB(30.0,0,0,0),
           child: Text(
             'ベース選択',
             style: TextStyle(
-              fontSize: 22.0,
+              fontSize: 18.0,
               letterSpacing: 5.0,
             ),
           ),
         ),
+        for(var $i = 0; $i < 2; $i++)
         Row(children: <Widget>[
+          for(var $i = 0; $i < 2; $i++)
           Container(
             padding: const EdgeInsets.all(20),
             height: 150,
@@ -183,7 +187,7 @@ class Cocktail extends StatelessWidget {
               child: const Text(
                 '',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 15.0,
                   letterSpacing: 5.0,
                 ),
               ),
@@ -198,106 +202,27 @@ class Cocktail extends StatelessWidget {
               onPressed: () {},
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                ),
-              ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          )
         ]),
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                ),
-              ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                ),
-              ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          )
-        ]),
-        Row(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(30),
+            padding: const EdgeInsets.fromLTRB(30.0,0,0,20.0),
             child: Text(
               '全体ランキング　TOP10',
               style: TextStyle(
-                fontSize: 22.0,
+                fontSize: 18.0,
                 letterSpacing: 5.0,
               ),
             ),
           )
         ]),
+        for(var $i = 0; $i < 5; $i++)
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(30.0,0,0,10.0),
             child: Text(
               '1.カシスオレンジ',
               style: TextStyle(
-                fontSize: 20.0,
-                letterSpacing: 5.0,
-              ),
-            ),
-          )
-        ]),
-        Row(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              '2.カシスウーロン',
-              style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 15.0,
                 letterSpacing: 5.0,
               ),
             ),
@@ -314,16 +239,18 @@ class Snacks extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.fromLTRB(30.0,0,0,0),
           child: Text(
             'ジャンル選択',
             style: TextStyle(
-              fontSize: 22.0,
+              fontSize: 18.0,
               letterSpacing: 5.0,
             ),
           ),
         ),
+        for(var $i = 0; $i < 2; $i++)
         Row(children: <Widget>[
+          for(var $i = 0; $i < 2; $i++)
           Container(
             padding: const EdgeInsets.all(20),
             height: 150,
@@ -331,7 +258,7 @@ class Snacks extends StatelessWidget {
               child: const Text(
                 '',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 15.0,
                   letterSpacing: 5.0,
                 ),
               ),
@@ -346,94 +273,27 @@ class Snacks extends StatelessWidget {
               onPressed: () {},
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                ),
-              ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          )
         ]),
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                ),
-              ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                ),
-              ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          )
-        ]),
-        Row(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(30),
+            padding: const EdgeInsets.fromLTRB(30.0,0,0,20.0),
             child: Text(
               '全体ランキング　TOP10',
               style: TextStyle(
-                fontSize: 22.0,
+                fontSize: 18.0,
                 letterSpacing: 5.0,
               ),
             ),
           )
         ]),
+        for(var $i = 0; $i < 5; $i++)
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(30.0,0,0,10.0),
             child: Text(
               '1.からあげ',
               style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 15.0,
                 letterSpacing: 5.0,
               ),
             ),
