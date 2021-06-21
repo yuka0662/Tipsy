@@ -6,12 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sample/main.dart';
 import './Header.dart';
+import './CheckBox.dart';
 import './Color.dart';
 import './Image_picker.dart';
 
 
 class Newpost extends StatelessWidget
 {
+  bool checkBoxMeat = false;  //肉のチェックボックス
+  bool checkBoxFish = false;  //魚のチェックボックス
+  bool checkBoxSweet = false;  //甘いのチェックボックス
+  bool checkBoxSalty = false; //しょっぱいのチェックボックス
 
   Image_picker image_picker = Image_picker();
   @override
@@ -66,7 +71,72 @@ class Newpost extends StatelessWidget
                   ),//レシピ名入力欄end
                       //材料
               ),
-
+              Row
+              (children:
+                [
+                  //肉のチェックボックス
+                  Expanded
+                  (child:
+                    Container(
+                      width:0.5,
+                      color: Colors.orange,
+                      child:
+                      CheckboxListTile
+                      (
+                        title: Text("肉"),
+                        value: checkBoxMeat,
+                        onChanged: (bool value){
+                          setState(bool value){
+                            checkBoxMeat = value;
+                          }
+                        },
+                      )
+                    ),
+                  ),
+                  //魚のチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("魚"),
+                      value: checkBoxFish,
+                      onChanged: (bool value){
+                          setState(){
+                            checkBoxFish = value;
+                          }
+                      },
+                    )
+                  ),
+                  //甘いのチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("甘い"),
+                      value:  checkBoxSweet,
+                      onChanged: (bool value){
+                        setState(){
+                         checkBoxSweet = value;
+                        }
+                      },
+                    )
+                  ),
+                  //しょっぱいのチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("しょっぱい"),
+                      value:  checkBoxSweet,
+                      onChanged: (bool value){
+                        setState(){
+                         checkBoxSweet = value;
+                        }
+                      },
+                    )
+                  ),
+                ],
+              )
             ],
           ),
         ),
