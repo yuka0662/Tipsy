@@ -5,31 +5,47 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sample/main.dart';
-import './Header.dart';
-import './CheckBox.dart';
+import './Search.dart';
 import './Color.dart';
-import './Image_picker.dart';
 
-
-class Newpost extends StatelessWidget
+class Newpost extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+      // TODO: implement createState
+      return _State();
+    }
+}
+class _State extends State
 {
-  bool checkBoxMeat = false;  //肉のチェックボックス
-  bool checkBoxFish = false;  //魚のチェックボックス
-  bool checkBoxSweet = false;  //甘いのチェックボックス
-  bool checkBoxSalty = false; //しょっぱいのチェックボックス
-  bool checkBoxSnack = false; //スナックのチェックボックス
-  bool checkBoxParty = false; //パーティのチェックボックス
-  bool checkBoxDelicacy = false; //変わり種・珍味のチェックボックス
-  bool checkBoxEasy = false; //簡単のチェックボックス
-  bool checkBoxTimeShort = false; //時短のチェックボックス
+  var _meat = false;  //肉のチェックボックス
+  var _fish = false;  //魚のチェックボックス
+  var _sweet = false;  //甘いのチェックボックス
+  var _salty = false; //しょっぱいのチェックボックス
+  var _snack = false; //スナックのチェックボックス
+  var _party = false; //パーティのチェックボックス
+  var _novelty = false; //変わり種・珍味のチェックボックス
+  var _easy = false; //簡単のチェックボックス
+  var _timeShort = false; //時短のチェックボックス
 
-  Image_picker image_picker = Image_picker();
   @override
   Widget build(BuildContext context)
   {
     return Scaffold
     (
-      appBar: Bar_nav(),
+      //appBar: Bar_nav(),
+      appBar: AppBar(
+        title: Text('tipsy'),
+        backgroundColor: HexColor('212738'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SearchPage()))
+            },
+            icon: Icon(Icons.search),
+          )
+        ],
+      ),
       // body: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       //   FloatingActionButton(
       //     onPressed: image_picker.Getim_camera(),
@@ -87,13 +103,14 @@ class Newpost extends StatelessWidget
                       CheckboxListTile
                       (
                         title: Text("肉"),
-                        value: checkBoxMeat,
+                        value: _meat,
+                        controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (bool value){
-                          setState(bool value){
-                            checkBoxMeat = value;
-                          }
+                          setState((){
+                            _meat = value;
+                          });
                         },
-                      )
+                      ),
                     ),
                   ),
                   //魚のチェックボックス
@@ -102,11 +119,12 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("魚"),
-                      value: checkBoxFish,
+                      value: _fish,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
-                          setState(){
-                            checkBoxFish = value;
-                          }
+                          setState((){
+                            _fish = value;
+                          });
                       },
                     )
                   ),
@@ -116,16 +134,13 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("甘い"),
-                      value:  checkBoxSweet,
+                      value:  _sweet,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value)
                       {
-                         if(checkBoxSweet==false){
-                           value=true;
-                           checkBoxSweet=value;
-                         }else{
-                           value=false;
-                           checkBoxSweet=value;
-                         }
+                         setState(() {
+                          _sweet = value;
+                         });
                       },
                     )
                   ),
@@ -135,11 +150,12 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("しょっぱい"),
-                      value:  checkBoxSweet,
+                      value:  _salty,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
-                        setState(){
-                         checkBoxSweet = value;
-                        }
+                        setState((){
+                         _salty = value;
+                        });
                       },
                     )
                   ),
@@ -154,11 +170,12 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("スナック"),
-                      value: checkBoxSnack,
+                      value: _snack,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
-                        setState(){
-                         checkBoxSnack = value;
-                        }
+                        setState((){
+                         _snack = value;
+                        });
                       },
                     )
                   ),
@@ -168,11 +185,12 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("パーティ"),
-                      value: checkBoxParty,
+                      value: _party,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
-                        setState(){
-                         checkBoxParty = value;
-                        }
+                        setState((){
+                         _party = value;
+                        });
                       },
                     )
                   ),
@@ -182,11 +200,12 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("変わり種"),
-                      value: checkBoxDelicacy,
+                      value: _novelty,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
-                        setState(){
-                         checkBoxDelicacy = value;
-                        }
+                        setState((){
+                         _novelty = value;
+                        });
                       },
                     )
                   ),
@@ -196,25 +215,26 @@ class Newpost extends StatelessWidget
                     CheckboxListTile
                     (
                       title: Text("簡単"),
-                      value: checkBoxEasy,
+                      value: _easy,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
-                        setState(){
-                         checkBoxEasy = value;
-                        }
+                        setState((){
+                         _easy = value;
+                        });
                       },
                     )
                   ),
                   //時短
                   Expanded
-                  (child:
-                    CheckboxListTile
+                  (child:CheckboxListTile
                     (
                       title: Text("時短"),
-                      value: checkBoxTimeShort,
+                      value: _timeShort,
+                      controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
-                        setState(){
-                         checkBoxTimeShort = value;
-                        }
+                        setState((){
+                         _timeShort = value;
+                        });
                       },
                     )
                   ),
@@ -223,11 +243,11 @@ class Newpost extends StatelessWidget
               // Expanded(child: Spacer()),
               //材料
               Row
-              (children: 
+              (children:
                 [
                   Expanded
-                  (child:
-                    TextField
+                  (
+                    child:TextField
                     (
                       decoration: const InputDecoration
                       (

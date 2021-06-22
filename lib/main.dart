@@ -6,7 +6,6 @@ import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
 import './Newpost.dart';
-import './Header.dart';
 
 void main() {
   runApp(MyApp());
