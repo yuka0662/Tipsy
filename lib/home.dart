@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
-        child:Scaffold(
+        child: Scaffold(
           body: Center(
             child: ChoiceCard(),
           ),
@@ -63,9 +63,7 @@ class _ChoiceCardState extends State<ChoiceCard> {
             );
           }).toList(),
         ),
-        body:TabBarView(
-          children: choices.map((tab) => tab.widget).toList()
-        ),
+        body: TabBarView(children: choices.map((tab) => tab.widget).toList()),
       ),
     );
   }
@@ -168,7 +166,7 @@ class Cocktail extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.fromLTRB(30.0,0,0,0),
+          padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 0),
           child: Text(
             'ベース選択',
             style: TextStyle(
@@ -177,35 +175,35 @@ class Cocktail extends StatelessWidget {
             ),
           ),
         ),
-        for(var $i = 0; $i < 2; $i++)
-        Row(children: <Widget>[
-          for(var $i = 0; $i < 2; $i++)
-          Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 15.0,
-                  letterSpacing: 5.0,
+        for (var $i = 0; $i < 2; $i++)
+          Row(children: <Widget>[
+            for (var $i = 0; $i < 2; $i++)
+              Container(
+                padding: const EdgeInsets.all(20),
+                height: 150,
+                child: RaisedButton(
+                  child: const Text(
+                    '',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      letterSpacing: 5.0,
+                    ),
+                  ),
+                  color: Colors.blueAccent,
+                  shape: const CircleBorder(
+                    side: BorderSide(
+                      color: Colors.blueGrey,
+                      width: 1,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  onPressed: () {},
                 ),
               ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ]),
+          ]),
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.fromLTRB(30.0,0,0,20.0),
+            padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 20.0),
             child: Text(
               '全体ランキング　TOP10',
               style: TextStyle(
@@ -215,19 +213,19 @@ class Cocktail extends StatelessWidget {
             ),
           )
         ]),
-        for(var $i = 0; $i < 5; $i++)
-        Row(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(30.0,0,0,10.0),
-            child: Text(
-              '1.カシスオレンジ',
-              style: TextStyle(
-                fontSize: 15.0,
-                letterSpacing: 5.0,
+        for (var $i = 0; $i < 5; $i++)
+          Row(children: <Widget>[
+            Container(
+              padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 10.0),
+              child: Text(
+                '1.カシスオレンジ',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                ),
               ),
-            ),
-          )
-        ]),
+            )
+          ]),
       ],
     );
   }
@@ -239,7 +237,7 @@ class Snacks extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.fromLTRB(30.0,0,0,0),
+          padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 0),
           child: Text(
             'ジャンル選択',
             style: TextStyle(
@@ -248,35 +246,35 @@ class Snacks extends StatelessWidget {
             ),
           ),
         ),
-        for(var $i = 0; $i < 2; $i++)
-        Row(children: <Widget>[
-          for(var $i = 0; $i < 2; $i++)
-          Container(
-            padding: const EdgeInsets.all(20),
-            height: 150,
-            child: RaisedButton(
-              child: const Text(
-                '',
-                style: TextStyle(
-                  fontSize: 15.0,
-                  letterSpacing: 5.0,
+        for (var $i = 0; $i < 2; $i++)
+          Row(children: <Widget>[
+            for (var $i = 0; $i < 2; $i++)
+              Container(
+                padding: const EdgeInsets.all(20),
+                height: 150,
+                child: RaisedButton(
+                  child: const Text(
+                    '',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      letterSpacing: 5.0,
+                    ),
+                  ),
+                  color: Colors.blueAccent,
+                  shape: const CircleBorder(
+                    side: BorderSide(
+                      color: Colors.blueGrey,
+                      width: 1,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  onPressed: () {},
                 ),
               ),
-              color: Colors.blueAccent,
-              shape: const CircleBorder(
-                side: BorderSide(
-                  color: Colors.blueGrey,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ]),
+          ]),
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.fromLTRB(30.0,0,0,20.0),
+            padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 20.0),
             child: Text(
               '全体ランキング　TOP10',
               style: TextStyle(
@@ -286,19 +284,19 @@ class Snacks extends StatelessWidget {
             ),
           )
         ]),
-        for(var $i = 0; $i < 5; $i++)
-        Row(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(30.0,0,0,10.0),
-            child: Text(
-              '1.からあげ',
-              style: TextStyle(
-                fontSize: 15.0,
-                letterSpacing: 5.0,
+        for (var $i = 0; $i < 5; $i++)
+          Row(children: <Widget>[
+            Container(
+              padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 10.0),
+              child: Text(
+                '1.からあげ',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                ),
               ),
-            ),
-          )
-        ]),
+            )
+          ]),
       ],
     );
   }
