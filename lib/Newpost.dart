@@ -17,6 +17,11 @@ class Newpost extends StatelessWidget
   bool checkBoxFish = false;  //魚のチェックボックス
   bool checkBoxSweet = false;  //甘いのチェックボックス
   bool checkBoxSalty = false; //しょっぱいのチェックボックス
+  bool checkBoxSnack = false; //スナックのチェックボックス
+  bool checkBoxParty = false; //パーティのチェックボックス
+  bool checkBoxDelicacy = false; //変わり種・珍味のチェックボックス
+  bool checkBoxEasy = false; //簡単のチェックボックス
+  bool checkBoxTimeShort = false; //時短のチェックボックス
 
   Image_picker image_picker = Image_picker();
   @override
@@ -41,10 +46,10 @@ class Newpost extends StatelessWidget
           child:
           Column
           (
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>
             [
-              Text("aaa"),
+              Expanded(child: Spacer()),
               Expanded(
                 child:
                   //レシピ名入力欄
@@ -54,7 +59,7 @@ class Newpost extends StatelessWidget
                     (
                       enabledBorder: OutlineInputBorder
                       (
-                        borderSide: BorderSide(color: HexColor('212738')),
+                        //borderSide: BorderSide(color: HexColor('212738')),
                       ),
                       labelText: "レシピ名",
                       hintText: "レシピ名を入力してください"
@@ -78,8 +83,6 @@ class Newpost extends StatelessWidget
                   Expanded
                   (child:
                     Container(
-                      width:0.5,
-                      color: Colors.orange,
                       child:
                       CheckboxListTile
                       (
@@ -114,10 +117,15 @@ class Newpost extends StatelessWidget
                     (
                       title: Text("甘い"),
                       value:  checkBoxSweet,
-                      onChanged: (bool value){
-                        setState(){
-                         checkBoxSweet = value;
-                        }
+                      onChanged: (bool value)
+                      {
+                         if(checkBoxSweet==false){
+                           value=true;
+                           checkBoxSweet=value;
+                         }else{
+                           value=false;
+                           checkBoxSweet=value;
+                         }
                       },
                     )
                   ),
@@ -136,12 +144,133 @@ class Newpost extends StatelessWidget
                     )
                   ),
                 ],
+              ),
+              Row
+              (children:
+                [
+                  //スナックのチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("スナック"),
+                      value: checkBoxSnack,
+                      onChanged: (bool value){
+                        setState(){
+                         checkBoxSnack = value;
+                        }
+                      },
+                    )
+                  ),
+                  //パーティ
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("パーティ"),
+                      value: checkBoxParty,
+                      onChanged:  (bool value){
+                        setState(){
+                         checkBoxParty = value;
+                        }
+                      },
+                    )
+                  ),
+                  //変わり種・珍味
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("変わり種"),
+                      value: checkBoxDelicacy,
+                      onChanged:  (bool value){
+                        setState(){
+                         checkBoxDelicacy = value;
+                        }
+                      },
+                    )
+                  ),
+                  //簡単
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("簡単"),
+                      value: checkBoxEasy,
+                      onChanged:  (bool value){
+                        setState(){
+                         checkBoxEasy = value;
+                        }
+                      },
+                    )
+                  ),
+                  //時短
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("時短"),
+                      value: checkBoxTimeShort,
+                      onChanged:  (bool value){
+                        setState(){
+                         checkBoxTimeShort = value;
+                        }
+                      },
+                    )
+                  ),
+                ],
+              ),
+              // Expanded(child: Spacer()),
+              //材料
+              Row
+              (children: 
+                [
+                  Expanded
+                  (child:
+                    TextField
+                    (
+                      decoration: const InputDecoration
+                      (
+                        enabledBorder:
+                        OutlineInputBorder(),
+                        labelText: "材料",
+                        hintText: "材料名・数量を入力してください"
+                      ),
+                    ),
+                  ),
+                  Expanded
+                  (child:
+                    IconButton
+                    (
+                      icon: const Icon(Icons.add),
+                      tooltip: "材料を追加する",
+                      onPressed: (){
+                        // setState(()
+                        //   { }
+                        // )
+                      },
+                    )
+                  ),
+                  Expanded
+                  (child:
+                    IconButton
+                    (
+                      icon: const Icon(Icons.remove),
+                      tooltip: "材料を追加する",
+                      onPressed: (){
+                        // setState(()
+                        //   { }
+                        // )
+                      },
+                    )
+                  ),
+                ],
               )
             ],
+
           ),
         ),
       )
     );
   }
-
 }
