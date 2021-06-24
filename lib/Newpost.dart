@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:html';
 import 'dart:io';
 import 'dart:ui';
@@ -77,15 +78,15 @@ class _State extends State
                       (
                         //borderSide: BorderSide(color: HexColor('212738')),
                       ),
-                      labelText: "レシピ名",
-                      hintText: "レシピ名を入力してください"
+                      labelText: 'レシピ名',
+                      hintText: 'レシピ名を入力してください'
                     ),
                     autovalidate: false,  //入力変化しても自動でチェックしない
                     validator: (value)
                     {
                       if(value.isEmpty)
                       {
-                        return "レシピ名を入力してください";
+                        return 'レシピ名を入力してください';
                       }
                       return null;  //問題ない場合、nullを返す
                     },
@@ -102,7 +103,7 @@ class _State extends State
                       child:
                       CheckboxListTile
                       (
-                        title: Text("肉"),
+                        title: Text('肉'),
                         value: _meat,
                         controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (bool value){
@@ -118,7 +119,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("魚"),
+                      title: Text('魚'),
                       value: _fish,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
@@ -133,7 +134,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("甘い"),
+                      title: Text('甘い'),
                       value:  _sweet,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value)
@@ -149,7 +150,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("しょっぱい"),
+                      title: Text('しょっぱい'),
                       value:  _salty,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
@@ -169,7 +170,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("スナック"),
+                      title: Text('スナック'),
                       value: _snack,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
@@ -184,7 +185,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("パーティ"),
+                      title: Text('パーティ'),
                       value: _party,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
@@ -199,7 +200,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("変わり種"),
+                      title: Text('変わり種'),
                       value: _novelty,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
@@ -214,7 +215,7 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text("簡単"),
+                      title: Text('簡単'),
                       value: _easy,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged:  (bool value){
@@ -228,10 +229,10 @@ class _State extends State
                   Expanded
                   (child:CheckboxListTile
                     (
-                      title: Text("時短"),
+                      title: Text('時短'),
                       value: _timeShort,
                       controlAffinity: ListTileControlAffinity.leading,
-                      onChanged:  (bool value){
+                      onChanged: (bool value){
                         setState((){
                          _timeShort = value;
                         });
@@ -253,30 +254,34 @@ class _State extends State
                       (
                         enabledBorder:
                         OutlineInputBorder(),
-                        labelText: "材料",
-                        hintText: "材料名・数量を入力してください"
+                        labelText: '材料',
+                        hintText: '材料名・数量を入力してください'
                       ),
                     ),
                   ),
+                  //材料を登録するボタン
                   Expanded
                   (child:
-                    IconButton
+                    SizedBox
                     (
-                      icon: const Icon(Icons.add),
-                      tooltip: "材料を追加する",
-                      onPressed: (){
-                        // setState(()
-                        //   { }
-                        // )
-                      },
+                      height: 51,
+                      child:
+                      new RaisedButton
+                      (
+                        textColor: HexColor('FBFBFF'),
+                        color: HexColor('212738'),
+                        child: const Text('登録する'),
+                        onPressed: (){}
+                      ),
                     )
                   ),
                   Expanded
-                  (child:
+                  (
+                    child:
                     IconButton
                     (
                       icon: const Icon(Icons.remove),
-                      tooltip: "材料を追加する",
+                      tooltip: '材料を追加する',
                       onPressed: (){
                         // setState(()
                         //   { }
