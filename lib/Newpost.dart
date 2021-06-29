@@ -1,34 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import './Search.dart';
+import 'package:sample/main.dart';
+// import './Header.dart';
 import './Color.dart';
+import './Search.dart';
 
-class Newpost extends StatefulWidget{
+class Newpost extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-      // TODO: implement createState
-      return _State();
-    }
+  // State<StatefulWidget> createState() {
+  //     // TODO: implement createState
+  //     return _State();
+  //   }
+  _State createState() => new _State();
 }
 class _State extends State
 {
-  var _meat = false;  //肉のチェックボックス
-  var _fish = false;  //魚のチェックボックス
-  var _sweet = false;  //甘いのチェックボックス
-  var _salty = false; //しょっぱいのチェックボックス
-  var _snack = false; //スナックのチェックボックス
-  var _party = false; //パーティのチェックボックス
-  var _novelty = false; //変わり種・珍味のチェックボックス
-  var _easy = false; //簡単のチェックボックス
-  var _timeShort = false; //時短のチェックボックス
+  // @override
+  // void initState(){
+  //   super.initState();
+  // }
+  //checkboxおつまみカテゴリーの初期設定
+  var _meat = false;
+  var _fish = false;
+  var _sweet = false;
+  var _salty = false;
+  var _easy = false;
+  var _tShort = false;
+  var _snack = false;
+  var _novelty = false;
+  var _party = false;
+
 
   @override
   Widget build(BuildContext context)
   {
     return Scaffold
     (
-      //appBar: Bar_nav(),
       appBar: AppBar(
         title: Text('tipsy'),
         backgroundColor: HexColor('212738'),
@@ -42,11 +50,6 @@ class _State extends State
           )
         ],
       ),
-      // body: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      //   FloatingActionButton(
-      //     onPressed: image_picker.Getim_camera(),
-      //   )
-      // ],),
       body:
 
       Center
@@ -58,10 +61,9 @@ class _State extends State
           child:
           Column
           (
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>
             [
-              Expanded(child: Spacer()),
               Expanded(
                 child:
                   //レシピ名入力欄
@@ -98,13 +100,13 @@ class _State extends State
                       child:
                       CheckboxListTile
                       (
-                        title: Text('肉'),
+                        title: Text("肉"),
                         value: _meat,
                         controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (bool value){
-                          setState((){
+                          setState(bool value){
                             _meat = value;
-                          });
+                          }
                         },
                       ),
                     ),
@@ -114,13 +116,13 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text('魚'),
+                      title: Text("魚"),
                       value: _fish,
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (bool value){
-                          setState((){
+                          setState(){
                             _fish = value;
-                          });
+                          }
                       },
                     )
                   ),
@@ -129,14 +131,13 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text('甘い'),
-                      value:  _sweet,
+                      title: Text("甘い"),
                       controlAffinity: ListTileControlAffinity.leading,
-                      onChanged: (bool value)
-                      {
-                         setState(() {
-                          _sweet = value;
-                         });
+                      value:  _sweet,
+                      onChanged: (bool value){
+                        setState(){
+                         _sweet = value;
+                        }
                       },
                     )
                   ),
@@ -145,13 +146,13 @@ class _State extends State
                   (child:
                     CheckboxListTile
                     (
-                      title: Text('しょっぱい'),
-                      value:  _salty,
+                      title: Text("しょっぱい"),
                       controlAffinity: ListTileControlAffinity.leading,
+                      value:  _salty,
                       onChanged: (bool value){
-                        setState((){
+                        setState(){
                          _salty = value;
-                        });
+                        }
                       },
                     )
                   ),
@@ -160,130 +161,134 @@ class _State extends State
               Row
               (children:
                 [
+                  //簡単のチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("簡単"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value:  _easy,
+                      onChanged: (bool value){
+                        setState(){
+                         _easy = value;
+                        }
+                      },
+                    )
+                  ),
+                  //時短のチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("時短"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value:  _tShort,
+                      onChanged: (bool value){
+                        setState(){
+                         _tShort = value;
+                        }
+                      },
+                    )
+                  ),
                   //スナックのチェックボックス
                   Expanded
                   (child:
                     CheckboxListTile
                     (
-                      title: Text('スナック'),
-                      value: _snack,
+                      title: Text("スナック"),
                       controlAffinity: ListTileControlAffinity.leading,
+                      value:  _snack,
                       onChanged: (bool value){
-                        setState((){
+                        setState(){
                          _snack = value;
-                        });
+                        }
                       },
                     )
                   ),
-                  //パーティ
+                  //変わり種のチェックボックス
                   Expanded
                   (child:
                     CheckboxListTile
                     (
-                      title: Text('パーティ'),
-                      value: _party,
+                      title: Text("変わり種"),
                       controlAffinity: ListTileControlAffinity.leading,
-                      onChanged:  (bool value){
-                        setState((){
-                         _party = value;
-                        });
-                      },
-                    )
-                  ),
-                  //変わり種・珍味
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text('変わり種'),
-                      value: _novelty,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged:  (bool value){
-                        setState((){
-                         _novelty = value;
-                        });
-                      },
-                    )
-                  ),
-                  //簡単
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text('簡単'),
-                      value: _easy,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged:  (bool value){
-                        setState((){
-                         _easy = value;
-                        });
-                      },
-                    )
-                  ),
-                  //時短
-                  Expanded
-                  (child:CheckboxListTile
-                    (
-                      title: Text('時短'),
-                      value: _timeShort,
-                      controlAffinity: ListTileControlAffinity.leading,
+                      value:  _novelty,
                       onChanged: (bool value){
-                        setState((){
-                         _timeShort = value;
-                        });
+                        setState(){
+                         _novelty = value;
+                        }
+                      },
+                    )
+                  ),
+                  //パーティのチェックボックス
+                  Expanded
+                  (child:
+                    CheckboxListTile
+                    (
+                      title: Text("パーティ"),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value:  _party,
+                      onChanged: (bool value){
+                        setState(){
+                         _party = value;
+                        }
                       },
                     )
                   ),
                 ],
               ),
-              // Expanded(child: Spacer()),
-              //材料
-              Row
-              (children:
+              Row(children:
                 [
-                  Expanded
+                  Container
                   (
-                    child:TextField
+                    width: 500,
+                    child:
+                    Expanded
                     (
-                      decoration: const InputDecoration
+                      child:
+                      //材料
+                      TextFormField
                       (
-                        enabledBorder:
-                        OutlineInputBorder(),
-                        labelText: '材料',
-                        hintText: '材料名・数量を入力してください'
-                      ),
+                        decoration: InputDecoration
+                        (
+                          enabledBorder: OutlineInputBorder
+                          (
+                            borderSide: BorderSide(color: HexColor('212738')),
+                          ),
+                          labelText: "材料",
+                          hintText: "材料・容量を入力してください"
+                        ),
+                        autovalidate: false,  //入力変化しても自動でチェックしない
+
+                      ),//材料end
                     ),
                   ),
-                  //材料を登録するボタン
+                  Container
+                  (
+                    width: 100,
+                    height: 50,
+                    child:
+                    Expanded
+                    (child:
+                      RaisedButton
+                      (
+                        child: const Text("追加"),
+                        color: HexColor('212738'),
+                        textColor: HexColor('FFFFFF'),
+                        onPressed: (){},
+                      )
+                    ),
+                  ),
+                  //材料の入力欄追加
                   Expanded
                   (child:
-                    SizedBox
-                    (
-                      height: 51,
-                      child:
-                      new RaisedButton
-                      (
-                        textColor: HexColor('FBFBFF'),
-                        color: HexColor('212738'),
-                        child: const Text('登録する'),
-                        onPressed: (){}
-                      ),
-                    )
-                  ),
-                  Expanded
-                  (
-                    child:
                     IconButton
                     (
-                      icon: const Icon(Icons.remove),
-                      tooltip: '材料を追加する',
-                      onPressed: (){
-                        // setState(()
-                        //   { }
-                        // )
-                      },
+                      icon: const Icon(Icons.add),
+                      color: HexColor('ffffff'),
                     )
-                  ),
+                  )
                 ],
               )
             ],

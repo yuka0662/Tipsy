@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //sappBar:Bar_nav(),
       appBar: AppBar(
         title: Text('tipsy'),
         backgroundColor: HexColor('212738'),
