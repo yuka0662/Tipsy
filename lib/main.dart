@@ -5,6 +5,7 @@ import './Search.dart';
 import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
+import './Newpost.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //sappBar:Bar_nav(),
       appBar: AppBar(
         title: Text('tipsy'),
         backgroundColor: HexColor('212738'),
@@ -112,7 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
       //タブによって表示内容が変わる(body部分)
       body: _pageWidgets.elementAt(_currentIndex),
       floatingActionButton: FloatingActionButton(
-        //onPressed:タップ時のイベント,
+        //新規投稿ボタンのタップ時のイベント,
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Newpost(),
+              )
+            );
+        },
         tooltip: 'Increment',
         backgroundColor: HexColor('43AA8B'),
         child: Icon(Icons.add),
