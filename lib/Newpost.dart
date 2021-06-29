@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sample/main.dart';
 import './Header.dart';
-import './CheckBox.dart';
 import './Color.dart';
-import './Image_picker.dart';
 
 
 class Newpost extends StatelessWidget
@@ -18,7 +16,7 @@ class Newpost extends StatelessWidget
   bool checkBoxSweet = false;  //甘いのチェックボックス
   bool checkBoxSalty = false; //しょっぱいのチェックボックス
 
-  Image_picker image_picker = Image_picker();
+
   @override
   Widget build(BuildContext context)
   {
