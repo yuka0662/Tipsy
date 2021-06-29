@@ -289,7 +289,7 @@ class _State extends State
                     IconButton
                     (
                       icon: const Icon(Icons.add),
-                      color: HexColor('ffffffff'),
+                      color: HexColor('ffffff'),
                     )
                   )
                 ],
