@@ -128,6 +128,10 @@ class _State extends State {
                   child: Text(
                     'キーワード',
                     style: TextStyle(
+<<<<<<< HEAD
+=======
+                      
+>>>>>>> b1b7fc4595c82ca9ad59d589d44e42925f3ea975
                       fontSize: 15.0,
                     ),
                   )),
