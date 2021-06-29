@@ -260,45 +260,43 @@ class _State extends State
                             borderSide: BorderSide(color: HexColor('212738')),
                           ),
                           labelText: "材料",
-                          hintText: "材料・容量を入力してください"
+                          hintText: "材料・用量を入力してください"
                         ),
                         autovalidate: false,  //入力変化しても自動でチェックしない
-
+                        validator: (value)
+                        {
+                          if(value.isEmpty)
+                          {
+                            return "材料・用量を入力してください";
+                          }
+                          return null;  //問題ない場合、nullを返す
+                        },
                       ),//材料end
                     ),
                   ),
-                  Container
-                  (
-                    width: 100,
-                    height: 50,
-                    child:
-                    Expanded
-                    (child:
-                      RaisedButton
-                      (
-                        child: const Text("追加"),
-                        color: HexColor('212738'),
-                        textColor: HexColor('FFFFFF'),
-                        onPressed: (){},
-                      )
-                    ),
-                  ),
-                  //材料の入力欄追加
+                  //材料の追加
                   Expanded
                   (child:
-                    IconButton
-                    (
-                      icon: const Icon(Icons.add),
-                      color: HexColor('ffffff'),
-                    )
-                  )
+                      RaisedButton
+                      (
+                        child: const Icon(Icons.add),
+                        color: HexColor('212738'),
+                        textColor: HexColor('FFFFFF'),
+                        shape:  const CircleBorder(
+                          side: BorderSide(
+                            width: 1,
+                          )
+                        ),
+                        onPressed: (){
+                        }
+                      ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
       )
     );
   }
-
 }
