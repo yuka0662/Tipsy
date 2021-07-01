@@ -204,7 +204,7 @@ class _UserState extends State {
         Container(
           padding: const EdgeInsets.all(10.0),
           child: Row(children: <Widget>[
-            Text('性別', style: TextStyle(fontSize: 15,color: Colors.grey)),
+            Text('性別', style: TextStyle(fontSize: 15, color: Colors.grey)),
           ]),
         ),
         Row(children: <Widget>[
@@ -252,11 +252,34 @@ class PasswordPage extends StatelessWidget {
         title: Text('パスワード変更'),
         backgroundColor: HexColor('212738'),
       ),
-      body: Center(
-        child: Center(
-          child: Text('パスワード変更できるよ！'),
+      body: Column(children: <Widget>[
+        Row(
+          children:<Widget>[
+            Container(
+              padding: const EdgeInsets.fromLTRB(30.0, 100.0, 0, 5.0),
+              child: Text('メールアドレス'),
+            ),
+          ]
         ),
-      ),
+        Container(
+          padding: const EdgeInsets.fromLTRB(30.0, 0, 30.0, 30.0),
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
+        Container(
+          child: RaisedButton(
+            onPressed: () => {
+              Navigator.pop(context) // 呼び出し元に戻る
+              //検索条件を保持してデータベースから探して呼び出し元の画面にて表示
+            },
+            child: Text('認証メールを送信'),
+          ),
+        ),
+      ]),
     );
   }
 }
