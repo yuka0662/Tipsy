@@ -1,6 +1,3 @@
-import 'dart:html';
-import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -76,17 +73,17 @@ class _State extends State
                     (
                       enabledBorder: OutlineInputBorder
                       (
-                        borderSide: BorderSide(color: HexColor('212738')),
+                        //borderSide: BorderSide(color: HexColor('212738')),
                       ),
-                      labelText: "レシピ名",
-                      hintText: "レシピ名を入力してください"
+                      labelText: 'レシピ名',
+                      hintText: 'レシピ名を入力してください'
                     ),
                     autovalidate: false,  //入力変化しても自動でチェックしない
                     validator: (value)
                     {
                       if(value.isEmpty)
                       {
-                        return "レシピ名を入力してください";
+                        return 'レシピ名を入力してください';
                       }
                       return null;  //問題ない場合、nullを返す
                     },
@@ -111,7 +108,7 @@ class _State extends State
                             _meat = value;
                           }
                         },
-                      )
+                      ),
                     ),
                   ),
                   //魚のチェックボックス
@@ -294,6 +291,7 @@ class _State extends State
                 ],
               ),
             ],
+
           ),
         ),
       )
