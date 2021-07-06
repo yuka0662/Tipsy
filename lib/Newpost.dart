@@ -33,7 +33,7 @@ class _State extends State
   var _party = false;
   //Controller
   var _materialController = TextEditingController(); //材料
-  final material_key = TextFormField();
+  var _text = ' '; //材料入力した値を入れる
 
 
   @override
@@ -78,7 +78,9 @@ class _State extends State
                 height: 100,
                 child:
                 Expanded
-                (child:
+                (
+                  flex: 3,
+                  child:
                   //レシピ名入力欄
                   TextFormField
                   (
@@ -273,15 +275,15 @@ class _State extends State
                           labelText: "材料",
                           hintText: "材料・用量を入力してください"
                         ),
-                        autovalidate: false,  //入力変化しても自動でチェックしない
-                        validator: (value)
-                        {
-                          if(value.isEmpty)
-                          {
-                            return "材料・用量を入力してください";
-                          }
-                          return null;  //問題ない場合、nullを返す
-                        },
+                        // autovalidate: false,  //入力変化しても自動でチェックしない
+                        // validator: (value)
+                        // {
+                        //   if(value.isEmpty)
+                        //   {
+                        //     return "材料・用量を入力してください";
+                        //   }
+                        //   return null;  //問題ない場合、nullを返す
+                        // },
                       ),//材料end
                     ),
                   ),
@@ -298,22 +300,40 @@ class _State extends State
                             width: 1,
                           )
                         ),
-                        onPressed: (){
-                          InputChip
-                            (
-                              label: Text('_materialController.toString()'),
-                              onDeleted: (){},
-                            );
-                        }
+                        onPressed: ()=> setState(
+                          (){
+                            _text = _materialController.text;
+                        },
+                        )
                       ),
                   ),
-                  // InputChip
-                  //           (
-                  //             label: Text('_materialController.toString()'),
-                  //             onDeleted: (){},
-                  //           )
                 ],
               ),
+              Container
+              (padding: EdgeInsets.only(top:10, bottom: 10),
+                child:
+                Expanded
+                (
+                  child:
+                  InputChip
+                  (
+                    label: Text(_text),
+                    onDeleted: (){},
+                  ),
+                ),
+              ),
+              TextFormField
+              (decoration:
+                InputDecoration
+                (
+                  enabledBorder: OutlineInputBorder
+                  (
+                    borderSide: BorderSide(color: HexColor('212738')),
+                  ),
+                  labelText: "手順",
+                  hintText: "手順を入力してください"
+                ),
+              )
             ],
 
           ),
