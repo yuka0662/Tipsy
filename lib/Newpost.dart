@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sample/Top.dart';
 import 'package:sample/main.dart';
 // import './Header.dart';
 import './Color.dart';
@@ -30,6 +31,9 @@ class _State extends State
   var _snack = false;
   var _novelty = false;
   var _party = false;
+  //Controller
+  var _materialController = TextEditingController(); //材料
+  final material_key = TextFormField();
 
 
   @override
@@ -51,7 +55,6 @@ class _State extends State
         ],
       ),
       body:
-
       Center
       (
         child:
@@ -64,8 +67,18 @@ class _State extends State
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>
             [
-              Expanded(
+              Container
+              (
+                padding: EdgeInsets.only(top:10),
+                child: Text('新規投稿', style: TextStyle(fontSize: 20)),
+              ),
+              Container
+              (
+                padding: EdgeInsets.only(top:25),
+                height: 100,
                 child:
+                Expanded
+                (child:
                   //レシピ名入力欄
                   TextFormField
                   (
@@ -88,7 +101,7 @@ class _State extends State
                       return null;  //問題ない場合、nullを返す
                     },
                   ),//レシピ名入力欄end
-                      //材料
+                ),
               ),
               Row
               (children:
@@ -250,6 +263,7 @@ class _State extends State
                       //材料
                       TextFormField
                       (
+                        controller: _materialController,
                         decoration: InputDecoration
                         (
                           enabledBorder: OutlineInputBorder
@@ -285,9 +299,19 @@ class _State extends State
                           )
                         ),
                         onPressed: (){
+                          InputChip
+                            (
+                              label: Text('_materialController.toString()'),
+                              onDeleted: (){},
+                            );
                         }
                       ),
                   ),
+                  // InputChip
+                  //           (
+                  //             label: Text('_materialController.toString()'),
+                  //             onDeleted: (){},
+                  //           )
                 ],
               ),
             ],
