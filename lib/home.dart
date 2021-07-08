@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './Top.dart';
 import './Color.dart';
+import './database/databse.dart';
 
 void main() => runApp(Home());
 
@@ -70,12 +71,34 @@ class _ChoiceCardState extends State<ChoiceCard> {
 }
 
 class Beer extends StatelessWidget {
+  var db = new Mysql();
+
+  var mail = '';
+
+  void _getCustomer() {
+    db.getConnection().then((conn) {
+      String sql = 'select user_id from users where nickname = \'horoyoi\';';
+      conn.query(sql).then((results) {
+        for (var row in results) {
+          //setState(() {
+          mail = row[0];
+          //});
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
-          child: Text('ビール一覧表示！！'),
+          child: Text(mail //,'ビール一覧表示！！'
+              ),
+        ),
+        FloatingActionButton(
+          onPressed: _getCustomer,
+          child: Icon(Icons.dry),
         )
       ],
     );
