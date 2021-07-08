@@ -318,7 +318,12 @@ class _State extends State
                   InputChip
                   (
                     label: Text(_text),
-                    onDeleted: (){},
+                    onDeleted: ()
+                    {
+                      setState(() {
+                        
+                      });
+                    },
                   ),
                 ),
               ),
