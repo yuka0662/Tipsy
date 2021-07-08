@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sample/Top.dart';
@@ -6,6 +9,7 @@ import 'package:sample/main.dart';
 // import './Header.dart';
 import './Color.dart';
 import './Search.dart';
+
 
 class Newpost extends StatefulWidget {
   @override
@@ -315,16 +319,7 @@ class _State extends State
                 Expanded
                 (
                   child:
-                  InputChip
-                  (
-                    label: Text(_text),
-                    onDeleted: ()
-                    {
-                      setState(() {
-                        
-                      });
-                    },
-                  ),
+                  
                 ),
               ),
               TextFormField
