@@ -1,10 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sample/ListItem.dart';
+import 'package:sample/Top.dart';
 import 'package:sample/main.dart';
 // import './Header.dart';
 import './Color.dart';
 import './Search.dart';
+
 
 class Newpost extends StatefulWidget {
   @override
@@ -30,7 +36,37 @@ class _State extends State
   var _snack = false;
   var _novelty = false;
   var _party = false;
+  //Controller
+  //var _materialController = TextEditingController(); //材料
+  //var _text = ' '; //材料入力した値を入れる
+  final myController = TextEditingController();
+  List<ListItem> listitem =[];
 
+  @override
+  void dispose(){
+    listitem.forEach((element) {
+      element.dispose();
+    });
+
+    super.dispose();
+  }
+
+  void add(){
+    setState(() {
+      listitem.add(ListItem.create(""));
+    });
+  }
+
+  void remove(int id){
+    final removedItem = listitem.firstWhere((element) => element.id == id);
+    setState(() {
+          listitem.removeWhere((element) => element.id == id);
+    });
+
+    Future.delayed(Duration(seconds: 1)).then((value){
+      removedItem.dispose();
+    });
+  }
 
   @override
   Widget build(BuildContext context)
@@ -51,7 +87,6 @@ class _State extends State
         ],
       ),
       body:
-
       Center
       (
         child:
@@ -64,8 +99,20 @@ class _State extends State
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>
             [
-              Expanded(
+              Container
+              (
+                padding: EdgeInsets.only(top:10),
+                child: Text('新規投稿', style: TextStyle(fontSize: 20)),
+              ),
+              Container
+              (
+                padding: EdgeInsets.only(top:25),
+                height: 100,
                 child:
+                Expanded
+                (
+                  flex: 3,
+                  child:
                   //レシピ名入力欄
                   TextFormField
                   (
@@ -88,7 +135,7 @@ class _State extends State
                       return null;  //問題ない場合、nullを返す
                     },
                   ),//レシピ名入力欄end
-                      //材料
+                ),
               ),
               Row
               (children:
@@ -238,58 +285,30 @@ class _State extends State
                   ),
                 ],
               ),
-              Row(children:
-                [
-                  Container
-                  (
-                    width: 500,
-                    child:
-                    Expanded
-                    (
-                      child:
-                      //材料
-                      TextFormField
-                      (
-                        decoration: InputDecoration
-                        (
-                          enabledBorder: OutlineInputBorder
-                          (
-                            borderSide: BorderSide(color: HexColor('212738')),
-                          ),
-                          labelText: "材料",
-                          hintText: "材料・容量を入力してください"
-                        ),
-                        autovalidate: false,  //入力変化しても自動でチェックしない
-
-                      ),//材料end
-                    ),
-                  ),
-                  Container
-                  (
-                    width: 100,
-                    height: 50,
-                    child:
-                    Expanded
-                    (child:
-                      RaisedButton
-                      (
-                        child: const Text("追加"),
-                        color: HexColor('212738'),
-                        textColor: HexColor('FFFFFF'),
-                        onPressed: (){},
-                      )
-                    ),
-                  ),
-                  //材料の入力欄追加
-                  Expanded
-                  (child:
-                    IconButton
-                    (
-                      icon: const Icon(Icons.add),
-                      color: HexColor('ffffff'),
-                    )
-                  )
+              ListView(
+                children: [
+                  //Text(listitem.toList()),
                 ],
+              )
+              // Container
+              // (padding: EdgeInsets.only(top:10, bottom: 10),
+              //   child:
+              //   // Expanded
+              //   // (
+              //   //   child:
+              //   // ),
+              // ),
+              TextFormField
+              (decoration:
+                InputDecoration
+                (
+                  enabledBorder: OutlineInputBorder
+                  (
+                    borderSide: BorderSide(color: HexColor('212738')),
+                  ),
+                  labelText: "手順",
+                  hintText: "手順を入力してください"
+                ),
               )
             ],
 
