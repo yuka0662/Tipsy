@@ -1,14 +1,15 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sample/ListItem.dart';
 import 'package:sample/Top.dart';
 import 'package:sample/main.dart';
 // import './Header.dart';
 import './Color.dart';
 import './Search.dart';
+import './ListItem.dart';
 
 
 class Newpost extends StatefulWidget {
@@ -21,10 +22,9 @@ class Newpost extends StatefulWidget {
 }
 class _State extends State
 {
-  // @override
-  // void initState(){
-  //   super.initState();
-  // }
+  // List<String> items = [];
+  var items =[''];
+  
   //checkboxおつまみカテゴリーの初期設定
   var _meat = false;
   var _fish = false;
@@ -307,21 +307,18 @@ class _State extends State
                         onPressed: ()=> setState(
                           (){
                             _text = _materialController.text;
+                            // items.add(_text);
+                            // var listall = items.map((lists) => '').toList();
+                            // print(listall);
                         },
                         )
                       ),
                   ),
+                  Expanded(child: Text(_text))
                 ],
               ),
               Container
-              (padding: EdgeInsets.only(top:10, bottom: 10),
-                child:
-                Expanded
-                (
-                  child:
-                  
-                ),
-              ),
+              (padding: EdgeInsets.only(top:10, bottom: 10),),
               TextFormField
               (decoration:
                 InputDecoration
