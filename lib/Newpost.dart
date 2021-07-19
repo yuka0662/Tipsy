@@ -23,7 +23,8 @@ class Newpost extends StatefulWidget {
 class _State extends State
 {
   // List<String> items = [];
-  var items =[''];
+  var items = <String>[]; //材料追加
+  var process = <String>[];  //手順
   
   //checkboxおつまみカテゴリーの初期設定
   var _meat = false;
@@ -38,6 +39,9 @@ class _State extends State
   //Controller
   var _materialController = TextEditingController(); //材料
   var _text = ' '; //材料入力した値を入れる
+  var _processController = TextEditingController(); //手順
+  var _process = '　';  //手順入力した値を入れる
+  var count = 0;
 
 
   @override
@@ -257,7 +261,8 @@ class _State extends State
                   ),
                 ],
               ),
-              Row(children:
+              Row
+              (children:
                 [
                   Container
                   (
@@ -307,32 +312,76 @@ class _State extends State
                         onPressed: ()=> setState(
                           (){
                             _text = _materialController.text;
-                            // items.add(_text);
-                            // var listall = items.map((lists) => '').toList();
-                            // print(listall);
+                            items.add(_text);
                         },
                         )
                       ),
                   ),
-                  Expanded(child: Text(_text))
                 ],
               ),
               Container
-              (padding: EdgeInsets.only(top:10, bottom: 10),),
-              TextFormField
-              (decoration:
-                InputDecoration
-                (
-                  enabledBorder: OutlineInputBorder
+              (
+                padding: EdgeInsets.only(top:10, bottom: 10),
+                child: Expanded(child: Text(items.toString(), style: TextStyle(fontSize: 23, color: Colors.grey,),),),
+              ),
+              Row
+              (children:
+                [
+                  Container
                   (
-                    borderSide: BorderSide(color: HexColor('212738')),
+                    width: 500,
+                    child:
+                    Expanded
+                    (
+                      child:
+                      //材料
+                      TextFormField
+                      (
+                        controller: _processController,
+                        decoration:
+                        InputDecoration
+                        (
+                          enabledBorder: OutlineInputBorder
+                          (
+                            borderSide: BorderSide(color: HexColor('212738')),
+                          ),
+                          labelText: "手順",
+                          hintText: "手順を入力してください"
+                        ),
+                      ),
+                    ),//材料end
                   ),
-                  labelText: "手順",
-                  hintText: "手順を入力してください"
-                ),
-              )
+                  //手順の追加
+                  Expanded
+                  (child:
+                      RaisedButton
+                      (
+                        child: const Icon(Icons.add),
+                        color: HexColor('212738'),
+                        textColor: HexColor('FFFFFF'),
+                        shape:  const CircleBorder(
+                          side: BorderSide(
+                            width: 1,
+                          )
+                        ),
+                        onPressed: ()=> setState(
+                          (){
+                            _process = count.toString()+ "：" + _processController.text;
+                            process.add(_process);
+                        },
+                        )
+                      ),
+                  ),
+                  // Expanded(child: Text(_text),)
+                  // Expanded(child: Text(itemsAdd[0])),
+                ],
+              ),
+              Container
+              (
+                padding: EdgeInsets.only(top:10, bottom: 10),
+                child: Expanded(child: Text(process.toString(), style: TextStyle(fontSize: 23,),),),
+              ),
             ],
-
           ),
         ),
       )
