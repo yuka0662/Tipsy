@@ -366,7 +366,9 @@ class _State extends State
                         ),
                         onPressed: ()=> setState(
                           (){
-                            _process = count.toString()+ "：" + _processController.text;
+                            // var i=0;
+                            // process[i];
+                            _process = count.toString()+ "：" + _processController.text+"\n";
                             process.add(_process);
                         },
                         )
