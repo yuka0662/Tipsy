@@ -22,10 +22,10 @@ class Newpost extends StatefulWidget {
 }
 class _State extends State
 {
+  List<String> processList = [];
   // List<String> items = [];
   var items = <String>[]; //材料追加
   var process = <String>[];  //手順
-  
   //checkboxおつまみカテゴリーの初期設定
   var _meat = false;
   var _fish = false;
@@ -43,6 +43,17 @@ class _State extends State
   var _process = '　';  //手順入力した値を入れる
   var count = 0;
 
+  void initState(){
+    super.initState();
+    _materialController = TextEditingController();
+    _processController = TextEditingController();
+  }
+
+  void dispose(){
+    super.dispose();
+    _materialController.dispose();
+    _processController.dispose();
+  }
 
   @override
   Widget build(BuildContext context)
@@ -66,7 +77,9 @@ class _State extends State
       Center
       (
         child:
-        Container
+        SingleChildScrollView
+        (child:
+          Container
         (
           width: 1000,
           child:
@@ -368,8 +381,10 @@ class _State extends State
                           (){
                             // var i=0;
                             // process[i];
-                            _process = count.toString()+ "：" + _processController.text+"\n";
+                            // _process = count.toString()+ "：" + _processController.text+"\n";
+                            _process = _processController.text;
                             process.add(_process);
+
                         },
                         )
                       ),
@@ -381,10 +396,24 @@ class _State extends State
               Container
               (
                 padding: EdgeInsets.only(top:10, bottom: 10),
-                child: Expanded(child: Text(process.toString(), style: TextStyle(fontSize: 23,),),),
+                // child: Expanded(child: Text(process.toString(), style: TextStyle(fontSize: 23,),),),
+                child:
+                ListView.builder
+                (
+                  shrinkWrap: true,
+                  itemCount: process.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return Container
+                    (
+                      padding: EdgeInsets.only(top:0.0, right: 0.0, bottom: 0.0, left: 0.0),
+                      child: ListTile(title: Text("$index : ${process.toString()}", style: TextStyle(color: Colors.black, fontSize: 23,),),),
+                    );
+                  }
+                ),
               ),
             ],
           ),
+        ),
         ),
       )
     );
