@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381907799819",
+    "project_id": "tipsy-f9c63",
+    "storage_bucket": "tipsy-f9c63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381907799819:android:6d62d92a8c28e005d49c0e",
+        "android_client_info": {
+          "package_name": "com.example.tipsy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381907799819-iiah3l8npge5gr5m4f9vorcdac1n23ok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDswaF-WjlTt61AzW8t1eTE2_YGLDfP_Ek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381907799819-iiah3l8npge5gr5m4f9vorcdac1n23ok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
