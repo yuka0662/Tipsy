@@ -19,7 +19,8 @@ class Mysql {
       _list.add('${row.fields}');
     }
   }
-  //Mysql();
+
+  Mysql();
 
   Future<MySqlConnection> getConnection() async {
     var settings = new ConnectionSettings(
