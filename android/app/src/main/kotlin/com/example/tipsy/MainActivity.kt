@@ -1,4 +1,4 @@
-package com.example.sample
+package com.example.tipsy
 
 import io.flutter.embedding.android.FlutterActivity
 

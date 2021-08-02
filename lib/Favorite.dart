@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './Color.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Favorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -4,12 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sample/Top.dart';
-import 'package:sample/main.dart';
-import 'package:image_picker/image_picker.dart';
-// import './Header.dart';
 import './Color.dart';
 import './Search.dart';
+import './home.dart';
 
 
 class Newpost extends StatefulWidget {
@@ -25,8 +22,7 @@ class _State extends State
   // File _image;
   // final picker = ImagePicker();
   File _image;
-  final picker = ImagePicker();
-    
+  //final picker = ImagePicker();
   List<String> processList = [];
   // List<String> items = [];
   var items = <String>[]; //材料追加
@@ -45,21 +41,21 @@ class _State extends State
   var _materialController = TextEditingController(); //材料
   var _processController = TextEditingController(); //手順
 
-  Future getImageFromCamera() async{
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+  // Future getImageFromCamera() async{
+  //   final pickedFile = await picker.getImage(source: ImageSource.camera);
 
-    setState(() {
-        // _image = File(pickedFile.path);
-    });
-  }
+  //   setState(() {
+  //       // _image = File(pickedFile.path);
+  //   });
+  // }
 
-  Future getImageFromGallery() async{
-    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+  // Future getImageFromGallery() async{
+  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
 
-    setState((){
-      // _image = File(pickedImage.path);
-    });
-  }
+  //   setState((){
+  //     // _image = File(pickedImage.path);
+  //   });
+  // }
 
   void initState(){
     super.initState();
@@ -494,7 +490,7 @@ class _State extends State
                               context,
                               MaterialPageRoute
                               (
-                                builder: (context)=>Top(),
+                                builder: (context)=>Home(),
                                 fullscreenDialog: true,
                               )
                             )
