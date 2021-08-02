@@ -1,15 +1,15 @@
+import 'dart:html';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sample/ListItem.dart';
 import 'package:sample/Top.dart';
 import 'package:sample/main.dart';
+import 'package:image_picker/image_picker.dart';
 // import './Header.dart';
 import './Color.dart';
 import './Search.dart';
-import './ListItem.dart';
 
 
 class Newpost extends StatefulWidget {
@@ -22,6 +22,11 @@ class Newpost extends StatefulWidget {
 }
 class _State extends State
 {
+  // File _image;
+  // final picker = ImagePicker();
+  File _image;
+  final picker = ImagePicker();
+    
   List<String> processList = [];
   // List<String> items = [];
   var items = <String>[]; //材料追加
@@ -38,10 +43,23 @@ class _State extends State
   var _party = false;
   //Controller
   var _materialController = TextEditingController(); //材料
-  var _text = ' '; //材料入力した値を入れる
   var _processController = TextEditingController(); //手順
-  var _process = '　';  //手順入力した値を入れる
-  var count = 0;
+
+  Future getImageFromCamera() async{
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+        // _image = File(pickedFile.path);
+    });
+  }
+
+  Future getImageFromGallery() async{
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+
+    setState((){
+      // _image = File(pickedImage.path);
+    });
+  }
 
   void initState(){
     super.initState();
@@ -58,6 +76,7 @@ class _State extends State
   @override
   Widget build(BuildContext context)
   {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold
     (
       appBar: AppBar(
@@ -81,7 +100,8 @@ class _State extends State
         (child:
           Container
         (
-          width: 1000,
+          width: size.width,
+          height: size.height,
           child:
           Column
           (
@@ -96,11 +116,11 @@ class _State extends State
               Container
               (
                 padding: EdgeInsets.only(top:25),
+                width: 600,
                 height: 100,
                 child:
                 Expanded
                 (
-                  flex: 3,
                   child:
                   //レシピ名入力欄
                   TextFormField
@@ -126,277 +146,299 @@ class _State extends State
                   ),//レシピ名入力欄end
                 ),
               ),
-              Row
-              (children:
-                [
-                  //肉のチェックボックス
-                  Expanded
-                  (child:
-                    Container(
-                      child:
+              Container
+              (
+                width: 600,
+                child:
+                Row
+                (children:
+                  [
+                    //肉のチェックボックス
+                    Expanded
+                    (child:
+                      Container(
+                        child:
+                        CheckboxListTile
+                        (
+                          title: Text("肉",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                          value: _meat,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (bool value){
+                            setState(()
+                            {
+                              _meat = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    //魚のチェックボックス
+                    Expanded
+                    (child:
                       CheckboxListTile
                       (
-                        title: Text("肉"),
-                        value: _meat,
+                        title: Text("魚",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        value: _fish,
                         controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (bool value){
-                          setState(bool value){
-                            _meat = value;
-                          }
+                            setState((){
+                              _fish = value;
+                            });
                         },
+                      )
+                    ),
+                    //甘いのチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("甘い",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _sweet,
+                        onChanged: (bool value){
+                          setState((){
+                          _sweet = value;
+                          });
+                        },
+                      )
+                    ),
+                  ],
+                ),
+              ),
+              Container
+              (
+                width: 600,
+                child:
+                Row(
+                  children: [
+                    //しょっぱいのチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("しょっぱい",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _salty,
+                        onChanged: (bool value){
+                          setState((){
+                          _salty = value;
+                          });
+                        },
+                      )
+                    ),
+                     //簡単のチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("簡単",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _easy,
+                        onChanged: (bool value){
+                          setState((){
+                          _easy = value;
+                          });
+                        },
+                      )
+                    ),
+                    //時短のチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("時短",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _tShort,
+                        onChanged: (bool value){
+                          setState((){
+                          _tShort = value;
+                          });
+                        },
+                      )
+                    ),
+                  ],
+                )
+              ),
+              Container(
+                width: 600,
+                child:
+                Row
+                (children:
+                  [
+                    //スナックのチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("スナック",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _snack,
+                        onChanged: (bool value){
+                          setState((){
+                          _snack = value;
+                          });
+                        },
+                      )
+                    ),
+                    //変わり種のチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("変わり種",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _novelty,
+                        onChanged: (bool value){
+                          setState((){
+                          _novelty = value;
+                          });
+                        },
+                      )
+                    ),
+                    //パーティのチェックボックス
+                    Expanded
+                    (child:
+                      CheckboxListTile
+                      (
+                        title: Text("パーティ",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value:  _party,
+                        onChanged: (bool value){
+                          setState((){
+                          _party = value;
+                          });
+                        },
+                      )
+                    ),
+                  ],
+                ),
+              ),
+              Container
+              (
+                width: 600,
+                child:
+                Row
+                (children:
+                  [
+                    Container
+                    (
+                      width: 500,
+                      child:
+                      Expanded
+                      (
+                        child:
+                        //材料
+                        TextFormField
+                        (
+                          controller: _materialController,
+                          decoration: InputDecoration
+                          (
+                            enabledBorder: OutlineInputBorder
+                            (
+                              borderSide: BorderSide(color: HexColor('212738')),
+                            ),
+                            labelText: "材料",
+                            hintText: "材料・用量を入力してください"
+                          ),
+                        ),//材料end
                       ),
                     ),
-                  ),
-                  //魚のチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("魚"),
-                      value: _fish,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged: (bool value){
-                          setState(){
-                            _fish = value;
-                          }
-                      },
-                    )
-                  ),
-                  //甘いのチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("甘い"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _sweet,
-                      onChanged: (bool value){
-                        setState(){
-                         _sweet = value;
-                        }
-                      },
-                    )
-                  ),
-                  //しょっぱいのチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("しょっぱい"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _salty,
-                      onChanged: (bool value){
-                        setState(){
-                         _salty = value;
-                        }
-                      },
-                    )
-                  ),
-                ],
-              ),
-              Row
-              (children:
-                [
-                  //簡単のチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("簡単"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _easy,
-                      onChanged: (bool value){
-                        setState(){
-                         _easy = value;
-                        }
-                      },
-                    )
-                  ),
-                  //時短のチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("時短"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _tShort,
-                      onChanged: (bool value){
-                        setState(){
-                         _tShort = value;
-                        }
-                      },
-                    )
-                  ),
-                  //スナックのチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("スナック"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _snack,
-                      onChanged: (bool value){
-                        setState(){
-                         _snack = value;
-                        }
-                      },
-                    )
-                  ),
-                  //変わり種のチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("変わり種"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _novelty,
-                      onChanged: (bool value){
-                        setState(){
-                         _novelty = value;
-                        }
-                      },
-                    )
-                  ),
-                  //パーティのチェックボックス
-                  Expanded
-                  (child:
-                    CheckboxListTile
-                    (
-                      title: Text("パーティ"),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value:  _party,
-                      onChanged: (bool value){
-                        setState(){
-                         _party = value;
-                        }
-                      },
-                    )
-                  ),
-                ],
-              ),
-              Row
-              (children:
-                [
-                  Container
-                  (
-                    width: 500,
-                    child:
+                    //材料の追加
                     Expanded
-                    (
-                      child:
-                      //材料
-                      TextFormField
-                      (
-                        controller: _materialController,
-                        decoration: InputDecoration
+                    (child:
+                        RaisedButton
                         (
-                          enabledBorder: OutlineInputBorder
-                          (
-                            borderSide: BorderSide(color: HexColor('212738')),
+                          child: const Icon(Icons.add),
+                          color: HexColor('212738'),
+                          textColor: HexColor('FFFFFF'),
+                          shape:  const CircleBorder(
+                            side: BorderSide(
+                              width: 1,
+                            )
                           ),
-                          labelText: "材料",
-                          hintText: "材料・用量を入力してください"
-                        ),
-                        // autovalidate: false,  //入力変化しても自動でチェックしない
-                        // validator: (value)
-                        // {
-                        //   if(value.isEmpty)
-                        //   {
-                        //     return "材料・用量を入力してください";
-                        //   }
-                        //   return null;  //問題ない場合、nullを返す
-                        // },
-                      ),//材料end
-                    ),
-                  ),
-                  //材料の追加
-                  Expanded
-                  (child:
-                      RaisedButton
-                      (
-                        child: const Icon(Icons.add),
-                        color: HexColor('212738'),
-                        textColor: HexColor('FFFFFF'),
-                        shape:  const CircleBorder(
-                          side: BorderSide(
-                            width: 1,
+                          onPressed: ()=> setState(
+                            (){
+                              items.add(_materialController.text);
+                          },
                           )
                         ),
-                        onPressed: ()=> setState(
-                          (){
-                            _text = _materialController.text;
-                            items.add(_text);
-                        },
-                        )
-                      ),
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
               Container
               (
                 padding: EdgeInsets.only(top:10, bottom: 10),
-                child: Expanded(child: Text(items.toString(), style: TextStyle(fontSize: 23, color: Colors.grey,),),),
-              ),
-              Row
-              (children:
-                [
-                  Container
-                  (
-                    width: 500,
-                    child:
-                    Expanded
+                child: ListView.builder
+                (
+                  shrinkWrap: true,
+                  itemCount: items.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return Container
                     (
-                      child:
-                      //材料
-                      TextFormField
+                      padding: EdgeInsets.only(top:0.0, right: 0.0, bottom: 0.0, left: 0.0),
+                      child: ListTile(title: Text("${items[index]}", style: TextStyle(color: Colors.black, fontSize: 15,),),),
+                    );
+                  }
+                  ),
+              ),
+              Container
+              (
+                width: 600,
+                child:
+                  Row
+                  (children:
+                    [
+                      Container
                       (
-                        controller: _processController,
-                        decoration:
-                        InputDecoration
+                        width: 500,
+                        child:
+                        Expanded
                         (
-                          enabledBorder: OutlineInputBorder
+                          child:
+                          //材料
+                          TextFormField
                           (
-                            borderSide: BorderSide(color: HexColor('212738')),
+                            controller: _processController,
+                            decoration:
+                            InputDecoration
+                            (
+                              enabledBorder: OutlineInputBorder
+                              (
+                                borderSide: BorderSide(color: HexColor('212738')),
+                              ),
+                              labelText: "手順",
+                              hintText: "手順を入力してください"
+                            ),
                           ),
-                          labelText: "手順",
-                          hintText: "手順を入力してください"
-                        ),
+                        ),//材料end
                       ),
-                    ),//材料end
-                  ),
-                  //手順の追加
-                  Expanded
-                  (child:
-                      RaisedButton
-                      (
-                        child: const Icon(Icons.add),
-                        color: HexColor('212738'),
-                        textColor: HexColor('FFFFFF'),
-                        shape:  const CircleBorder(
-                          side: BorderSide(
-                            width: 1,
-                          )
-                        ),
-                        onPressed: ()=> setState(
-                          (){
-                            // var i=0;
-                            // process[i];
-                            // _process = count.toString()+ "：" + _processController.text+"\n";
-                            _process = _processController.text;
-                            process.add(_process);
-
-                        },
-                        )
+                    //手順の追加
+                      Expanded
+                      (child:
+                          RaisedButton
+                          (
+                            child: const Icon(Icons.add),
+                            color: HexColor('212738'),
+                            textColor: HexColor('FFFFFF'),
+                            shape:  const CircleBorder(
+                              side: BorderSide(
+                                width: 1,
+                              )
+                            ),
+                            onPressed: ()=> setState(
+                              (){
+                                process.add(_processController.text);
+                              },
+                            )
+                          ),
                       ),
-                  ),
-                  // Expanded(child: Text(_text),)
-                  // Expanded(child: Text(itemsAdd[0])),
-                ],
+                  ],
+                ),
               ),
               Container
               (
                 padding: EdgeInsets.only(top:10, bottom: 10),
-                // child: Expanded(child: Text(process.toString(), style: TextStyle(fontSize: 23,),),),
                 child:
                 ListView.builder
                 (
@@ -406,11 +448,62 @@ class _State extends State
                     return Container
                     (
                       padding: EdgeInsets.only(top:0.0, right: 0.0, bottom: 0.0, left: 0.0),
-                      child: ListTile(title: Text("$index : ${process.toString()}", style: TextStyle(color: Colors.black, fontSize: 23,),),),
+                      child: ListTile(title: Text("${index+1} : ${process[index]}", style: TextStyle(color: Colors.black, fontSize: 23,),),),
                     );
                   }
                 ),
               ),
+              Container
+              (
+                width: 600,
+                child:
+                Row
+                (
+                  children: [
+                    Container
+                    (
+                      width: 150,
+                      height: 50,
+                      child:
+                      SizedBox(
+                        child:
+                        RaisedButton
+                        (
+                          child: Text('キャンセル'),
+                          onPressed:()=>{
+                            Navigator.pop(context)
+                          }
+                        ),
+                      )
+                    ),
+                    Container(padding: EdgeInsets.only(top:0.0, right: 0.0, bottom: 0.0, left: 200.0),),
+                    Container
+                    (
+                      width: 150,
+                      height: 50,
+                      child:
+                      RaisedButton
+                      (
+                        child: Text('投稿する'),
+                        color: HexColor('212738'),
+                        textColor: HexColor('FFFFFF'),
+                        // splashColor: HexColor('08FFC8'),
+                        onPressed: ()=>{
+                            Navigator.push
+                            (
+                              context,
+                              MaterialPageRoute
+                              (
+                                builder: (context)=>Top(),
+                                fullscreenDialog: true,
+                              )
+                            )
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              )
             ],
           ),
         ),
