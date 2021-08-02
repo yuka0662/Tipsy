@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import './Color.dart';
 import './home.dart';
 import './Search.dart';
@@ -7,7 +8,13 @@ import './Favorite.dart';
 import './Timer.dart';
 import './Newpost.dart';
 
-void main() {
+import './signin.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -21,7 +28,14 @@ class MyApp extends StatelessWidget {
         '/password': (BuildContext context) => PasswordPage(),
         '/add': (BuildContext context) => AddPage(),
       },
-      home: MyHomePage(),
+      home: MyAuthPage(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale("ja"),
+      ],
     );
   }
 }
@@ -106,13 +120,21 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('ログアウト'),
               leading: Icon(Icons.logout),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) {
+                    return MyAuthPage();
+                  }),
+                );
+              },
             ),
           ],
         ),
       ),
       //タブによって表示内容が変わる(body部分)
       body: _pageWidgets.elementAt(_currentIndex),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         //新規投稿ボタンのタップ時のイベント,
         onPressed: () {
           Navigator.push(
@@ -123,7 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Increment',
         backgroundColor: HexColor('43AA8B'),
-        child: Icon(Icons.add),
+        icon: Icon(Icons.add),
+        label: const Text('レシピ追加'),
       ),
       //下のナビゲーションバー
       bottomNavigationBar: BottomNavigationBar(
@@ -172,7 +195,8 @@ class _UserState extends State {
         //ここにimagepickerの追加
         Container(
           padding: const EdgeInsets.all(10.0),
-          child: TextField(
+          child: TextFormField(
+            initialValue: 'お酒大好き',
             decoration: InputDecoration(
               icon: Icon(Icons.face),
               labelText: 'ユーザー名',
@@ -181,7 +205,8 @@ class _UserState extends State {
         ),
         Container(
           padding: const EdgeInsets.all(10.0),
-          child: TextField(
+          child: TextFormField(
+            initialValue: 'osake.like@like.ac.jp',
             decoration: InputDecoration(
               icon: Icon(Icons.markunread),
               labelText: 'メールアドレス',
@@ -193,7 +218,7 @@ class _UserState extends State {
           child: TextFormField(
             enabled: false,
             //databaseから値を取ってくる
-            initialValue: '〇〇〇〇年△△月◇◇日',
+            initialValue: '1999年05月13日',
             decoration: const InputDecoration(
               labelText: '生年月日',
             ),
@@ -243,7 +268,15 @@ class _UserState extends State {
   }
 }
 
-class PasswordPage extends StatelessWidget {
+class PasswordPage extends StatefulWidget {
+  @override
+  _PasswordPageState createState() => _PasswordPageState();
+}
+
+class _PasswordPageState extends State {
+  //final AuthService _auth = AuthService();
+  String _email = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -252,31 +285,58 @@ class PasswordPage extends StatelessWidget {
         backgroundColor: HexColor('212738'),
       ),
       body: Column(children: <Widget>[
-        Row(
-          children:<Widget>[
-            Container(
-              padding: const EdgeInsets.fromLTRB(30.0, 100.0, 0, 5.0),
-              child: Text('メールアドレス'),
-            ),
-          ]
-        ),
+        Row(children: <Widget>[
+          Container(
+            padding: const EdgeInsets.fromLTRB(30.0, 100.0, 0, 5.0),
+            child: Text('メールアドレス'),
+          ),
+        ]),
         Container(
           padding: const EdgeInsets.fromLTRB(30.0, 0, 30.0, 30.0),
           child: TextField(
-            obscureText: true,
             decoration: InputDecoration(
+              hintText: 'sample@co.jp',
               border: OutlineInputBorder(),
             ),
           ),
         ),
         Container(
-          child: RaisedButton(
-            onPressed: () => {
-              Navigator.pop(context) // 呼び出し元に戻る
-              //検索条件を保持してデータベースから探して呼び出し元の画面にて表示
-            },
-            child: Text('認証メールを送信'),
-          ),
+          child: FlatButton(
+              color: Colors.blue,
+              onPressed: () async {
+                /*
+                String _result = await _auth.passwordResetEmail(_email);
+
+                // 成功時は戻る
+                if (_result == 'success') {
+                  Navigator.pop(context);
+                } else if (_result == 'ERROR_INVALID_EMAIL') {
+                  Flushbar(
+                    message: "無効なメールアドレスです",
+                    backgroundColor: Colors.red,
+                    margin: EdgeInsets.all(8),
+                    borderRadius: 8,
+                    duration: Duration(seconds: 3),
+                  )..show(context);
+                } else if (_result == 'ERROR_USER_NOT_FOUND') {
+                  Flushbar(
+                    message: "メールアドレスが登録されていません",
+                    backgroundColor: Colors.red,
+                    margin: EdgeInsets.all(8),
+                    borderRadius: 8,
+                    duration: Duration(seconds: 3),
+                  )..show(context);
+                } else {
+                  Flushbar(
+                    message: "メール送信に失敗しました",
+                    backgroundColor: Colors.red,
+                    margin: EdgeInsets.all(8),
+                    borderRadius: 8,
+                    duration: Duration(seconds: 3),
+                  )..show(context);
+                }
+                */
+              }),
         ),
       ]),
     );
