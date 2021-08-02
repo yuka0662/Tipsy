@@ -21,7 +21,7 @@ class _State extends State
 {
   // File _image;
   // final picker = ImagePicker();
-  File _image;
+  //File _image;
   //final picker = ImagePicker();
   List<String> processList = [];
   // List<String> items = [];
