@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>sample</string>
+	<string>tipsy</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -40,14 +40,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-
-	<!--追加-->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>requires to access photo library</string>
-	<key>NSCameraUsageDescription</key>
-	<string>requires to use your camera</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>requires to use your microphone</string>
 	<false/>
 </dict>
 </plist>

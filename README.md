@@ -1,4 +1,4 @@
-# sample
+# tipsy
 
 A new Flutter project.
 
