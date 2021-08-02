@@ -1,7 +1,7 @@
-import 'dart:html';
-import 'dart:math';
+//import 'dart:html';
+//import 'dart:math';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import './Color.dart';
@@ -156,6 +156,7 @@ class _State extends State
                         child:
                         CheckboxListTile
                         (
+                          contentPadding: EdgeInsets.all(0),
                           title: Text("肉",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                           value: _meat,
                           controlAffinity: ListTileControlAffinity.leading,
@@ -173,6 +174,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("魚",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         value: _fish,
                         controlAffinity: ListTileControlAffinity.leading,
@@ -188,6 +190,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("甘い",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _sweet,
@@ -212,6 +215,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("しょっぱい",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _salty,
@@ -227,6 +231,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("簡単",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _easy,
@@ -242,6 +247,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("時短",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _tShort,
@@ -266,6 +272,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("スナック",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _snack,
@@ -281,6 +288,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("変わり種",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _novelty,
@@ -296,6 +304,7 @@ class _State extends State
                     (child:
                       CheckboxListTile
                       (
+                        contentPadding: EdgeInsets.all(0),
                         title: Text("パーティ",style: TextStyle(fontSize: 15, color:HexColor('707070'))),
                         controlAffinity: ListTileControlAffinity.leading,
                         value:  _party,
@@ -318,7 +327,7 @@ class _State extends State
                   [
                     Container
                     (
-                      width: 500,
+                      width: 300,
                       child:
                       Expanded
                       (
@@ -387,7 +396,7 @@ class _State extends State
                     [
                       Container
                       (
-                        width: 500,
+                        width: 300,
                         child:
                         Expanded
                         (
@@ -472,7 +481,7 @@ class _State extends State
                         ),
                       )
                     ),
-                    Container(padding: EdgeInsets.only(top:0.0, right: 0.0, bottom: 0.0, left: 200.0),),
+                    Container(padding: EdgeInsets.only(top:0.0, right: 0.0, bottom: 0.0, left: 110.0),),
                     Container
                     (
                       width: 150,
