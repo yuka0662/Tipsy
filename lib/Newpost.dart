@@ -1,7 +1,7 @@
-import 'dart:html';
-import 'dart:math';
+//import 'dart:html';
+//import 'dart:math';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import './Color.dart';
@@ -21,7 +21,7 @@ class _State extends State
 {
   // File _image;
   // final picker = ImagePicker();
-  File _image;
+  //File _image;
   //final picker = ImagePicker();
   List<String> processList = [];
   // List<String> items = [];
