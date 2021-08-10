@@ -7,7 +7,7 @@ import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
 import './Newpost.dart';
-
+import './';
 import './signin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/password': (BuildContext context) => PasswordPage(),
         '/add': (BuildContext context) => AddPage(),
       },
+      // home: MyAuthPage(),
       home: MyHomePage(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
