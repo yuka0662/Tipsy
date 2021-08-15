@@ -1,4 +1,6 @@
 //import 'dart:html';
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +17,11 @@ class RecipepostList extends StatefulWidget{
 
 class _State extends State
 {
-  // final list = ['Apple', 'Banana'];
   @override
   Widget build(BuildContext context)
   {
-    const list = [Text('紅茶のお酒'), Text('カシスウーロン')];
+    //var list = ['Apple', 'Banana'];
+    var list = ['紅茶のお酒', 'カシスウーロン'];
     return Scaffold
     (
       appBar: AppBar(
@@ -36,70 +38,89 @@ class _State extends State
         ],
       ),
       body:
+        ListView.separated
+        (
+          itemBuilder: (BuildContext context, int index)
+          {
+            return _Recipelist(list[index]);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return separatorItem();
+          },
+          itemCount: list.length,
+        )
       // Center
       // (
       //   child:
-        SingleChildScrollView
-        (
-          child: Row
-          (
-            children: [
-              Container
-              (
-                child:
-                //_Recipelist('紅茶のお酒-お湯割り-', Image.asset('fauchon_straight.jpg'))
-                // _Recipelist('紅茶のお酒-お湯割り-'),
-                Expanded
-                (
-                  child:
-                    ListView
-                    (
-                      children: list
-                    ),
-                )
-                // Expanded
-                // (
-                //   child:
-                  // ListView(
-                  //   children:
-                  //   [
-                  //     _Recipelist('紅茶のお酒-お湯割り-'),
-                  //     _Recipelist('カシスウーロン')
-                  //   ],
-                  // )
-                // ListView
-                // (
-                //   children:<Widget>[
-                //       ListTile(
-                //         // leading: Image.network('https://www.asahibeer.co.jp/products/spirits_liqueur/liqueur/fauchon_koucha/'),
-                //       title: Text("紅茶のお酒-お湯割り-"),),
-                //       ListTile(
-                //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                //       title: Text('ブランデー-ソーダ―割-'),
-                //       ),
-                //       ListTile(
-                //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                //       title: Text('ブランデー-ソーダ―割-'),
-                //       ),
-                //       ListTile(
-                //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                //       title: Text('ブランデー-ソーダ―割-'),
-                //       ),
-                //       ListTile(
-                //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                //       title: Text('ブランデー-ソーダ―割-'),
-                //       ),
-                //   ]
-                // ),
-                )
-              //)
-            ],
-          ),
-        )
+        // SingleChildScrollView
+        // (
+        //   child: Row
+        //   (
+        //     children: [
+        //       Container
+        //       (
+        //         child:
+        //         //_Recipelist('紅茶のお酒-お湯割り-', Image.asset('fauchon_straight.jpg'))
+        //         // _Recipelist('紅茶のお酒-お湯割り-'),
+        //         Expanded
+        //         (
+        //           child:
+        //             // ListView
+        //             // (
+        //             //   children: list
+        //             // ),
+        //             // Text('紅茶のお酒'),
+        //             ListView(children: [list[]]),
+        //         )
+        //         // Expanded
+        //         // (
+        //         //   child:
+        //           // ListView(
+        //           //   children:
+        //           //   [
+        //           //     _Recipelist('紅茶のお酒-お湯割り-'),
+        //           //     _Recipelist('カシスウーロン')
+        //           //   ],
+        //           // )
+        //         // ListView
+        //         // (
+        //         //   children:<Widget>[
+        //         //       ListTile(
+        //         //         // leading: Image.network('https://www.asahibeer.co.jp/products/spirits_liqueur/liqueur/fauchon_koucha/'),
+        //         //       title: Text("紅茶のお酒-お湯割り-"),),
+        //         //       ListTile(
+        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
+        //         //       title: Text('ブランデー-ソーダ―割-'),
+        //         //       ),
+        //         //       ListTile(
+        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
+        //         //       title: Text('ブランデー-ソーダ―割-'),
+        //         //       ),
+        //         //       ListTile(
+        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
+        //         //       title: Text('ブランデー-ソーダ―割-'),
+        //         //       ),
+        //         //       ListTile(
+        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
+        //         //       title: Text('ブランデー-ソーダ―割-'),
+        //         //       ),
+        //         //   ]
+        //         // ),
+        //         )
+        //       //)
+        //     ],
+        //   ),
+        // )
       //)
     );
   }
 
+   Widget separatorItem() {
+    return Container(
+      height: 10,
+      // color: Colors.orange,
+    );
+  }
   // Widget _Recipelist(String title, Image image)
   Widget _Recipelist(String title)
   {
@@ -125,6 +146,15 @@ class _State extends State
           ],
         )
       ),
+    );
+  }
+
+  Widget _ImageList(Image image)
+  {
+    var imageList = {};
+    return Scaffold
+    (
+
     );
   }
 }
