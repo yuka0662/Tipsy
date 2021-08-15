@@ -7,7 +7,7 @@ import './Liquor.dart';
 import './Favorite.dart';
 import './Timer.dart';
 import './Newpost.dart';
-import './';
+import './RecipepostList.dart';
 import './signin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -114,8 +114,9 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('レシピ投稿一覧'),
               leading: Icon(Icons.menu_book),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/add');
+                // Navigator.pop(context);
+                // Navigator.pushNamed(context, '/add');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RecipepostList()));
               },
             ),
             ListTile(
