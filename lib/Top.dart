@@ -1,89 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 class Top extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SlidePage();
-     
+    return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.white),
+      home: NestedList(),
+    );
   }
-}
-class SlidePage extends StatefulWidget {
+} 
+
+class NestedList extends StatelessWidget {
   @override
-  _SlideshowState createState() => _SlideshowState();
-}
- 
- 
-class _SlideshowState extends State<SlidePage> {
- 
-  // ページコントローラ
-  final PageController controller = PageController(viewportFraction: 0.8);
- 
-  // ページインデックス
-  int currentPage = 0;
- 
-  // データ
-  List<String>_imageList = [
-    "images/aki.png", 
-    "images/gift.png",
-    "images/otsumami.png"
-  ];
- 
- 
-  @override
-  void initState() {
- 
-    super.initState();
- 
-    // ページコントローラのページ遷移を監視しページ数を丸める
-    controller.addListener(() {
-      int next = controller.page.round();
-      if (currentPage != next) {
-        setState(() {
-          currentPage = next;
-        });
-      }
-    });
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Nested List'),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        itemBuilder: _buildVerticalItem,
+      ),
+    );
   }
- 
- 
-  /*
-   * アニメーションカード生成
-   */
-  AnimatedContainer _createCardAnimate(String imagepath, bool active) {
- 
-    // アクティブと非アクティブのアニメーション設定値
-    final double top = active ? 100 : 200;
-    final double side = active ? 0 : 40;
- 
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeOutQuint,
-      margin: EdgeInsets.only(top: top, bottom: 50.0, right: side, left: side),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fitWidth,
-          image: Image.asset(imagepath).image,
+
+  Widget _buildVerticalItem(BuildContext context, int verticalIndex) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: SizedBox(
+        height: 320,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              WordPair.random().asPascalCase,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              WordPair.random().asPascalCase,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            _buildHorizontalItem(context, verticalIndex),
+          ],
         ),
       ),
     );
   }
-  @override
-  Widget build(BuildContext context) {
- 
-    return PageView.builder(
-      controller: controller,
-      itemCount: _imageList.length,
-      itemBuilder: (context, int currentIndex) {
- 
-        // アクティブ値
-        bool active = currentIndex == currentPage;
- 
-        // カードの生成して返す
-        return _createCardAnimate(
-          _imageList[currentIndex],
-          active,
-        );
-      },
+
+  Widget _buildHorizontalItem(BuildContext context, int verticalIndex) {
+    return SizedBox(
+      height: 240,
+      child: PageView.builder(
+        controller: PageController(viewportFraction: 0.8),
+        itemBuilder: (context, horizontalIndex) =>
+            _buildHorizontalView(context, verticalIndex, horizontalIndex),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalView(
+      BuildContext context, int verticalIndex, int horizontalIndex) {
+    final imageUrl =
+        'https://source.unsplash.com/random/275x240?sig=$verticalIndex$horizontalIndex';
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Card(
+        child: Image.network(imageUrl),
+      ),
     );
   }
 }
