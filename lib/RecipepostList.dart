@@ -20,12 +20,10 @@ class _State extends State
   @override
   Widget build(BuildContext context)
   {
-    //var list = ['Apple', 'Banana'];
-    var list = ['紅茶のお酒', 'カシスウーロン'];
     return Scaffold
     (
       appBar: AppBar(
-        title: Text('tipsy'),
+        title: Text('レシピ投稿一覧'),
         backgroundColor: HexColor('212738'),
         actions: <Widget>[
           IconButton(
@@ -38,123 +36,46 @@ class _State extends State
         ],
       ),
       body:
-        ListView.separated
-        (
-          itemBuilder: (BuildContext context, int index)
-          {
-            return _Recipelist(list[index]);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return separatorItem();
-          },
-          itemCount: list.length,
-        )
-      // Center
-      // (
-      //   child:
-        // SingleChildScrollView
-        // (
-        //   child: Row
-        //   (
-        //     children: [
-        //       Container
-        //       (
-        //         child:
-        //         //_Recipelist('紅茶のお酒-お湯割り-', Image.asset('fauchon_straight.jpg'))
-        //         // _Recipelist('紅茶のお酒-お湯割り-'),
-        //         Expanded
-        //         (
-        //           child:
-        //             // ListView
-        //             // (
-        //             //   children: list
-        //             // ),
-        //             // Text('紅茶のお酒'),
-        //             ListView(children: [list[]]),
-        //         )
-        //         // Expanded
-        //         // (
-        //         //   child:
-        //           // ListView(
-        //           //   children:
-        //           //   [
-        //           //     _Recipelist('紅茶のお酒-お湯割り-'),
-        //           //     _Recipelist('カシスウーロン')
-        //           //   ],
-        //           // )
-        //         // ListView
-        //         // (
-        //         //   children:<Widget>[
-        //         //       ListTile(
-        //         //         // leading: Image.network('https://www.asahibeer.co.jp/products/spirits_liqueur/liqueur/fauchon_koucha/'),
-        //         //       title: Text("紅茶のお酒-お湯割り-"),),
-        //         //       ListTile(
-        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-        //         //       title: Text('ブランデー-ソーダ―割-'),
-        //         //       ),
-        //         //       ListTile(
-        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-        //         //       title: Text('ブランデー-ソーダ―割-'),
-        //         //       ),
-        //         //       ListTile(
-        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-        //         //       title: Text('ブランデー-ソーダ―割-'),
-        //         //       ),
-        //         //       ListTile(
-        //         //         // leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-        //         //       title: Text('ブランデー-ソーダ―割-'),
-        //         //       ),
-        //         //   ]
-        //         // ),
-        //         )
-        //       //)
-        //     ],
-        //   ),
-        // )
-      //)
-    );
-  }
-
-   Widget separatorItem() {
-    return Container(
-      height: 10,
-      // color: Colors.orange,
-    );
-  }
-  // Widget _Recipelist(String title, Image image)
-  Widget _Recipelist(String title)
-  {
-    return GestureDetector(
-      child:Container(
-        padding: EdgeInsets.all(8.0),
-        decoration: new BoxDecoration(
-          border: new Border(bottom: BorderSide(width: 1.0, color: Colors.grey))
-        ),
-        child: Row(
+        ListView(
           children: <Widget>[
-            // Container(
-            //   margin: EdgeInsets.all(50.0),
-            //   child:image,
-            // ),
-            Text(
-              title,
-              style: TextStyle(
-                color:Colors.black,
-                fontSize: 18.0
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
               ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_straight"),
+                  title: Text('紅茶のリキュール　-お湯割り-')
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_apple"),
+                  title: Text("アップルティーのリキュール -お湯割り-"),
+                ),
             ),
           ],
         )
-      ),
     );
   }
 
-  Widget _ImageList(Image image)
+  Widget _ImageItem(String name)
   {
-    var imageList = {};
-    return Scaffold
+    var imageItem = "images/" + name + ".jpg";
+    return Container
     (
-
+      height: 100,
+      child: Image.asset(imageItem, fit: BoxFit.cover,),
     );
   }
 }
