@@ -79,3 +79,148 @@ class _State extends State
     );
   }
 }
+
+
+class PostCocktail extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_straight"),
+                  title: Text('紅茶のリキュール　-お湯割り-')
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_apple"),
+                  title: Text("アップルティーのリキュール -お湯割り-"),
+                ),
+            ),
+          ],
+        );
+  }
+
+   Widget _ImageItem(String name)
+  {
+    var imageItem = "images/" + name + ".jpg";
+    return Container
+    (
+      height: 100,
+      child: Image.asset(imageItem, fit: BoxFit.cover,),
+    );
+  }
+}
+
+class PostSnacks extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_straight"),
+                  title: Text('紅茶のリキュール　-お湯割り-')
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_apple"),
+                  title: Text("アップルティーのリキュール -お湯割り-"),
+                ),
+            ),
+          ],
+        );
+  }
+
+   Widget _ImageItem(String name)
+  {
+    var imageItem = "images/" + name + ".jpg";
+    return Container
+    (
+      height: 100,
+      child: Image.asset(imageItem, fit: BoxFit.cover,),
+    );
+  }
+}
+
+class PostAlcohol extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_straight"),
+                  title: Text('紅茶のリキュール　-お湯割り-')
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_apple"),
+                  title: Text("アップルティーのリキュール -お湯割り-"),
+                ),
+            ),
+          ],
+        );
+  }
+
+   Widget _ImageItem(String name)
+  {
+    var imageItem = "images/" + name + ".jpg";
+    return Container
+    (
+      height: 100,
+      child: Image.asset(imageItem, fit: BoxFit.cover,),
+    );
+  }
+}
