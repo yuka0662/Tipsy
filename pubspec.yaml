@@ -63,6 +63,7 @@ flutter:
   assets:
     - images/fauchon_straight.jpg
     - images/fauchon_apple.jpg
+    - images/karaage.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
