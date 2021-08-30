@@ -5,6 +5,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tipsy/main.dart';
 //import 'package:flutter/rendering.dart';
 import './Color.dart';
 import './Search.dart';
@@ -31,11 +32,16 @@ class RecipepostList extends StatelessWidget
             actions: <Widget>[
               IconButton(
                 onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchPage()))
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage())),
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+              IconButton(
+                onPressed: () => {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => SearchPage())),
                 },
                 icon: Icon(Icons.search),
-              )
+              ),
             ],
           ),
           body: Center
@@ -44,6 +50,7 @@ class RecipepostList extends StatelessWidget
           ),
         ),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

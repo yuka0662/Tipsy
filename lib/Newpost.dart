@@ -41,22 +41,6 @@ class _State extends State
   var _materialController = TextEditingController(); //材料
   var _processController = TextEditingController(); //手順
 
-  // Future getImageFromCamera() async{
-  //   final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-  //   setState(() {
-  //       // _image = File(pickedFile.path);
-  //   });
-  // }
-
-  // Future getImageFromGallery() async{
-  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
-
-  //   setState((){
-  //     // _image = File(pickedImage.path);
-  //   });
-  // }
-
   void initState(){
     super.initState();
     _materialController = TextEditingController();
