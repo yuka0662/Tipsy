@@ -9,7 +9,11 @@ import 'package:tipsy/main.dart';
 //import 'package:flutter/rendering.dart';
 import './Color.dart';
 import './Search.dart';
+import './signin.dart';
 import './home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 //import 'dart:math';
 
 
@@ -27,22 +31,28 @@ class RecipepostList extends StatelessWidget
         (
           appBar: AppBar
           (
-            title: Text('tipsy'),
-            backgroundColor: HexColor('212738'),
-            actions: <Widget>[
-              IconButton(
+            leading: IconButton(
                 onPressed: () => {
                   Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage())),
                 },
                 icon: Icon(Icons.arrow_back),
               ),
+            actions: <Widget>[
               IconButton(
                 onPressed: () => {
                   Navigator.push(context,MaterialPageRoute(builder: (context) => SearchPage())),
                 },
                 icon: Icon(Icons.search),
               ),
+              IconButton(
+                onPressed: () => {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => SearchPage())),
+                },
+                icon: Icon(Icons.keyboard_control),
+              ),
             ],
+            title: Text('tipsy'),
+            backgroundColor: HexColor('212738'),
           ),
           body: Center
           (
@@ -113,6 +123,21 @@ class PostCocktail extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    final button = new PopupMenuButton(
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
+        )
+      ]
+    );
     return ListView(
           children: <Widget>[
             Container
@@ -125,7 +150,8 @@ class PostCocktail extends StatelessWidget
                 ListTile
                 (
                   leading: _ImageItem("fauchon_straight"),
-                  title: Text('紅茶のリキュール　-お湯割り-')
+                  title: Text('紅茶のリキュール　-お湯割り-'),
+                  trailing: button,
                 ),
             ),
             Container
@@ -139,6 +165,7 @@ class PostCocktail extends StatelessWidget
                 (
                   leading: _ImageItem("fauchon_apple"),
                   title: Text("アップルティーのリキュール -お湯割り-"),
+                  trailing: button,
                 ),
             ),
           ],
@@ -159,13 +186,31 @@ class PostCocktail extends StatelessWidget
 
 class PostSnacks extends StatelessWidget
 {
+  // final _menuKey = GlobalKey();
   @override
   Widget build(BuildContext context)
   {
+    final button = new PopupMenuButton(
+      // key: _menuKey,
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
+        )
+      ]
+    );
     return ListView(
           children: <Widget>[
             Container
             (
+            // height: 200,
                decoration: new BoxDecoration
               (
                   border: new Border(bottom: new BorderSide(color: Colors.grey),),
@@ -174,7 +219,8 @@ class PostSnacks extends StatelessWidget
                 ListTile
                 (
                   leading: _ImageItem("karaage"),
-                  title: Text('唐揚げ')
+                  title: Text('唐揚げ'),
+                  trailing: button,
                 ),
             ),
             Container
@@ -184,10 +230,15 @@ class PostSnacks extends StatelessWidget
                   border: new Border(bottom: new BorderSide(color: Colors.grey),),
               ),
               child:
-                ListTile
+                Flexible
                 (
-                  leading: _ImageItem("fauchon_apple"),
-                  title: Text("アップルティーのリキュール -お湯割り-"),
+                  child:
+                  ListTile
+                  (
+                    leading: _ImageItem("fauchon_apple"),
+                    title: Text("アップルティーのリキュール -お湯割り-"),
+                    trailing: button,
+                  ),
                 ),
             ),
           ],
@@ -197,10 +248,11 @@ class PostSnacks extends StatelessWidget
    Widget _ImageItem(String name)
   {
     var imageItem = "images/" + name + ".jpg";
-    return Container
+    return SizedBox
     (
-      height: 100,
-      child: Image.asset(imageItem, fit: BoxFit.cover,),
+      height: 200,
+      //width: 200,
+      child: Image.asset(imageItem, fit: BoxFit.contain,),
     );
   }
 }
@@ -210,6 +262,21 @@ class PostAlcohol extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    final button = new PopupMenuButton(
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
+        )
+      ]
+    );
     return ListView(
           children: <Widget>[
             Container
@@ -222,7 +289,8 @@ class PostAlcohol extends StatelessWidget
                 ListTile
                 (
                   leading: _ImageItem("fauchon_straight"),
-                  title: Text('紅茶のリキュール　-お湯割り-')
+                  title: Text('紅茶のリキュール　-お湯割り-'),
+                  trailing: button,
                 ),
             ),
             Container
@@ -236,6 +304,7 @@ class PostAlcohol extends StatelessWidget
                 (
                   leading: _ImageItem("fauchon_apple"),
                   title: Text("アップルティーのリキュール -お湯割り-"),
+                  trailing: button,
                 ),
             ),
           ],
