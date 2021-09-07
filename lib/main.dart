@@ -28,8 +28,7 @@ class MyApp extends StatelessWidget {
         '/password': (BuildContext context) => PasswordPage(),
         '/add': (BuildContext context) => AddPage(),
       },
-      // home: MyAuthPage(),
-      home: MyHomePage(),
+      home: MyHomePage(), //_LoginCheck(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
