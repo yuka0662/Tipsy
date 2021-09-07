@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import './Top.dart';
 import './Color.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import './CocktailsAPI/cocktails.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(Home());
@@ -186,7 +189,19 @@ class Liqueur extends StatelessWidget {
 }
 
 class Cocktail extends StatelessWidget {
-  var category = ['甘口','辛口','軽い','重い'];
+  var base = [
+    'ジン',
+    'ウォッカ',
+    'テキーラ',
+    'ラム',
+    'ウィスキー',
+    'ブランデー',
+    'リキュール',
+    'ワイン',
+    'ビール',
+    '日本酒',
+    'ノンアルコール'
+  ];
   var array = [
     'アル・カポネ',
     'オーロラ',
@@ -197,9 +212,10 @@ class Cocktail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: const EdgeInsets.fromLTRB(20.0, 10.0, 0, 0),
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 0.0, 0, 10.0),
           child: Text(
             'ベース選択',
             style: TextStyle(
@@ -208,62 +224,16 @@ class Cocktail extends StatelessWidget {
             ),
           ),
         ),
-        for (var $i = 0; $i < 1; $i++)
-          Row(children: <Widget>[
-            for (var $i = 0; $i < 3; $i++)
-              Container(
-                padding: const EdgeInsets.all(20),
-                height: 150,
-                child: RaisedButton(
-                  child: Text(
-                    '${category[$i]}',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      letterSpacing: 5.0,
-                    ),
-                  ),
-                  color: Colors.blueAccent,
-                  shape: const CircleBorder(
-                    side: BorderSide(
-                      color: Colors.blueGrey,
-                      width: 1,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-          ]),
-        /*
-        StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('cacktails').snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return new Text('Error: ${snapshot.error}');
-              }
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return new Text('Loading...');
-                default:
-                  return new RichText(
-                      text: TextSpan(
-                    style: TextStyle(color: Colors.blue),
-                    children:
-                        snapshot.data.docs.map((DocumentSnapshot document) {
-                      return new TextSpan(
-                        text: document['cacbase'],
-                        //リンクをつける(要調べ)
-                      );
-                    }).toList(),
-                  ));
-              }
-            }),
-            */
+        SizedBox(
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: _children(context),
+          ),
+        ),
         Row(children: <Widget>[
           Container(
-            padding: const EdgeInsets.fromLTRB(30.0, 0, 0, 20.0),
+            padding: EdgeInsets.fromLTRB(0, 20.0, 0, 10.0),
             child: Text(
               '全体ランキング　TOP10',
               style: TextStyle(
@@ -283,47 +253,48 @@ class Cocktail extends StatelessWidget {
                       letterSpacing: 5.0,
                     )),
                 onTap: () {
+                  /*
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => RecipeDetail()));
+                */
                 },
               ),
             )
           ]),
-        /*
-        StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('c_ranking').snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return new Text('Error: ${snapshot.error}');
-              }
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return new Text('Loading...');
-                default:
-                  return new RichText(
-                      text: TextSpan(
-                    style: TextStyle(color: Colors.blue),
-                    children:
-                        snapshot.data.docs.map((DocumentSnapshot document) {
-                      return new TextSpan(
-                        text: document['crank_id'],
-                        //リンクをつける(要調べ)
-                      );
-                    }).toList(),
-                  ));
-              }
-            }),
-            */
       ],
     );
   }
+
+  List<Widget> _children(BuildContext context) => List<Widget>.generate(
+      base.length,
+      (index) => Padding(
+          padding: EdgeInsets.all(8),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CocktailsAll(base[index])));
+            },
+            child: Container(
+                height: 100,
+                width: 140,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                        left: BorderSide(color: HexColor('212738'), width: 7))),
+                child: Center(
+                  child: Text(
+                    base[index],
+                    style: TextStyle(fontSize: 15),
+                  ),
+                )),
+          )));
 }
 
 class Snacks extends StatelessWidget {
-  var category = ['簡単','お手軽','肉','魚'];
-  var array = ['だし巻き卵','あさりの酒蒸し','きゅうりと大根の漬物','簡単ポテトサラダ','枝豆の塩ゆで'];
+  var category = ['簡単', 'お手軽', '肉', '魚'];
+  var array = ['だし巻き卵', 'あさりの酒蒸し', 'きゅうりと大根の漬物', '簡単ポテトサラダ', '枝豆の塩ゆで'];
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -398,9 +369,6 @@ class Snacks extends StatelessWidget {
 }
 
 class TaskDetail extends StatelessWidget {
-  //TaskDetail(this.id);
-  //String id;
-
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
@@ -434,9 +402,6 @@ class TaskDetail extends StatelessWidget {
 }
 
 class OrecipeDetail extends StatelessWidget {
-  //OrecipeDetail(this.id);
-  //String id;
-
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
@@ -452,7 +417,8 @@ class OrecipeDetail extends StatelessWidget {
               letterSpacing: 5.0,
               color: Colors.black,
               decoration: TextDecoration.none)),
-      Text('卵　　　　　　　　　　　　：4個\nⒶ水　　　　　　　　　　　：大さじ6\nⒶ「ほんだし」　　　　　　：小さじ1/2\nⒶみりん　　　　　　　　　：小さじ2\nⒶ薄口しょうゆ　　　　　　：小さじ1\n「AJINOMOTO サラダ油」：適量\n大根おろし・お好みで　　　：適量\n',
+      Text(
+          '卵　　　　　　　　　　　　：4個\nⒶ水　　　　　　　　　　　：大さじ6\nⒶ「ほんだし」　　　　　　：小さじ1/2\nⒶみりん　　　　　　　　　：小さじ2\nⒶ薄口しょうゆ　　　　　　：小さじ1\n「AJINOMOTO サラダ油」：適量\n大根おろし・お好みで　　　：適量\n',
           style: TextStyle(
               fontSize: 15.0,
               letterSpacing: 5.0,
@@ -464,7 +430,8 @@ class OrecipeDetail extends StatelessWidget {
               letterSpacing: 5.0,
               color: Colors.black,
               decoration: TextDecoration.none)),
-      Text('1. ボウルに卵を割りほぐし、白身を切るようによく溶く。混ぜ合わせたＡを加えてさらに混ぜる。\n\n2. 卵焼き器を強めの中火で熱し、油を含ませたキッチンペーパーで全体に油をなじませる。（１）の卵液を玉じゃくし七分目ほど入れて広げ、半熟になったら向こう側から手前に向かって巻き、巻いた卵を向こう側に送る。\n\n3. 卵焼き器に油をなじませ、再び卵液を流し入れる。巻いた卵を持ち上げて下に卵液を流し、卵のフチが固まってきたら手前に巻き込む。同様にくり返し焼く。\n\n4. 焼き上がったらまな板に取り出し、粗熱が取れたら食べやすい大きさに切る。\n\n5. 器に盛り、好みで大根おろしを添える。\n',
+      Text(
+          '1. ボウルに卵を割りほぐし、白身を切るようによく溶く。混ぜ合わせたＡを加えてさらに混ぜる。\n\n2. 卵焼き器を強めの中火で熱し、油を含ませたキッチンペーパーで全体に油をなじませる。（１）の卵液を玉じゃくし七分目ほど入れて広げ、半熟になったら向こう側から手前に向かって巻き、巻いた卵を向こう側に送る。\n\n3. 卵焼き器に油をなじませ、再び卵液を流し入れる。巻いた卵を持ち上げて下に卵液を流し、卵のフチが固まってきたら手前に巻き込む。同様にくり返し焼く。\n\n4. 焼き上がったらまな板に取り出し、粗熱が取れたら食べやすい大きさに切る。\n\n5. 器に盛り、好みで大根おろしを添える。\n',
           style: TextStyle(
               fontSize: 15.0,
               letterSpacing: 5.0,
@@ -486,55 +453,188 @@ class OrecipeDetail extends StatelessWidget {
   }
 }
 
-class RecipeDetail extends StatelessWidget {
-  //RecipeDetail(this.id);
-  //String id;
+class RecipeDetail extends StatefulWidget {
+  RecipeDetail(
+      this._id,
+      this._cocktailname,
+      this._englishname,
+      this._base,
+      this._technique,
+      this._taste,
+      this._style,
+      this._alcohol,
+      this._topname,
+      this._glass,
+      this._digest,
+      this._desc,
+      this._recipe,
+      this._recipes);
+  final int _id;
+  final String _cocktailname;
+  final String _englishname;
+  final String _base;
+  final String _technique;
+  final String _taste;
+  final String _style;
+  final String _alcohol;
+  final String _topname;
+  final String _glass;
+  final String _digest;
+  final String _desc;
+  final String _recipe;
+  final List _recipes;
+
+  @override
+  _RecipeDetailState createState() => new _RecipeDetailState(
+      _id,
+      _cocktailname,
+      _englishname,
+      _base,
+      _technique,
+      _taste,
+      _style,
+      _alcohol,
+      _topname,
+      _glass,
+      _digest,
+      _desc,
+      _recipe,
+      _recipes);
+}
+
+class _RecipeDetailState extends State {
+  _RecipeDetailState(
+      this._id,
+      this._cocktailname,
+      this._englishname,
+      this._base,
+      this._technique,
+      this._taste,
+      this._style,
+      this._alcohol,
+      this._topname,
+      this._glass,
+      this._digest,
+      this._desc,
+      this._recipe,
+      this._recipes);
+  final int _id;
+  final String _cocktailname;
+  final String _englishname;
+  final String _base;
+  final String _technique;
+  final String _taste;
+  final String _style;
+  final String _alcohol;
+  final String _topname;
+  final String _glass;
+  final String _digest;
+  final String _desc;
+  final String _recipe;
+  final List _recipes;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
-      Text('アル・カポネ\n\nカクテルタイプ： ショート\nテイスト　　　： 中甘辛口\nアルコール度数： 強い(25度以上)\n製法　　　　　： シェイク\n',
-          style: TextStyle(
-              fontSize: 15.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-      Text('材料',
-          style: TextStyle(
-              fontSize: 20.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-      Text('テネシーウイスキー　　：30ml\nクランベリーリキュール：15ml\nディサローノアマレット：15ml\nライムジュース　　　　：1tsp\n',
-          style: TextStyle(
-              fontSize: 15.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-      Text('手順',
-          style: TextStyle(
-              fontSize: 20.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-      Text('1. シェークしてカクテルグラスに注ぐ。\n\n2. 野菜・ライムピール・ブラックオリーブでボルサリーノ（帽子）をイメージしたデコレーションを飾る。\n',
-          style: TextStyle(
-              fontSize: 15.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-      Text('メモ',
-          style: TextStyle(
-              fontSize: 20.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-      Text('コツ・ポイント',
-          style: TextStyle(
-              fontSize: 15.0,
-              letterSpacing: 5.0,
-              color: Colors.black,
-              decoration: TextDecoration.none)),
-    ]);
+    return Container(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+        child: ListView(children: [
+          Text(_digest,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.grey,
+                  decoration: TextDecoration.none)),
+          Text(_cocktailname,
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 1.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text(_englishname,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Row(children: [
+            CachedNetworkImage(
+              width: 140,
+              height: 170,
+              imageUrl: 'https://dm58o2i5oqos8.cloudfront.net/photos/' +
+                  _id.toString() +
+                  '.jpg',
+              errorWidget: (conte, url, dynamic error) =>
+                  Image.asset('assets/InPreparation_sp.png'),
+            ),
+            Text(
+                '\nBase:' +
+                    _base +
+                    '\nTec:' +
+                    _technique +
+                    '\nTaste:' +
+                    _taste +
+                    '\nStyle:' +
+                    _style +
+                    '\nAlc.:' +
+                    _alcohol +
+                    '%\nTop:' +
+                    _topname +
+                    '\nGlass:' +
+                    _glass +
+                    '\n\n',
+                style: TextStyle(
+                    fontSize: 15.0,
+                    letterSpacing: 5.0,
+                    color: Colors.black,
+                    decoration: TextDecoration.none)),
+          ]),
+          Text(_desc + '\n',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text('材料',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          for (int i = 0; i < _recipes.length; i++)
+            Container(
+              decoration: BoxDecoration(
+                border: const Border(
+                  bottom: BorderSide(
+                    color: Colors.grey,
+                    width: 1,
+                  )
+                )
+              ),
+              child: ListTile(
+                  title: Row(
+                children: [
+                  Container(
+                    width: 250,
+                    child: Text(
+                      _recipes[i]["ingredient_name"],
+                    ),
+                  ),
+                  Text(_recipes[i]["amount"] + _recipes[i]["unit"])
+                ],
+              )),
+            ),
+          Text('\n手順',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text(_recipe+'\n',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.blueGrey,
+                  decoration: TextDecoration.none)),
+        ]));
   }
 }

@@ -9,6 +9,7 @@ import './Timer.dart';
 import './Newpost.dart';
 
 import './signin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/password': (BuildContext context) => PasswordPage(),
         '/add': (BuildContext context) => AddPage(),
       },
-      home: _LoginCheck(),
+      home: MyHomePage(), //_LoginCheck(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -119,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: Text('ユーザー情報の変更'),
+              title: Text('ユーザー情報の閲覧・変更'),
               leading: Icon(Icons.account_circle),
               onTap: () {
                 Navigator.pop(context);
@@ -213,7 +214,7 @@ class _UserState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ユーザー情報の変更'),
+        title: Text('ユーザー情報の閲覧・変更'),
         backgroundColor: HexColor('212738'),
       ),
       body: Column(children: <Widget>[
@@ -281,9 +282,25 @@ class _UserState extends State {
         ]),
         Container(
           child: RaisedButton(
-            onPressed: () => {
-              Navigator.pop(context) // 呼び出し元に戻る
-              //検索条件を保持してデータベースから探して呼び出し元の画面にて表示
+            onPressed: () async {
+              try {
+                DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc()
+                    .get();
+                Map<String, dynamic> record = docSnapshot.data();
+                var data = {
+                  'email': record['email'], 
+                  'nickname': record['nickname'],
+                  'birthday': record['birthday'],
+                  'gender': _type
+                };
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc()
+                    .update(data);
+                Navigator.pop(context); // 呼び出し元に戻る
+              } catch (e) {}
             },
             child: Text('変更'),
           ),
