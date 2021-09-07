@@ -9,6 +9,7 @@ import './Timer.dart';
 import './Newpost.dart';
 import './RecipepostList.dart';
 import './signin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -37,6 +38,31 @@ class MyApp extends StatelessWidget {
         const Locale("ja"),
       ],
     );
+  }
+}
+
+class _LoginCheck extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final bool _loggedIn = AuthModel().loggedIn;
+    return _loggedIn ? MyHomePage() : MyAuthPage();
+  }
+}
+
+class AuthModel with ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User _user;
+
+  User get user => _user;
+
+  bool get loggedIn => _user != null;
+
+  AuthModel() {
+    final User _currentUser = _auth.currentUser;
+    if (_currentUser != null) {
+      _user = _currentUser;
+      notifyListeners();
+    }
   }
 }
 
@@ -94,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: Text('ユーザー情報の変更'),
+              title: Text('ユーザー情報の閲覧・変更'),
               leading: Icon(Icons.account_circle),
               onTap: () {
                 Navigator.pop(context);
@@ -189,7 +215,7 @@ class _UserState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ユーザー情報の変更'),
+        title: Text('ユーザー情報の閲覧・変更'),
         backgroundColor: HexColor('212738'),
       ),
       body: Column(children: <Widget>[
@@ -257,9 +283,25 @@ class _UserState extends State {
         ]),
         Container(
           child: RaisedButton(
-            onPressed: () => {
-              Navigator.pop(context) // 呼び出し元に戻る
-              //検索条件を保持してデータベースから探して呼び出し元の画面にて表示
+            onPressed: () async {
+              try {
+                DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc()
+                    .get();
+                Map<String, dynamic> record = docSnapshot.data();
+                var data = {
+                  'email': record['email'], 
+                  'nickname': record['nickname'],
+                  'birthday': record['birthday'],
+                  'gender': _type
+                };
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc()
+                    .update(data);
+                Navigator.pop(context); // 呼び出し元に戻る
+              } catch (e) {}
             },
             child: Text('変更'),
           ),
@@ -275,12 +317,15 @@ class PasswordPage extends StatefulWidget {
 }
 
 class _PasswordPageState extends State {
-  //final AuthService _auth = AuthService();
-  String _email = '';
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String email = '';
+  String msg = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('パスワード変更'),
         backgroundColor: HexColor('212738'),
@@ -299,44 +344,45 @@ class _PasswordPageState extends State {
               hintText: 'sample@co.jp',
               border: OutlineInputBorder(),
             ),
+            onChanged: (String value) {
+              setState(() {
+                email = value;
+              });
+            },
           ),
         ),
+        Text(msg, style: TextStyle(color: Colors.red)),
         Container(
           child: FlatButton(
-              color: Colors.blue,
+              color: HexColor('212738'),
+              child: Text(
+                'メールを送る',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () async {
-                /*
-                String _result = await _auth.passwordResetEmail(_email);
-
-                // 成功時は戻る
-                if (_result == 'success') {
-                  Navigator.pop(context);
-                } else if (_result == 'ERROR_INVALID_EMAIL') {
-                  Flushbar(
-                    message: "無効なメールアドレスです",
-                    backgroundColor: Colors.red,
-                    margin: EdgeInsets.all(8),
-                    borderRadius: 8,
-                    duration: Duration(seconds: 3),
-                  )..show(context);
-                } else if (_result == 'ERROR_USER_NOT_FOUND') {
-                  Flushbar(
-                    message: "メールアドレスが登録されていません",
-                    backgroundColor: Colors.red,
-                    margin: EdgeInsets.all(8),
-                    borderRadius: 8,
-                    duration: Duration(seconds: 3),
-                  )..show(context);
+                if (email == '') {
+                  setState(() {
+                    msg = 'メールアドレスを入力してください';
+                  });
                 } else {
-                  Flushbar(
-                    message: "メール送信に失敗しました",
-                    backgroundColor: Colors.red,
-                    margin: EdgeInsets.all(8),
-                    borderRadius: 8,
-                    duration: Duration(seconds: 3),
-                  )..show(context);
+                  try {
+                    await _auth.sendPasswordResetEmail(email: this.email);
+
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(
+                        content: const Text('送信が完了しました。\nメールをご確認ください。'),
+                        duration: const Duration(seconds: 5),
+                        action: SnackBarAction(
+                          label: 'OK',
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )));
+                  } catch (e) {
+                    setState(() {
+                      msg = e.toString();
+                    });
+                  }
                 }
-                */
               }),
         ),
       ]),
