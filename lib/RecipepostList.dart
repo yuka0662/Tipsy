@@ -1,73 +1,323 @@
 //import 'dart:html';
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tipsy/main.dart';
 //import 'package:flutter/rendering.dart';
 import './Color.dart';
 import './Search.dart';
+import './signin.dart';
 import './home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 //import 'dart:math';
 
-class RecipepostList extends StatefulWidget{
-  @override
-  _State createState() => new _State();
-}
 
-class _State extends State{
-
+class RecipepostList extends StatelessWidget
+{
   @override
   Widget build(BuildContext context)
   {
-    return Scaffold
+    return MaterialApp
     (
-      appBar: AppBar(
-        title: Text('tipsy'),
-        backgroundColor: HexColor('212738'),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SearchPage()))
-            },
-            icon: Icon(Icons.search),
-          )
-        ],
-      ),
-      body:Center
+      home:  DefaultTabController
       (
-        child:
-        SingleChildScrollView
+        length: choices2.length,
+        child: Scaffold
         (
-          child: Row
+          appBar: AppBar
           (
-            children: [
-              Container
-              (
-                child:
-                ListView
-                (
-                  children:<Widget>[
-                      ListTile(leading: Image.network('https://www.asahibeer.co.jp/products/spirits_liqueur/liqueur/fauchon_koucha/'),
-                      title: Text("紅茶のお酒-お湯割り-"),),
-                      ListTile(leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                      title: Text('ブランデー-ソーダ―割-'),
-                      ),
-                      ListTile(leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                      title: Text('ブランデー-ソーダ―割-'),
-                      ),
-                      ListTile(leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                      title: Text('ブランデー-ソーダ―割-'),
-                      ),
-                      ListTile(leading: Image.network('https://www.amazon.co.jp/%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BC-%E3%83%8B%E3%83%83%E3%82%AB%E3%83%96%E3%83%A9%E3%83%B3%E3%83%87%E3%83%BCV-S-O-P%E7%99%BD-720ml/dp/B004Q2AE1S/ref=zg_bs_71631051_1?_encoding=UTF8&psc=1&refRID=3VPPQ9RC8NTKJN9RNMW6'),
-                      title: Text('ブランデー-ソーダ―割-'),
-                      ),
-                  ]
-                ),
-              )
+            leading: IconButton(
+                onPressed: () => {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage())),
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
+            actions: <Widget>[
+              IconButton(
+                onPressed: () => {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => SearchPage())),
+                },
+                icon: Icon(Icons.search),
+              ),
+              IconButton(
+                onPressed: () => {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => SearchPage())),
+                },
+                icon: Icon(Icons.keyboard_control),
+              ),
             ],
+            title: Text('tipsy'),
+            backgroundColor: HexColor('212738'),
           ),
+          body: Center
+          (
+            child: ChoiceCard2(),
+          ),
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class Choice2
+{
+  String label;
+  Widget widget;
+
+  Choice2(this.label, this.widget);
+}
+
+final List<Choice2> choices2 =
+[
+  Choice2('おつまみ', PostSnacks()),
+  Choice2('カクテル', PostCocktail()),
+  Choice2('お酒', PostAlcohol()),
+];
+
+class ChoiceCard2 extends StatefulWidget
+{
+  @override
+  _ChoiceCardState2 createState() => _ChoiceCardState2();
+}
+
+class _ChoiceCardState2 extends State<ChoiceCard2>
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    return Container
+    (
+      child: Scaffold
+      (
+        resizeToAvoidBottomInset: false,
+        appBar: TabBar
+        (
+          unselectedLabelColor: Colors.grey,
+          labelColor: HexColor('43AA8B'),
+          indicatorColor: HexColor('43AA8B'),
+          tabs: choices2.map((Choice2 choice)
+          {
+            return Tab
+            (
+              text: choice.label,
+            );
+          }).toList(),
+        ),
+        body: TabBarView
+        (
+          children: choices2.map((tab) => tab.widget).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class PostCocktail extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    final button = new PopupMenuButton(
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
         )
-      )
+      ]
+    );
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_straight"),
+                  title: Text('紅茶のリキュール　-お湯割り-'),
+                  trailing: button,
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_apple"),
+                  title: Text("アップルティーのリキュール -お湯割り-"),
+                  trailing: button,
+                ),
+            ),
+          ],
+        );
+  }
+
+   Widget _ImageItem(String name)
+  {
+    var imageItem = "images/" + name + ".jpg";
+    return Container
+    (
+      height: 100,
+      child: Image.asset(imageItem, fit: BoxFit.cover,),
+    );
+  }
+}
+
+
+class PostSnacks extends StatelessWidget
+{
+  // final _menuKey = GlobalKey();
+  @override
+  Widget build(BuildContext context)
+  {
+    final button = new PopupMenuButton(
+      // key: _menuKey,
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
+        )
+      ]
+    );
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+            // height: 200,
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("karaage"),
+                  title: Text('唐揚げ'),
+                  trailing: button,
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                Flexible
+                (
+                  child:
+                  ListTile
+                  (
+                    leading: _ImageItem("fauchon_apple"),
+                    title: Text("アップルティーのリキュール -お湯割り-"),
+                    trailing: button,
+                  ),
+                ),
+            ),
+          ],
+        );
+  }
+
+   Widget _ImageItem(String name)
+  {
+    var imageItem = "images/" + name + ".jpg";
+    return SizedBox
+    (
+      height: 200,
+      //width: 200,
+      child: Image.asset(imageItem, fit: BoxFit.contain,),
+    );
+  }
+}
+
+class PostAlcohol extends StatelessWidget
+{
+  @override
+  Widget build(BuildContext context)
+  {
+    final button = new PopupMenuButton(
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
+        )
+      ]
+    );
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_straight"),
+                  title: Text('紅茶のリキュール　-お湯割り-'),
+                  trailing: button,
+                ),
+            ),
+            Container
+            (
+              decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
+              ),
+              child:
+                ListTile
+                (
+                  leading: _ImageItem("fauchon_apple"),
+                  title: Text("アップルティーのリキュール -お湯割り-"),
+                  trailing: button,
+                ),
+            ),
+          ],
+        );
+  }
+
+   Widget _ImageItem(String name)
+  {
+    var imageItem = "images/" + name + ".jpg";
+    return Container
+    (
+      height: 100,
+      child: Image.asset(imageItem, fit: BoxFit.cover,),
     );
   }
 }

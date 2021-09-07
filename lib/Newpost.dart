@@ -41,22 +41,6 @@ class _State extends State
   var _materialController = TextEditingController(); //材料
   var _processController = TextEditingController(); //手順
 
-  // Future getImageFromCamera() async{
-  //   final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-  //   setState(() {
-  //       // _image = File(pickedFile.path);
-  //   });
-  // }
-
-  // Future getImageFromGallery() async{
-  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
-
-  //   setState((){
-  //     // _image = File(pickedImage.path);
-  //   });
-  // }
-
   void initState(){
     super.initState();
     _materialController = TextEditingController();
@@ -89,16 +73,18 @@ class _State extends State
         ],
       ),
       body:
+      SingleChildScrollView(
+        child:
       Center
       (
         child:
-        SingleChildScrollView
-        (child:
+        // SingleChildScrollView
+        // (child:
           Container
-        (
-          width: size.width,
-          height: size.height,
-          child:
+          (
+            width: size.width,
+            height: size.height,
+            child:
           Column
           (
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -311,7 +297,7 @@ class _State extends State
               ),
               Container
               (
-                width: 600,
+                width: 500,
                 child:
                 Row
                 (children:
@@ -324,41 +310,49 @@ class _State extends State
                       (
                         child:
                         //材料
-                        TextFormField
+                        SingleChildScrollView
                         (
-                          controller: _materialController,
-                          decoration: InputDecoration
+                          child:
+                          TextFormField
                           (
-                            enabledBorder: OutlineInputBorder
+                            controller: _materialController,
+                            decoration: InputDecoration
                             (
-                              borderSide: BorderSide(color: HexColor('212738')),
+                              enabledBorder: OutlineInputBorder
+                              (
+                                borderSide: BorderSide(color: HexColor('212738')),
+                              ),
+                              labelText: "材料",
+                              hintText: "材料・用量を入力してください"
                             ),
-                            labelText: "材料",
-                            hintText: "材料・用量を入力してください"
-                          ),
-                        ),//材料end
+                          ),//材料end
+                        )
                       ),
                     ),
                     //材料の追加
-                    Expanded
-                    (child:
-                        RaisedButton
-                        (
-                          child: const Icon(Icons.add),
-                          color: HexColor('212738'),
-                          textColor: HexColor('FFFFFF'),
-                          shape:  const CircleBorder(
-                            side: BorderSide(
-                              width: 1,
+                    SingleChildScrollView
+                    (
+                      child:
+                      Expanded
+                      (child:
+                          RaisedButton
+                          (
+                            child: const Icon(Icons.add),
+                            color: HexColor('212738'),
+                            textColor: HexColor('FFFFFF'),
+                            shape:  const CircleBorder(
+                              side: BorderSide(
+                                width: 1,
+                              )
+                            ),
+                            onPressed: ()=> setState(
+                              (){
+                                items.add(_materialController.text);
+                            },
                             )
                           ),
-                          onPressed: ()=> setState(
-                            (){
-                              items.add(_materialController.text);
-                          },
-                          )
-                        ),
-                    ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -380,7 +374,7 @@ class _State extends State
               ),
               Container
               (
-                width: 600,
+                width: 500,
                 child:
                   Row
                   (children:
@@ -503,7 +497,8 @@ class _State extends State
             ],
           ),
         ),
-        ),
+        // ),
+      ),
       )
     );
   }

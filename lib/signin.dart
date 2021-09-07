@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import './main.dart';
 import './Color.dart';
@@ -27,7 +28,7 @@ class _MyAuthPageState extends State<MyAuthPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                 child:
                     // メールアドレス入力
                     TextFormField(
@@ -43,7 +44,7 @@ class _MyAuthPageState extends State<MyAuthPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child:
                     // パスワード入力
                     TextFormField(
@@ -88,23 +89,38 @@ class _MyAuthPageState extends State<MyAuthPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    try {
-                      // メール/パスワードでログイン
-                      final user = (await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: this.email, password: this.password))
-                          .user;
-                      // ログインに成功した場合
-                      // ホーム画面へ遷移
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          return MyHomePage();
-                        }),
-                      );
-                    } catch (e) {
-                      // ログインに失敗した場合
+                    if (email != '' && password != '') {
+                      try {
+                        // メール/パスワードでログイン
+                        final user = (await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: this.email, password: this.password))
+                            .user;
+                        
+                        // ログインに成功した場合
+                        // ホーム画面へ遷移
+                        await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                            return MyHomePage();
+                          }),
+                        );
+                      } catch (e) {
+                        // ログインに失敗した場合
+                        setState(() {
+                          infoText = "ログインに失敗しました：${e.toString()}";
+                        });
+                      }
+                    } else if (email == '' && password != '') {
                       setState(() {
-                        infoText = "ログインに失敗しました：${e.toString()}";
+                        infoText = "メールアドレスを入力してください";
+                      });
+                    } else if (email != '' && password == '') {
+                      setState(() {
+                        infoText = "パスワードを入力してください";
+                      });
+                    } else if (email == '' && password == '') {
+                      setState(() {
+                        infoText = "メールアドレスとパスワードを入力してください";
                       });
                     }
                   },
@@ -136,9 +152,10 @@ class SigninPage extends StatefulWidget {
 class _SigninPageState extends State<SigninPage> {
   // メッセージ表示用
   String infoText = '';
-  // 入力したメールアドレス・パスワード
+  // 入力したメールアドレス・パスワード・アカウント名
   String email = '';
   String password = '';
+  String name = '';
   //誕生日表示用
   String bday = '';
 
@@ -159,6 +176,11 @@ class _SigninPageState extends State<SigninPage> {
     }
   }
 
+  String _type;
+  void _handleRadio(String e) => setState(() {
+        _type = e;
+      });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,14 +193,14 @@ class _SigninPageState extends State<SigninPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                   child:
                       // メールアドレス入力
                       TextFormField(
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        labelText: 'メールアドレス'),
+                        labelText: 'メールアドレス(必須)'),
                     onChanged: (String value) {
                       setState(() {
                         email = value;
@@ -187,14 +209,14 @@ class _SigninPageState extends State<SigninPage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                   child:
                       // パスワード入力
                       TextFormField(
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        labelText: 'パスワード'),
+                        labelText: 'パスワード(必須)'),
                     obscureText: true,
                     onChanged: (String value) {
                       setState(() {
@@ -203,13 +225,75 @@ class _SigninPageState extends State<SigninPage> {
                     },
                   ),
                 ),
-                Text(
-                  _labelText,
-                  style: TextStyle(fontSize: 18),
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        '※コメントを投稿する際に使用する名前です',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      // ニックネームの入力
+                      TextFormField(
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'アカウント名(必須)'),
+                        onChanged: (String value) {
+                          setState(() {
+                            name = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.date_range),
-                  onPressed: () => _selectDate(context),
+                Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Row(children: <Widget>[
+                    Text('　生年月日(必須)',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    Expanded(
+                      child: ListTile(
+                        title: Text(
+                          _labelText,
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                      ),
+                    )
+                  ]),
+                ),
+                Container(padding: EdgeInsets.all(20)),
+                Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Row(children: <Widget>[
+                    Text('　性別(必須)　',
+                        style: TextStyle(fontSize: 16, color: Colors.black)),
+                    new Radio(
+                      activeColor: Colors.blue,
+                      value: 'men',
+                      groupValue: _type,
+                      onChanged: _handleRadio,
+                    ),
+                    new Text('男性'),
+                    new Radio(
+                      activeColor: Colors.blue,
+                      value: 'women',
+                      groupValue: _type,
+                      onChanged: _handleRadio,
+                    ),
+                    new Text('女性'),
+                    new Radio(
+                      activeColor: Colors.blue,
+                      value: 'other',
+                      groupValue: _type,
+                      onChanged: _handleRadio,
+                    ),
+                    new Text('その他'),
+                  ]),
                 ),
                 Container(
                   padding: EdgeInsets.all(8),
@@ -225,24 +309,44 @@ class _SigninPageState extends State<SigninPage> {
                   child: ElevatedButton(
                     child: Text('ユーザー登録'),
                     onPressed: () async {
-                      try {
-                        // メール/パスワードでユーザー登録
-                        final user = (await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                    email: this.email, password: this.password))
-                            .user;
-
-                        // ユーザー登録に成功した場合
-                        // ログイン画面へ遷移
-                        await Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                            return MyAuthPage();
-                          }),
-                        );
-                      } catch (e) {
-                        // ユーザー登録に失敗した場合
+                      if (email != '' &&
+                          password != '' &&
+                          name != '' &&
+                          _labelText != '' &&
+                          _type != '') {
+                        try {
+                          // メール/パスワードでユーザー登録
+                          final user = (await FirebaseAuth.instance
+                                  .createUserWithEmailAndPassword(
+                                      email: this.email,
+                                      password: this.password))
+                              .user;
+                          var data = {
+                            'email': email,
+                            'nickname': name,
+                            'birthday': _labelText,
+                            'gender': _type
+                          };
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc()
+                              .set(data);
+                          // ユーザー登録に成功した場合
+                          // ログイン画面へ遷移
+                          await Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
+                              return MyAuthPage();
+                            }),
+                          );
+                        } catch (e) {
+                          // ユーザー登録に失敗した場合
+                          setState(() {
+                            infoText = "登録に失敗しました：${e.toString()}";
+                          });
+                        }
+                      } else {
                         setState(() {
-                          infoText = "登録に失敗しました：${e.toString()}";
+                          infoText = "必須項目を入力してください";
                         });
                       }
                     },
