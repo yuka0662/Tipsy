@@ -24,7 +24,7 @@ class RecipepostList extends StatelessWidget
           (
             leading: IconButton(
                 onPressed: () => {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(AuthModel().user.email))),
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(/*AuthModel().user.email*/))),
                 },
                 icon: Icon(Icons.arrow_back),
               ),
