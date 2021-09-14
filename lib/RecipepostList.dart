@@ -3,14 +3,10 @@
 //import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
-//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tipsy/main.dart';
-//import 'package:flutter/rendering.dart';
 import './Color.dart';
 import './Search.dart';
-//import './signin.dart';
-//import './home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,8 +22,11 @@ class RecipepostList extends StatelessWidget {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () => {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyHomePage())),
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyHomePage(AuthModel().user.email))),
               },
               icon: Icon(Icons.arrow_back),
             ),

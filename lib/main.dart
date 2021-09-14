@@ -25,11 +25,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/user': (BuildContext context) => UserPage(),
         '/password': (BuildContext context) => PasswordPage(),
-        '/add': (BuildContext context) => AddPage(),
       },
-      home: MyHomePage(), //_LoginCheck(),
+      home: MyHomePage(AuthModel().user.email), //_LoginCheck(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -45,7 +43,7 @@ class _LoginCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool _loggedIn = AuthModel().loggedIn;
-    return _loggedIn ? MyHomePage() : MyAuthPage();
+    return _loggedIn ? MyHomePage(AuthModel().user.email) : MyAuthPage();
   }
 }
 
@@ -67,13 +65,17 @@ class AuthModel with ChangeNotifier {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  MyHomePage(this.email);
+  final String email;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(email);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  _MyHomePageState(this.email);
+  final String email;
+
   int _currentIndex = 0;
   final _pageWidgets = [
     Home(),
@@ -123,8 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('ユーザー情報の閲覧・変更'),
               leading: Icon(Icons.account_circle),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/user');
+                Navigator.push(context, MaterialPageRoute(builder:(context) => UserPage(email)));
               },
             ),
             ListTile(
@@ -139,8 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('レシピ投稿一覧'),
               leading: Icon(Icons.menu_book),
               onTap: () {
-                // Navigator.pop(context);
-                // Navigator.pushNamed(context, '/add');
                 Navigator.push(context, MaterialPageRoute(builder: (context) => RecipepostList()));
               },
             ),
@@ -198,14 +197,21 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class UserPage extends StatefulWidget {
+  UserPage(this._email);
+  final String _email;
+
   @override
   State<StatefulWidget> createState() {
-    return _UserState();
+    return _UserState(_email);
   }
 }
 
 //Drawerの移動先
 class _UserState extends State {
+  _UserState(this._email);
+  final String _email;
+  
+  String nickname = 'お酒大好き';
   String _type;
   void _handleRadio(String e) => setState(() {
         _type = e;
@@ -223,7 +229,7 @@ class _UserState extends State {
         Container(
           padding: const EdgeInsets.all(10.0),
           child: TextFormField(
-            initialValue: 'お酒大好き',
+            initialValue: _email,//nickname,
             decoration: InputDecoration(
               icon: Icon(Icons.face),
               labelText: 'ユーザー名',
@@ -233,6 +239,7 @@ class _UserState extends State {
         Container(
           padding: const EdgeInsets.all(10.0),
           child: TextFormField(
+            enabled: false,
             initialValue: 'osake.like@like.ac.jp',
             decoration: InputDecoration(
               icon: Icon(Icons.markunread),
@@ -292,7 +299,7 @@ class _UserState extends State {
                 Map<String, dynamic> record = docSnapshot.data();
                 var data = {
                   'email': record['email'], 
-                  'nickname': record['nickname'],
+                  'nickname': nickname,
                   'birthday': record['birthday'],
                   'gender': _type
                 };
@@ -386,23 +393,6 @@ class _PasswordPageState extends State {
               }),
         ),
       ]),
-    );
-  }
-}
-
-class AddPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('レシピ投稿一覧'),
-        backgroundColor: HexColor('212738'),
-      ),
-      body: Center(
-        child: Center(
-          child: Text('投稿したレシピの一覧が見れるよ！'),
-        ),
-      ),
     );
   }
 }

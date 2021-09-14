@@ -94,14 +94,13 @@ class _MyAuthPageState extends State<MyAuthPage> {
                         // メール/パスワードでログイン
                         final user = (await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
-                                    email: this.email, password: this.password))
-                            .user;
+                                    email: this.email, password: this.password));
                         
                         // ログインに成功した場合
                         // ホーム画面へ遷移
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) {
-                            return MyHomePage();
+                            return MyHomePage(user.user.email);
                           }),
                         );
                       } catch (e) {
