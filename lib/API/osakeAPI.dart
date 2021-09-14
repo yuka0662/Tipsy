@@ -87,7 +87,7 @@ class _ListState extends State<_List> {
     }
   }
 
-  main() async{
+  Future main() async{
     await getData();
   }
 

@@ -100,7 +100,7 @@ class _MyAuthPageState extends State<MyAuthPage> {
                         // ホーム画面へ遷移
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) {
-                            return MyHomePage(user.user.email);
+                            return MyHomePage(/*user.user.email*/);
                           }),
                         );
                       } catch (e) {

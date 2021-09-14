@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/password': (BuildContext context) => PasswordPage(),
       },
-      home: MyHomePage(AuthModel().user.email), //_LoginCheck(),
+      home: MyHomePage(/*AuthModel().user.email*/), //_LoginCheck(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -43,7 +43,7 @@ class _LoginCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool _loggedIn = AuthModel().loggedIn;
-    return _loggedIn ? MyHomePage(AuthModel().user.email) : MyAuthPage();
+    return _loggedIn ? MyHomePage(/*AuthModel().user.email*/) : MyAuthPage();
   }
 }
 
@@ -65,16 +65,16 @@ class AuthModel with ChangeNotifier {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage(this.email);
-  final String email;
+  //MyHomePage(this.email);
+  //final String email;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState(email);
+  _MyHomePageState createState() => _MyHomePageState(/*email*/);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState(this.email);
-  final String email;
+  //_MyHomePageState(this.email);
+  //final String email;
 
   int _currentIndex = 0;
   final _pageWidgets = [
@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('ユーザー情報の閲覧・変更'),
               leading: Icon(Icons.account_circle),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder:(context) => UserPage(email)));
+                Navigator.push(context, MaterialPageRoute(builder:(context) => UserPage(""/*email*/)));
               },
             ),
             ListTile(
@@ -229,7 +229,7 @@ class _UserState extends State {
         Container(
           padding: const EdgeInsets.all(10.0),
           child: TextFormField(
-            initialValue: _email,//nickname,
+            initialValue: /*_email,*/nickname,
             decoration: InputDecoration(
               icon: Icon(Icons.face),
               labelText: 'ユーザー名',
