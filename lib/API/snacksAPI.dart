@@ -22,41 +22,7 @@ class _SnackState extends State<SnacksAll> {
   List useData;
 
   Future getData() async {
-    if (_category == 'ジン') {
-      category = '1';
-    } else if (_category == 'ウォッカ') {
-      category = '2';
-    } else if (_category == 'テキーラ') {
-      category = '3';
-    } else if (_category == 'ラム') {
-      category = '4';
-    } else if (_category == 'ウィスキー') {
-      category = '5';
-    } else if (_category == 'ブランデー') {
-      category = '6';
-    } else if (_category == 'リキュール') {
-      category = '7';
-    } else if (_category == 'ワイン') {
-      category = '8';
-    } else if (_category == 'ビール') {
-      category = '9';
-    } else if (_category == '日本酒') {
-      category = '10';
-    } else {
-      category = '0';
-    }
-
-    var response = await http.get(Uri.parse(
-        'https://cocktail-f.com/api/v1/cocktails?word=' '&limit=10'));
-    if (response.statusCode == 200) {
-      data = json.decode(response.body); //json->Mapオブジェクトに格納
-      setState(() {
-        //状態が変化した場合によばれる
-        useData = data["cocktails"]; //Map->Listに必要な情報だけ格納
-      });
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    
   }
 
   @override

@@ -41,7 +41,7 @@ final List<Choice> choices = [
   Choice('焼酎', Shochu()),
   Choice('リキュール', Liqueur()),
   Choice('カクテル', Cocktail()),
-  Choice('おつまみ', Snacks()),
+  //Choice('おつまみ', Snacks()),
 ];
 
 class ChoiceCard extends StatefulWidget {
@@ -154,12 +154,10 @@ class Cocktail extends StatelessWidget {
 }
 
 class Snacks extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: <Widget>[
-      ],
+      children: <Widget>[],
     );
   }
 }
@@ -247,122 +245,130 @@ class _RecipeDetailState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-          child: ListView(children: [
-            Text(_digest,
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.grey,
-                    decoration: TextDecoration.none)),
-            Text(_cocktailname,
-                style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 1.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Text(_englishname,
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Row(children: [
-              CachedNetworkImage(
-                width: 140,
-                height: 170,
-                imageUrl: 'https://dm58o2i5oqos8.cloudfront.net/photos/' +
-                    _id.toString() +
-                    '.jpg',
-                errorWidget: (conte, url, dynamic error) =>
-                    Image.asset('assets/InPreparation_sp.png'),
-              ),
-              Flexible(
-                child: Text(
-                    '\nBase:' +
-                        _base +
-                        '\nTec:' +
-                        _technique +
-                        '\nTaste:' +
-                        _taste +
-                        '\nStyle:' +
-                        _style +
-                        '\nAlc.:' +
-                        _alcohol +
-                        '%\nTop:' +
-                        _topname +
-                        '\nGlass:' +
-                        _glass +
-                        '\n\n',
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        letterSpacing: 5.0,
-                        color: Colors.black,
-                        decoration: TextDecoration.none)),
-              ),
-            ]),
-            Text(_desc + '\n',
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Text('材料',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            for (int i = 0; i < _recipes.length; i++)
-              Container(
-                decoration: BoxDecoration(
-                    border: const Border(
-                        bottom: BorderSide(
+      body: Container(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+        child: ListView(children: [
+          Text(_digest,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
                   color: Colors.grey,
-                  width: 1,
-                ))),
-                child: ListTile(
-                    title: Row(
-                  children: [
-                    Container(
-                      width: 250,
-                      child: Text(
-                        _recipes[i]["ingredient_name"],
-                      ),
-                    ),
-                    Text(_recipes[i]["amount"] + _recipes[i]["unit"])
-                  ],
-                )),
-              ),
-            Text('\n手順',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Text(_recipe + '\n\n\n\n',
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.blueGrey,
-                    decoration: TextDecoration.none)),
-          ]),
-        ),
-        floatingActionButton: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              margin: EdgeInsets.only(right: 300),
-              child: FloatingActionButton(
-                onPressed: () {},
-                child: Icon(
-                  Icons.favorite_border,
-                ),
-                backgroundColor: Colors.grey,
-              ),
+                  decoration: TextDecoration.none)),
+          Text(_cocktailname,
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 1.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text(_englishname,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Row(children: [
+            CachedNetworkImage(
+              width: 140,
+              height: 170,
+              imageUrl: 'https://dm58o2i5oqos8.cloudfront.net/photos/' +
+                  _id.toString() +
+                  '.jpg',
+              errorWidget: (conte, url, dynamic error) =>
+                  Image.asset('assets/InPreparation_sp.png'),
             ),
-          ],
-        ));
+            Flexible(
+              child: Text(
+                  '\nBase:' +
+                      _base +
+                      '\nTec:' +
+                      _technique +
+                      '\nTaste:' +
+                      _taste +
+                      '\nStyle:' +
+                      _style +
+                      '\nAlc.:' +
+                      _alcohol +
+                      '%\nTop:' +
+                      _topname +
+                      '\nGlass:' +
+                      _glass +
+                      '\n\n',
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      letterSpacing: 5.0,
+                      color: Colors.black,
+                      decoration: TextDecoration.none)),
+            ),
+          ]),
+          Text(_desc + '\n',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text('材料',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          for (int i = 0; i < _recipes.length; i++)
+            Container(
+              decoration: BoxDecoration(
+                  border: const Border(
+                      bottom: BorderSide(
+                color: Colors.grey,
+                width: 1,
+              ))),
+              child: ListTile(
+                  title: Row(
+                children: [
+                  Container(
+                    width: 250,
+                    child: Text(
+                      _recipes[i]["ingredient_name"],
+                    ),
+                  ),
+                  Text(_recipes[i]["amount"] + _recipes[i]["unit"])
+                ],
+              )),
+            ),
+          Text('\n手順',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text(_recipe + '\n\n\n\n',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.blueGrey,
+                  decoration: TextDecoration.none)),
+          Text("コメント",
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          
+        ]),
+      ),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 160),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Icon(
+                Icons.favorite_border,
+              ),
+              backgroundColor: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

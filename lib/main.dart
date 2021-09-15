@@ -25,9 +25,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
+        '/recipepostlist': (BuildContext context) => RecipepostList(),
         '/password': (BuildContext context) => PasswordPage(),
       },
-      home: MyHomePage(/*AuthModel().user.email*/), //_LoginCheck(),
+      home: _LoginCheck(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -43,7 +44,7 @@ class _LoginCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool _loggedIn = AuthModel().loggedIn;
-    return _loggedIn ? MyHomePage(/*AuthModel().user.email*/) : MyAuthPage();
+    return _loggedIn ? MyHomePage(AuthModel().user.email) : MyAuthPage();
   }
 }
 
@@ -65,16 +66,16 @@ class AuthModel with ChangeNotifier {
 }
 
 class MyHomePage extends StatefulWidget {
-  //MyHomePage(this.email);
-  //final String email;
+  MyHomePage(this.email);
+  final String email;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState(/*email*/);
+  _MyHomePageState createState() => _MyHomePageState(email);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //_MyHomePageState(this.email);
-  //final String email;
+  _MyHomePageState(this.email);
+  final String email;
 
   int _currentIndex = 0;
   final _pageWidgets = [
@@ -96,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('tipsy'),
         backgroundColor: HexColor('212738'),
+        /*
         actions: <Widget>[
           IconButton(
             onPressed: () => {
@@ -105,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.search),
           )
         ],
+        */
       ),
       drawer: Drawer(
         child: ListView(
@@ -125,7 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('ユーザー情報の閲覧・変更'),
               leading: Icon(Icons.account_circle),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder:(context) => UserPage(""/*email*/)));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserPage(email)));
               },
             ),
             ListTile(
@@ -140,7 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('レシピ投稿一覧'),
               leading: Icon(Icons.menu_book),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => RecipepostList()));
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/recipepostlist');
               },
             ),
             ListTile(
@@ -210,9 +215,9 @@ class UserPage extends StatefulWidget {
 class _UserState extends State {
   _UserState(this._email);
   final String _email;
-  
-  String nickname = 'お酒大好き';
-  String _type;
+
+  String nickname, birthday, _type;
+
   void _handleRadio(String e) => setState(() {
         _type = e;
       });
@@ -224,96 +229,115 @@ class _UserState extends State {
         title: Text('ユーザー情報の閲覧・変更'),
         backgroundColor: HexColor('212738'),
       ),
-      body: Column(children: <Widget>[
-        //ここにimagepickerの追加
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: TextFormField(
-            initialValue: /*_email,*/nickname,
-            decoration: InputDecoration(
-              icon: Icon(Icons.face),
-              labelText: 'ユーザー名',
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: TextFormField(
-            enabled: false,
-            initialValue: 'osake.like@like.ac.jp',
-            decoration: InputDecoration(
-              icon: Icon(Icons.markunread),
-              labelText: 'メールアドレス',
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: TextFormField(
-            enabled: false,
-            //databaseから値を取ってくる
-            initialValue: '1999年05月13日',
-            decoration: const InputDecoration(
-              labelText: '生年月日',
-            ),
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(children: <Widget>[
-            Text('性別', style: TextStyle(fontSize: 15, color: Colors.grey)),
-          ]),
-        ),
-        Row(children: <Widget>[
-          new Radio(
-            activeColor: Colors.blue,
-            value: 'men',
-            groupValue: _type,
-            onChanged: _handleRadio,
-          ),
-          new Text('男性'),
-          new Radio(
-            activeColor: Colors.blue,
-            value: 'women',
-            groupValue: _type,
-            onChanged: _handleRadio,
-          ),
-          new Text('女性'),
-          new Radio(
-            activeColor: Colors.blue,
-            value: 'other',
-            groupValue: _type,
-            onChanged: _handleRadio,
-          ),
-          new Text('その他'),
-        ]),
-        Container(
-          child: RaisedButton(
-            onPressed: () async {
-              try {
-                DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc()
-                    .get();
-                Map<String, dynamic> record = docSnapshot.data();
-                var data = {
-                  'email': record['email'], 
-                  'nickname': nickname,
-                  'birthday': record['birthday'],
-                  'gender': _type
-                };
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc()
-                    .update(data);
-                Navigator.pop(context); // 呼び出し元に戻る
-              } catch (e) {}
-            },
-            child: Text('変更'),
-          ),
-        ),
-      ]),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return new Text('');
+            default:
+              return ListView(
+                children: snapshot.data.docs.map((DocumentSnapshot document) {
+                  if (document.id == _email) {
+                    nickname = document['nickname'];
+                    _type = document['gender'];
+                    return Column(children: <Widget>[
+                      //ここにimagepickerの追加
+                      Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextFormField(
+                          initialValue: nickname,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.face),
+                            labelText: 'ユーザー名',
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              nickname = value;
+                            });
+                          },
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextFormField(
+                          enabled: false,
+                          initialValue: _email,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.markunread),
+                            labelText: 'メールアドレス',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextFormField(
+                          enabled: false,
+                          //databaseから値を取ってくる
+                          initialValue: document['birthday'],
+                          decoration: const InputDecoration(
+                            labelText: '生年月日',
+                          ),
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(children: <Widget>[
+                          Text('性別',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey)),
+                        ]),
+                      ),
+                      Row(children: <Widget>[
+                        new Radio(
+                          activeColor: Colors.blue,
+                          value: 'men',
+                          groupValue: _type,
+                          onChanged: _handleRadio,
+                        ),
+                        new Text('男性'),
+                        new Radio(
+                          activeColor: Colors.blue,
+                          value: 'women',
+                          groupValue: _type,
+                          onChanged: _handleRadio,
+                        ),
+                        new Text('女性'),
+                        new Radio(
+                          activeColor: Colors.blue,
+                          value: 'other',
+                          groupValue: _type,
+                          onChanged: _handleRadio,
+                        ),
+                        new Text('その他'),
+                      ]),
+                      Container(
+                        child: RaisedButton(
+                          onPressed: () async {
+                            try {
+                              var data = {
+                                'nickname': nickname,
+                                'birthday': document['birthday'],
+                                'gender': _type
+                              };
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(_email)
+                                  .update(data);
+                              Navigator.pop(context); // 呼び出し元に戻る
+                            } catch (e) {}
+                          },
+                          child: Text('変更'),
+                        ),
+                      ),
+                    ]);
+                  }
+                }).toList(),
+              );
+          }
+        },
+      ),
     );
   }
 }

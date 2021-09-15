@@ -87,7 +87,8 @@ class _ListState extends State<_List> {
     }
   }
 
-  Future main() async{
+  Future main() async {
+    await Future<void>.delayed(Duration(seconds: 2));
     await getData();
   }
 
@@ -150,6 +151,13 @@ class _ListState extends State<_List> {
                     ],
                   ),
                 ),
+                IconButton(
+                  onPressed: () => {},
+                  icon: Icon(
+                    Icons.favorite_border,
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
           ),
@@ -182,71 +190,89 @@ class _TaskDetailState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-      child: ListView(
-        children: [
-          Row(
-            children: [
-              CachedNetworkImage(
-                height: 170,
-                imageUrl: _image,
-                fit: BoxFit.fitHeight,
-                errorWidget: (conte, url, dynamic error) =>
-                    Image.asset('assets/InPreparation_sp.png'),
-              ),
-              Flexible(
-                child: Text(_name + '\n',
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        letterSpacing: 5.0,
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.normal)),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                NumberFormat().format(_price).toString() + '円\n',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 15.0,
-                  letterSpacing: 5.0,
-                  decoration: TextDecoration.none,
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+        child: ListView(
+          children: [
+            Row(
+              children: [
+                CachedNetworkImage(
+                  height: 170,
+                  imageUrl: _image,
+                  fit: BoxFit.fitHeight,
+                  errorWidget: (conte, url, dynamic error) =>
+                      Image.asset('assets/InPreparation_sp.png'),
+                ),
+                Flexible(
+                  child: Text(_name + '\n',
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          letterSpacing: 5.0,
+                          color: Colors.black,
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.normal)),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  NumberFormat().format(_price).toString() + '円\n',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 15.0,
+                    letterSpacing: 5.0,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ],
+            ),
+            ListTile(
+              title: Container(
+                color: HexColor('212738'),
+                margin: EdgeInsets.fromLTRB(180, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: Text(
+                  '購入ページに移動',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
-            ],
+              onTap: () {
+                launch(_url);
+              },
+            ),
+            Text('\n商品説明\n',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    letterSpacing: 5.0,
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
+                    fontWeight: FontWeight.normal)),
+            Text(_item + '\n\n\n\n',
+                style: TextStyle(
+                    fontSize: 15.0,
+                    letterSpacing: 5.0,
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
+                    fontWeight: FontWeight.normal)),
+          ],
+        ),
+      ),
+      floatingActionButton: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 160),
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: Icon(
+                Icons.favorite_border,
+              ),
+              backgroundColor: Colors.grey,
+            ),
           ),
-          ListTile(
-            title:Container(
-              color: HexColor('212738'),
-              margin: EdgeInsets.fromLTRB(180, 0, 0, 0),
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child:Text(
-              '購入ページに移動',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),),
-            onTap: () {
-              launch(_url);
-            },
-          ),
-          Text('\n商品説明\n',
-              style: TextStyle(
-                  fontSize: 20.0,
-                  letterSpacing: 5.0,
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal)),
-          Text(_item + '\n\n\n\n',
-              style: TextStyle(
-                  fontSize: 15.0,
-                  letterSpacing: 5.0,
-                  color: Colors.black,
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.normal)),
         ],
       ),
     );
