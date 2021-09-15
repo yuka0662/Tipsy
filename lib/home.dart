@@ -5,7 +5,6 @@ import './API/cocktails.dart';
 import './API/osakeAPI.dart';
 import './API/snacksAPI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(Home());
