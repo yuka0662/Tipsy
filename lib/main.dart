@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: Text('ユーザー情報の閲覧・変更'),
+              title: Text('ユーザー情報の閲覧'),//・変更
               leading: Icon(Icons.account_circle),
               onTap: () {
                 Navigator.push(context,
@@ -226,7 +226,7 @@ class _UserState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ユーザー情報の閲覧・変更'),
+        title: Text('ユーザー情報の閲覧'),//・変更
         backgroundColor: HexColor('212738'),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -312,6 +312,7 @@ class _UserState extends State {
                         ),
                         new Text('その他'),
                       ]),
+                      /*
                       Container(
                         child: RaisedButton(
                           onPressed: () async {
@@ -330,7 +331,7 @@ class _UserState extends State {
                           },
                           child: Text('変更'),
                         ),
-                      ),
+                      ),*/
                     ]);
                   }
                 }).toList(),
