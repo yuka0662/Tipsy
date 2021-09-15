@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
+import '../main.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../home.dart';
@@ -132,7 +133,7 @@ class _CocktailAllState extends State<CocktailsAll> {
                         useData[index]["cocktail_digest"],
                         useData[index]["cocktail_desc"],
                         useData[index]["recipe_desc"],
-                        useData[index]["recipes"])));
+                        useData[index]["recipes"],AuthModel().user.email)));
           },
           child: Card(
             //cardデザインを定義:material_design
