@@ -125,18 +125,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: Text('ユーザー情報の閲覧'),//・変更
+              title: Text('ユーザー情報の閲覧'), //・変更
               leading: Icon(Icons.account_circle),
               onTap: () {
-<<<<<<< HEAD
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => UserPage("" /*email*/)));
-=======
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => UserPage(email)));
->>>>>>> 5657ff45e594f0ee5ecdcdff5ff651dad62454dc
               },
             ),
             ListTile(
@@ -151,13 +144,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('レシピ投稿一覧'),
               leading: Icon(Icons.menu_book),
               onTap: () {
-<<<<<<< HEAD
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RecipepostList()));
-=======
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/recipepostlist');
->>>>>>> 5657ff45e594f0ee5ecdcdff5ff651dad62454dc
               },
             ),
             ListTile(
@@ -228,13 +216,8 @@ class _UserState extends State {
   _UserState(this._email);
   final String _email;
 
-<<<<<<< HEAD
-  String nickname = 'お酒大好き';
-  String _type;
-=======
   String nickname, birthday, _type;
 
->>>>>>> 5657ff45e594f0ee5ecdcdff5ff651dad62454dc
   void _handleRadio(String e) => setState(() {
         _type = e;
       });
@@ -243,101 +226,9 @@ class _UserState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ユーザー情報の閲覧'),//・変更
+        title: Text('ユーザー情報の閲覧'), //・変更
         backgroundColor: HexColor('212738'),
       ),
-<<<<<<< HEAD
-      body: Column(children: <Widget>[
-        //ここにimagepickerの追加
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: TextFormField(
-            initialValue: /*_email,*/ nickname,
-            decoration: InputDecoration(
-              icon: Icon(Icons.face),
-              labelText: 'ユーザー名',
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: TextFormField(
-            enabled: false,
-            initialValue: 'osake.like@like.ac.jp',
-            decoration: InputDecoration(
-              icon: Icon(Icons.markunread),
-              labelText: 'メールアドレス',
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: TextFormField(
-            enabled: false,
-            //databaseから値を取ってくる
-            initialValue: '1999年05月13日',
-            decoration: const InputDecoration(
-              labelText: '生年月日',
-            ),
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(children: <Widget>[
-            Text('性別', style: TextStyle(fontSize: 15, color: Colors.grey)),
-          ]),
-        ),
-        Row(children: <Widget>[
-          new Radio(
-            activeColor: Colors.blue,
-            value: 'men',
-            groupValue: _type,
-            onChanged: _handleRadio,
-          ),
-          new Text('男性'),
-          new Radio(
-            activeColor: Colors.blue,
-            value: 'women',
-            groupValue: _type,
-            onChanged: _handleRadio,
-          ),
-          new Text('女性'),
-          new Radio(
-            activeColor: Colors.blue,
-            value: 'other',
-            groupValue: _type,
-            onChanged: _handleRadio,
-          ),
-          new Text('その他'),
-        ]),
-        Container(
-          child: RaisedButton(
-            onPressed: () async {
-              try {
-                DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc()
-                    .get();
-                Map<String, dynamic> record = docSnapshot.data();
-                var data = {
-                  'email': record['email'],
-                  'nickname': nickname,
-                  'birthday': record['birthday'],
-                  'gender': _type
-                };
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc()
-                    .update(data);
-                Navigator.pop(context); // 呼び出し元に戻る
-              } catch (e) {}
-            },
-            child: Text('変更'),
-          ),
-        ),
-      ]),
-=======
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -448,7 +339,6 @@ class _UserState extends State {
           }
         },
       ),
->>>>>>> 5657ff45e594f0ee5ecdcdff5ff651dad62454dc
     );
   }
 }
