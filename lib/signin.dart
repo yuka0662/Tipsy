@@ -100,7 +100,7 @@ class _MyAuthPageState extends State<MyAuthPage> {
                         // ホーム画面へ遷移
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) {
-                            return MyHomePage(/*user.user.email*/);
+                            return MyHomePage(user.user.email);
                           }),
                         );
                       } catch (e) {
@@ -321,14 +321,13 @@ class _SigninPageState extends State<SigninPage> {
                                       password: this.password))
                               .user;
                           var data = {
-                            'email': email,
                             'nickname': name,
                             'birthday': _labelText,
                             'gender': _type
                           };
                           await FirebaseFirestore.instance
                               .collection('users')
-                              .doc()
+                              .doc(email)
                               .set(data);
                           // ユーザー登録に成功した場合
                           // ログイン画面へ遷移
