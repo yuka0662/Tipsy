@@ -390,7 +390,7 @@ class _RecipeDetailState extends State {
                   color: Colors.black,
                   decoration: TextDecoration.none)),
           Column(
-            children: messageList.map((document) {
+            children: messageList?.map((document) {
               return Container(
                 decoration: new BoxDecoration(
                   border: new Border(
@@ -404,7 +404,7 @@ class _RecipeDetailState extends State {
                   ),
                 ),
               );
-            }).toList(),
+            })?.toList() ?? [],
           ),
           Row(children: [
             Expanded(
