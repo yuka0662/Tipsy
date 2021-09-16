@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Home(),
     Liquor(),
     Favorite(),
-    Timer(),
+    TimerApp(),
   ];
 
   void _onItemTapped(int index) {
@@ -125,7 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('ユーザー情報の閲覧・変更'),
               leading: Icon(Icons.account_circle),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder:(context) => UserPage(""/*email*/)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserPage("" /*email*/)));
               },
             ),
             ListTile(
@@ -140,7 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('レシピ投稿一覧'),
               leading: Icon(Icons.menu_book),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => RecipepostList()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RecipepostList()));
               },
             ),
             ListTile(
@@ -210,7 +214,7 @@ class UserPage extends StatefulWidget {
 class _UserState extends State {
   _UserState(this._email);
   final String _email;
-  
+
   String nickname = 'お酒大好き';
   String _type;
   void _handleRadio(String e) => setState(() {
@@ -229,7 +233,7 @@ class _UserState extends State {
         Container(
           padding: const EdgeInsets.all(10.0),
           child: TextFormField(
-            initialValue: /*_email,*/nickname,
+            initialValue: /*_email,*/ nickname,
             decoration: InputDecoration(
               icon: Icon(Icons.face),
               labelText: 'ユーザー名',
@@ -298,7 +302,7 @@ class _UserState extends State {
                     .get();
                 Map<String, dynamic> record = docSnapshot.data();
                 var data = {
-                  'email': record['email'], 
+                  'email': record['email'],
                   'nickname': nickname,
                   'birthday': record['birthday'],
                   'gender': _type
