@@ -4,6 +4,7 @@ import './Color.dart';
 import './API/cocktails.dart';
 import './API/osakeAPI.dart';
 import './API/snacksAPI.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(Home());
@@ -41,7 +42,7 @@ final List<Choice> choices = [
   Choice('焼酎', Shochu()),
   Choice('リキュール', Liqueur()),
   Choice('カクテル', Cocktail()),
-  Choice('おつまみ', Snacks()),
+  //Choice('おつまみ', Snacks()),
 ];
 
 class ChoiceCard extends StatefulWidget {
@@ -154,12 +155,10 @@ class Cocktail extends StatelessWidget {
 }
 
 class Snacks extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: <Widget>[
-      ],
+      children: <Widget>[],
     );
   }
 }
@@ -179,7 +178,8 @@ class RecipeDetail extends StatefulWidget {
       this._digest,
       this._desc,
       this._recipe,
-      this._recipes);
+      this._recipes,
+      this._email);
   final int _id;
   final String _cocktailname;
   final String _englishname;
@@ -194,6 +194,7 @@ class RecipeDetail extends StatefulWidget {
   final String _desc;
   final String _recipe;
   final List _recipes;
+  final String _email;
 
   @override
   _RecipeDetailState createState() => new _RecipeDetailState(
@@ -210,7 +211,8 @@ class RecipeDetail extends StatefulWidget {
       _digest,
       _desc,
       _recipe,
-      _recipes);
+      _recipes,
+      _email);
 }
 
 class _RecipeDetailState extends State {
@@ -228,7 +230,8 @@ class _RecipeDetailState extends State {
       this._digest,
       this._desc,
       this._recipe,
-      this._recipes);
+      this._recipes,
+      this._email);
   final int _id;
   final String _cocktailname;
   final String _englishname;
@@ -243,126 +246,225 @@ class _RecipeDetailState extends State {
   final String _desc;
   final String _recipe;
   final List _recipes;
+  final String _email;
+
+  String _text = '';
+  final myController = TextEditingController();
+
+  void _handleText(String e) {
+    setState(() {
+      _text = e;
+    });
+  }
+
+  List messageList;
+  Future getMessage() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('comments')
+        .doc('id')
+        .collection(_id.toString())
+        .snapshots()) {
+          messageList = [];
+      for (var message in snapshot.docs) {
+        setState(() {
+          messageList.add(message.data());
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getMessage();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-          child: ListView(children: [
-            Text(_digest,
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.grey,
-                    decoration: TextDecoration.none)),
-            Text(_cocktailname,
-                style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 1.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Text(_englishname,
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Row(children: [
-              CachedNetworkImage(
-                width: 140,
-                height: 170,
-                imageUrl: 'https://dm58o2i5oqos8.cloudfront.net/photos/' +
-                    _id.toString() +
-                    '.jpg',
-                errorWidget: (conte, url, dynamic error) =>
-                    Image.asset('assets/InPreparation_sp.png'),
-              ),
-              Flexible(
-                child: Text(
-                    '\nBase:' +
-                        _base +
-                        '\nTec:' +
-                        _technique +
-                        '\nTaste:' +
-                        _taste +
-                        '\nStyle:' +
-                        _style +
-                        '\nAlc.:' +
-                        _alcohol +
-                        '%\nTop:' +
-                        _topname +
-                        '\nGlass:' +
-                        _glass +
-                        '\n\n',
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        letterSpacing: 5.0,
-                        color: Colors.black,
-                        decoration: TextDecoration.none)),
-              ),
-            ]),
-            Text(_desc + '\n',
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Text('材料',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            for (int i = 0; i < _recipes.length; i++)
-              Container(
-                decoration: BoxDecoration(
-                    border: const Border(
-                        bottom: BorderSide(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+        child: ListView(children: [
+          Text(_digest,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
                   color: Colors.grey,
-                  width: 1,
-                ))),
-                child: ListTile(
-                    title: Row(
-                  children: [
-                    Container(
-                      width: 250,
-                      child: Text(
-                        _recipes[i]["ingredient_name"],
-                      ),
-                    ),
-                    Text(_recipes[i]["amount"] + _recipes[i]["unit"])
-                  ],
-                )),
-              ),
-            Text('\n手順',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    letterSpacing: 5.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.none)),
-            Text(_recipe + '\n\n\n\n',
-                style: TextStyle(
-                    fontSize: 15.0,
-                    letterSpacing: 5.0,
-                    color: Colors.blueGrey,
-                    decoration: TextDecoration.none)),
+                  decoration: TextDecoration.none)),
+          Text(_cocktailname,
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 1.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text(_englishname,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Row(children: [
+            CachedNetworkImage(
+              width: 140,
+              height: 170,
+              imageUrl: 'https://dm58o2i5oqos8.cloudfront.net/photos/' +
+                  _id.toString() +
+                  '.jpg',
+              errorWidget: (conte, url, dynamic error) =>
+                  Image.asset('assets/InPreparation_sp.png'),
+            ),
+            Flexible(
+              child: Text(
+                  '\nBase:' +
+                      _base +
+                      '\nTec:' +
+                      _technique +
+                      '\nTaste:' +
+                      _taste +
+                      '\nStyle:' +
+                      _style +
+                      '\nAlc.:' +
+                      _alcohol +
+                      '%\nTop:' +
+                      _topname +
+                      '\nGlass:' +
+                      _glass +
+                      '\n\n',
+                  style: TextStyle(
+                      fontSize: 15.0,
+                      letterSpacing: 5.0,
+                      color: Colors.black,
+                      decoration: TextDecoration.none)),
+            ),
           ]),
-        ),
-        floatingActionButton: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+          Text(_desc + '\n',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text('材料',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          for (int i = 0; i < _recipes.length; i++)
             Container(
-              margin: EdgeInsets.only(right: 300),
-              child: FloatingActionButton(
-                onPressed: () {},
-                child: Icon(
-                  Icons.favorite_border,
+              decoration: BoxDecoration(
+                  border: const Border(
+                      bottom: BorderSide(
+                color: Colors.grey,
+                width: 1,
+              ))),
+              child: ListTile(
+                  title: Row(
+                children: [
+                  Container(
+                    width: 250,
+                    child: Text(
+                      _recipes[i]["ingredient_name"],
+                    ),
+                  ),
+                  Text(_recipes[i]["amount"] + _recipes[i]["unit"])
+                ],
+              )),
+            ),
+          Text('\n手順',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Text(_recipe + '\n',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  letterSpacing: 5.0,
+                  color: Colors.blueGrey,
+                  decoration: TextDecoration.none)),
+          Text("コメント",
+              style: TextStyle(
+                  fontSize: 20.0,
+                  letterSpacing: 5.0,
+                  color: Colors.black,
+                  decoration: TextDecoration.none)),
+          Column(
+            children: messageList?.map((document) {
+              return Container(
+                decoration: new BoxDecoration(
+                  border: new Border(
+                    bottom: new BorderSide(color: Colors.grey),
+                  ),
                 ),
-                backgroundColor: Colors.grey,
+                child: ListTile(
+                  title: Text(
+                    '${document['nickname']}さん\n${document['comment']}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              );
+            })?.toList() ?? [],
+          ),
+          Row(children: [
+            Expanded(
+              child: Container(
+                child: TextFormField(
+                  decoration: InputDecoration(labelText: 'コメント入力'),
+                  onChanged: _handleText,
+                  controller: myController,
+                ),
               ),
             ),
-          ],
-        ));
+            Container(
+              child: IconButton(
+                onPressed: () async {
+                  try {
+                    await for (var snapshot in FirebaseFirestore.instance
+                        .collection('users')
+                        .snapshots()) {
+                      for (var document in snapshot.docs) {
+                        if (document.id == _email) {
+                          var data = {
+                            'nickname': document['nickname'],
+                            'comment': _text,
+                          };
+                          await FirebaseFirestore.instance
+                              .collection('comments')
+                              .doc('id')
+                              .collection(_id.toString())
+                              .doc()
+                              .set(data);
+                          myController.clear();
+                        }
+                      }
+                    }
+                  } catch (e) {
+                    print("${e.toString()}");
+                  }
+                },
+                icon: Icon(
+                  Icons.send_rounded,
+                  color: HexColor('212738'),
+                ),
+              ),
+            ),
+          ]),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
+          ),
+        ]),
+      ),
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(right: 160),
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(
+            Icons.favorite_border,
+          ),
+          backgroundColor: Colors.grey,
+        ),
+      ),
+    );
   }
 }

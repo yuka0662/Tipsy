@@ -4,9 +4,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tipsy/main.dart';
 import './Color.dart';
-import './Search.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,46 +13,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 class RecipepostList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('レシピ投稿一覧'),
+        backgroundColor: HexColor('212738'),
+      ),
+      body: DefaultTabController(
         length: choices2.length,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MyHomePage(/*AuthModel().user.email*/))),
-              },
-              icon: Icon(Icons.arrow_back),
-            ),
-            actions: <Widget>[
-              IconButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchPage())),
-                },
-                icon: Icon(Icons.search),
-              ),
-              IconButton(
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchPage())),
-                },
-                icon: Icon(Icons.keyboard_control),
-              ),
-            ],
-            title: Text('tipsy'),
-            backgroundColor: HexColor('212738'),
-          ),
-          body: Center(
-            child: ChoiceCard2(),
-          ),
+        child: Center(
+          child: ChoiceCard2(),
         ),
       ),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

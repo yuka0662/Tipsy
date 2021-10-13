@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
+import '../main.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 //カクテル一覧表示
 class CocktailsAll extends StatefulWidget {
@@ -22,6 +25,7 @@ class _CocktailAllState extends State<CocktailsAll> {
   var taste = '';
   var style = '';
   var top = '';
+  int flag = 0;
 
   Map data;
   List useData;
@@ -106,6 +110,8 @@ class _CocktailAllState extends State<CocktailsAll> {
     getData();
   }
 
+  var icondata = Icon(Icons.favorite_border,color: Colors.black);
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -132,7 +138,8 @@ class _CocktailAllState extends State<CocktailsAll> {
                         useData[index]["cocktail_digest"],
                         useData[index]["cocktail_desc"],
                         useData[index]["recipe_desc"],
-                        useData[index]["recipes"])));
+                        useData[index]["recipes"],
+                        AuthModel().user.email)));
           },
           child: Card(
             //cardデザインを定義:material_design
@@ -165,11 +172,40 @@ class _CocktailAllState extends State<CocktailsAll> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => {},
-                  icon: Icon(
-                    Icons.favorite_border,
-                    color: Colors.black,
-                  ),
+                  onPressed: () async {
+                    /*
+                    try {
+                      if(flag == 0){
+                      await FirebaseFirestore.instance
+                          .collection('favorites')
+                          .doc(AuthModel().user.email)
+                          .collection('カクテル')
+                          .doc(useData[index]["cocktail_id"].toString())
+                          .set({'state':'1'});
+                          flag = 1;
+                          setState(() {
+                            
+                          });
+                          
+                      }else{
+                        await FirebaseFirestore.instance
+                          .collection('favorites')
+                          .doc(AuthModel().user.email)
+                          .collection('カクテル')
+                          .doc(useData[index]["cocktail_id"].toString())
+                          .update({'state':'0'});
+                          flag = 0;
+                          setState(() {
+                           icondata = Icon(Icons.favorite_border,color: Colors.black);
+                          });
+                          
+                      }
+                      print(flag);
+                    } catch (e) {
+                      print("${e.toString()}");
+                    }*/
+                  },
+                  icon: icondata,
                 ),
               ],
             ),
