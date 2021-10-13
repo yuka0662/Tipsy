@@ -389,14 +389,8 @@ class _RecipeDetailState extends State {
                   letterSpacing: 5.0,
                   color: Colors.black,
                   decoration: TextDecoration.none)),
-          /*Column(
-            children: messageList.map((document) {
-              if (document.hasError)
-                return new Text('Error: ${document.error}');
-              switch (document.connectionState) {
-                case ConnectionState.waiting:
-                  return new Text('');
-                default:
+          Column(
+            children: messageList?.map((document) {
                   return Container(
                     decoration: new BoxDecoration(
                       border: new Border(
@@ -410,10 +404,9 @@ class _RecipeDetailState extends State {
                       ),
                     ),
                   );
-              }
-            }).toList(),
+                })?.toList() ??
+                [],
           ),
-          */
           Row(children: [
             Expanded(
               child: Container(
