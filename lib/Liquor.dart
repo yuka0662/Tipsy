@@ -52,7 +52,8 @@ class Lstate extends State {
             Padding(padding: EdgeInsets.all(20)),
             Container(
               height: 100,
-              child:Image.asset('images/logo.png'),),
+              child: Image.asset('images/logo.png'),
+            ),
             Container(
               height: 70,
               child: Center(
@@ -70,13 +71,13 @@ class Lstate extends State {
                   children: [
                     for (int i = 0; i < alist[_cnt].length; i++)
                       SizedBox(
-                        
                           width: double.infinity,
                           height: 50,
                           child: RaisedButton(
-                            color: HexColor('212738'),
+                              color: HexColor('212738'),
                               child: Text(alist[_cnt][res + i],
-                                  style: TextStyle(fontSize: 15,color: Colors.white)),
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.white)),
                               onPressed: () {
                                 if (_cnt + 1 < qlist.length) {
                                   setState(() {
@@ -146,7 +147,8 @@ class Ans extends StatelessWidget {
         Padding(padding: EdgeInsets.fromLTRB(20, 20, 20, 20)),
         Container(
           height: 100,
-          child:Image.asset('images/logo.png'),),
+          child: Image.asset('images/logo.png'),
+        ),
         Container(
           padding: EdgeInsets.all(20),
           height: 100,
