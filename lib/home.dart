@@ -264,7 +264,7 @@ class _RecipeDetailState extends State {
         .doc('id')
         .collection(_id.toString())
         .snapshots()) {
-          messageList = [];
+      messageList = [];
       for (var message in snapshot.docs) {
         setState(() {
           messageList.add(message.data());
@@ -389,23 +389,31 @@ class _RecipeDetailState extends State {
                   letterSpacing: 5.0,
                   color: Colors.black,
                   decoration: TextDecoration.none)),
-          Column(
+          /*Column(
             children: messageList.map((document) {
-              return Container(
-                decoration: new BoxDecoration(
-                  border: new Border(
-                    bottom: new BorderSide(color: Colors.grey),
-                  ),
-                ),
-                child: ListTile(
-                  title: Text(
-                    '${document['nickname']}さん\n${document['comment']}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              );
+              if (document.hasError)
+                return new Text('Error: ${document.error}');
+              switch (document.connectionState) {
+                case ConnectionState.waiting:
+                  return new Text('');
+                default:
+                  return Container(
+                    decoration: new BoxDecoration(
+                      border: new Border(
+                        bottom: new BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        '${document['nickname']}さん\n${document['comment']}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  );
+              }
             }).toList(),
           ),
+          */
           Row(children: [
             Expanded(
               child: Container(

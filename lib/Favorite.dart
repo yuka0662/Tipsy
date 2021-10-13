@@ -10,13 +10,12 @@ class Favorite extends StatelessWidget {
       home: DefaultTabController(
         length: choices2.length,
         child: Scaffold(
-          appBar:PreferredSize(
+          appBar: PreferredSize(
             preferredSize: Size.fromHeight(25.0),
             child: AppBar(
-              title: Text('お気に入り',
-                style: TextStyle(
-                  color: HexColor('212738')
-                ),
+              title: Text(
+                'お気に入り',
+                style: TextStyle(color: HexColor('212738')),
               ),
               backgroundColor: Colors.grey[50],
               foregroundColor: HexColor('212738'),
@@ -79,13 +78,14 @@ class _ChoiceCardState2 extends State<ChoiceCard2> {
   }
 }
 
+//この画面は遷移しないようにコメントアウトされています
 class LikeSnacks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
         Center(
-          child: Text('お気に入りのおつまみ一覧表示！！'),
+          child: Text('未実装です。そっと画面を戻してください。'),
         )
       ],
     );
@@ -98,7 +98,7 @@ class LikeCocktail extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Center(
-          child: Text('お気に入りのカクテル一覧表示！！'),
+          child: Text('未実装です。そっと画面を戻してください。'),
         )
       ],
     );
@@ -111,7 +111,7 @@ class LikeSake extends StatelessWidget {
     return ListView(
       children: <Widget>[
         Center(
-          child: Text('お気に入りのお酒一覧表示！！'),
+          child: Text('未実装です。そっと画面を戻してください。'),
         )
       ],
     );
