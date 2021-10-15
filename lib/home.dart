@@ -264,7 +264,7 @@ class _RecipeDetailState extends State {
         .doc('id')
         .collection(_id.toString())
         .snapshots()) {
-          messageList = [];
+      messageList = [];
       for (var message in snapshot.docs) {
         setState(() {
           messageList.add(message.data());
@@ -391,20 +391,21 @@ class _RecipeDetailState extends State {
                   decoration: TextDecoration.none)),
           Column(
             children: messageList?.map((document) {
-              return Container(
-                decoration: new BoxDecoration(
-                  border: new Border(
-                    bottom: new BorderSide(color: Colors.grey),
-                  ),
-                ),
-                child: ListTile(
-                  title: Text(
-                    '${document['nickname']}さん\n${document['comment']}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              );
-            })?.toList() ?? [],
+                  return Container(
+                    decoration: new BoxDecoration(
+                      border: new Border(
+                        bottom: new BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        '${document['nickname']}さん\n${document['comment']}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  );
+                })?.toList() ??
+                [],
           ),
           Row(children: [
             Expanded(
@@ -420,25 +421,23 @@ class _RecipeDetailState extends State {
               child: IconButton(
                 onPressed: () async {
                   try {
-                    await for (var snapshot in FirebaseFirestore.instance
+                    DocumentSnapshot docSnapshot = await FirebaseFirestore
+                        .instance
                         .collection('users')
-                        .snapshots()) {
-                      for (var document in snapshot.docs) {
-                        if (document.id == _email) {
-                          var data = {
-                            'nickname': document['nickname'],
-                            'comment': _text,
-                          };
-                          await FirebaseFirestore.instance
-                              .collection('comments')
-                              .doc('id')
-                              .collection(_id.toString())
-                              .doc()
-                              .set(data);
-                          myController.clear();
-                        }
-                      }
-                    }
+                        .doc(_email)
+                        .get();
+                    Map<String, dynamic> record = docSnapshot.data();
+                    var data = {
+                      'nickname': record['nickname'],
+                      'comment': _text,
+                    };
+                    await FirebaseFirestore.instance
+                        .collection('comments')
+                        .doc('id')
+                        .collection(_id.toString())
+                        .doc()
+                        .set(data);
+                    myController.clear();
                   } catch (e) {
                     print("${e.toString()}");
                   }

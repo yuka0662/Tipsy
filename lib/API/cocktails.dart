@@ -25,7 +25,8 @@ class _CocktailAllState extends State<CocktailsAll> {
   var taste = '';
   var style = '';
   var top = '';
-  int flag = 0;
+
+  final _saved = Set();
 
   Map data;
   List useData;
@@ -110,8 +111,6 @@ class _CocktailAllState extends State<CocktailsAll> {
     getData();
   }
 
-  var icondata = Icon(Icons.favorite_border,color: Colors.black);
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -119,6 +118,7 @@ class _CocktailAllState extends State<CocktailsAll> {
       //スクロール可能な可変リストを作る
       itemCount: useData == null ? 0 : useData.length, //受け取る数の定義
       itemBuilder: (BuildContext context, int index) {
+        final alreadySaved = _saved.contains(index);
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -128,7 +128,7 @@ class _CocktailAllState extends State<CocktailsAll> {
                         useData[index]["cocktail_id"],
                         useData[index]["cocktail_name"],
                         useData[index]["cocktail_name_english"],
-                        useData[index]["base_name"],
+                        useData[index]["base_name"]==null?'なし':useData[index]["base_name"],
                         useData[index]["technique_name"],
                         useData[index]["taste_name"],
                         useData[index]["style_name"],
@@ -172,41 +172,60 @@ class _CocktailAllState extends State<CocktailsAll> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () async {
-                    /*
-                    try {
-                      if(flag == 0){
-                      await FirebaseFirestore.instance
-                          .collection('favorites')
-                          .doc(AuthModel().user.email)
-                          .collection('カクテル')
-                          .doc(useData[index]["cocktail_id"].toString())
-                          .set({'state':'1'});
-                          flag = 1;
-                          setState(() {
-                            
+                    onPressed: () async {
+                      try {
+                        final docRef = FirebaseFirestore.instance
+                            .collection('favorites')
+                            .doc(AuthModel().user.email)
+                            .collection('カクテル')
+                            .doc(useData[index]["cocktail_id"].toString());
+                        final docSnapshot =
+                            await docRef.get(); // DocumentSnapshot
+                        final data =
+                            docSnapshot.exists ? docSnapshot.data() : null;
+                        //alreadySaved =
+                        if (alreadySaved) {
+                          await FirebaseFirestore.instance
+                              .collection('favorites')
+                              .doc(AuthModel().user.email)
+                              .collection('カクテル')
+                              .doc(useData[index]["cocktail_id"].toString())
+                              .update({
+                            'state': 'false',
+                            'id': useData[index]["cocktail_id"]
                           });
-                          
-                      }else{
-                        await FirebaseFirestore.instance
-                          .collection('favorites')
-                          .doc(AuthModel().user.email)
-                          .collection('カクテル')
-                          .doc(useData[index]["cocktail_id"].toString())
-                          .update({'state':'0'});
-                          flag = 0;
                           setState(() {
-                           icondata = Icon(Icons.favorite_border,color: Colors.black);
+                            _saved.remove(index);
                           });
-                          
+                        } else {
+                          await FirebaseFirestore.instance
+                              .collection('favorites')
+                              .doc(AuthModel().user.email)
+                              .collection('カクテル')
+                              .doc(useData[index]["cocktail_id"].toString())
+                              .set({
+                            'state': 'true',
+                            'id': useData[index]["cocktail_id"]
+                          });
+                          setState(() {
+                            _saved.add(index);
+                          });
+                        }
+
+                        print(alreadySaved);
+                      } catch (e) {
+                        print("${e.toString()}");
                       }
-                      print(flag);
-                    } catch (e) {
-                      print("${e.toString()}");
-                    }*/
-                  },
-                  icon: icondata,
-                ),
+                    },
+                    icon: alreadySaved
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                        : Icon(
+                            Icons.favorite_border,
+                            color: Colors.black,
+                          )),
               ],
             ),
           ),

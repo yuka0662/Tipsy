@@ -224,6 +224,24 @@ class _SigninPageState extends State<SigninPage> {
                     },
                   ),
                 ),
+                /*パスワード再入力
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                  child:
+                      // パスワード入力
+                      TextFormField(
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'パスワード確認(必須)'),
+                    obscureText: true,
+                    onChanged: (String value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
+                  ),
+                ),*/
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
                   child: Column(
