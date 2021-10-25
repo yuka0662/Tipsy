@@ -429,7 +429,7 @@ class _RecipeDetailState extends State {
                                   FlatButton(
                                     child: Text("通報する"),
                                     onPressed: () async {
-                                      /*try {
+                                      try {
                                         var data = {
                                           'comment': document['comment'],
                                           'email': document['email'],
@@ -441,7 +441,7 @@ class _RecipeDetailState extends State {
                                         myController.clear();
                                       } catch (e) {
                                         print("${e.toString()}");
-                                      }*/
+                                      }
                                       Navigator.pop(context);
                                       showTopSnacmBar(context);
                                     },
