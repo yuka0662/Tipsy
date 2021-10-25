@@ -438,7 +438,6 @@ class _RecipeDetailState extends State {
                                             .collection('com_notice')
                                             .doc()
                                             .set(data);
-                                        myController.clear();
                                       } catch (e) {
                                         print("${e.toString()}");
                                       }
