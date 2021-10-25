@@ -8,9 +8,66 @@ class Liquor extends StatefulWidget {
   Lstate createState() => new Lstate();
 }
 
+class Start extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    String text = 'Start';
+    String text1 = 'あなた好みのお酒をおすすめします！';
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(padding: EdgeInsets.all(20)),
+            Container(
+              height: 100,
+              child: Image.asset('images/logo.png'),
+            ),
+            Container(
+              height: 70,
+              child: Center(
+                child: Text(
+                  text1,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 30.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: RaisedButton(
+                            color: HexColor('212738'),
+                            child: Text(text,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.white)),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Liquor(),
+                                ),
+                              );
+                            })),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class Lstate extends State {
   List<String> qlist = [
-    'あなた好みのお酒をおすすめします！',
     '1.普段どれくらいお酒を飲みますか？',
     '2.普段どんなお酒を飲みますか？',
     '3.好みの味はどれですか？',
@@ -24,7 +81,6 @@ class Lstate extends State {
   ];
 
   List<List<String>> alist = [
-    ['Start'],
     ['毎日', '週に3－4日', '週に1－2日', '時々'],
     ['醸造酒(日本酒、ビール、ワイン等)', '蒸留酒(焼酎、ウイスキー等)', '混成酒(果実酒、リキュール等)'],
     ['甘め', '苦め', '渋め', 'その他', '特になし'],
@@ -52,7 +108,8 @@ class Lstate extends State {
             Padding(padding: EdgeInsets.all(20)),
             Container(
               height: 100,
-              child:Image.asset('images/logo.png'),),
+              child: Image.asset('images/logo.png'),
+            ),
             Container(
               height: 70,
               child: Center(
@@ -70,13 +127,13 @@ class Lstate extends State {
                   children: [
                     for (int i = 0; i < alist[_cnt].length; i++)
                       SizedBox(
-                        
                           width: double.infinity,
                           height: 50,
                           child: RaisedButton(
-                            color: HexColor('212738'),
+                              color: HexColor('212738'),
                               child: Text(alist[_cnt][res + i],
-                                  style: TextStyle(fontSize: 15,color: Colors.white)),
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.white)),
                               onPressed: () {
                                 if (_cnt + 1 < qlist.length) {
                                   setState(() {
@@ -146,7 +203,8 @@ class Ans extends StatelessWidget {
         Padding(padding: EdgeInsets.fromLTRB(20, 20, 20, 20)),
         Container(
           height: 100,
-          child:Image.asset('images/logo.png'),),
+          child: Image.asset('images/logo.png'),
+        ),
         Container(
           padding: EdgeInsets.all(20),
           height: 100,
@@ -161,7 +219,25 @@ class Ans extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Text(rlist[_a][1],
-                    style: TextStyle(fontSize: 15, letterSpacing: 4.0))))
+                    style: TextStyle(fontSize: 15, letterSpacing: 4.0)))),
+        RaisedButton(
+            color: HexColor('212738'),
+            child: Text('もう一度診断する',
+                style: TextStyle(fontSize: 15, color: Colors.white)),
+            onPressed: () {
+              Navigator.pop(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Start(),
+                ),
+              );
+              Navigator.pop(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Start(),
+                ),
+              );
+            }),
       ]),
     ));
   }

@@ -41,6 +41,8 @@ dependencies:
   provider: ^5.0.0
   http: ^0.13.3
   cached_network_image: ^3.1.0
+  top_snackbar_flutter: ^1.0.1
+  another_flushbar: ^1.10.24
 
 dev_dependencies:
   #追加

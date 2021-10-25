@@ -6,7 +6,6 @@ import 'dart:async';
 import 'dart:convert';
 import '../home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 //カクテル一覧表示
 class CocktailsAll extends StatefulWidget {
@@ -25,8 +24,6 @@ class _CocktailAllState extends State<CocktailsAll> {
   var taste = '';
   var style = '';
   var top = '';
-
-  final _saved = Set();
 
   Map data;
   List useData;
@@ -105,20 +102,40 @@ class _CocktailAllState extends State<CocktailsAll> {
     }
   }
 
+  var favoriteList;
+  Future getState() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('favorites')
+        .doc(AuthModel().user.email)
+        .collection('カクテル')
+        .snapshots()) {
+      favoriteList = [];
+      for (var state in snapshot.docs) {
+        setState(() {
+          favoriteList.add(int.parse(state.id));
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getData();
+    getState();
   }
+
+  var alreadySaved;
 
   @override
   Widget build(BuildContext context) {
+    alreadySaved = [];
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
       //スクロール可能な可変リストを作る
       itemCount: useData == null ? 0 : useData.length, //受け取る数の定義
       itemBuilder: (BuildContext context, int index) {
-        final alreadySaved = _saved.contains(index);
+        alreadySaved.add(favoriteList.contains(useData[index]["cocktail_id"]));
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -128,7 +145,9 @@ class _CocktailAllState extends State<CocktailsAll> {
                         useData[index]["cocktail_id"],
                         useData[index]["cocktail_name"],
                         useData[index]["cocktail_name_english"],
-                        useData[index]["base_name"]==null?'なし':useData[index]["base_name"],
+                        useData[index]["base_name"] == null
+                            ? 'なし'
+                            : useData[index]["base_name"],
                         useData[index]["technique_name"],
                         useData[index]["taste_name"],
                         useData[index]["style_name"],
@@ -174,50 +193,51 @@ class _CocktailAllState extends State<CocktailsAll> {
                 IconButton(
                     onPressed: () async {
                       try {
-                        final docRef = FirebaseFirestore.instance
-                            .collection('favorites')
-                            .doc(AuthModel().user.email)
-                            .collection('カクテル')
-                            .doc(useData[index]["cocktail_id"].toString());
-                        final docSnapshot =
-                            await docRef.get(); // DocumentSnapshot
-                        final data =
-                            docSnapshot.exists ? docSnapshot.data() : null;
-                        //alreadySaved =
-                        if (alreadySaved) {
-                          await FirebaseFirestore.instance
-                              .collection('favorites')
-                              .doc(AuthModel().user.email)
-                              .collection('カクテル')
-                              .doc(useData[index]["cocktail_id"].toString())
-                              .update({
-                            'state': 'false',
-                            'id': useData[index]["cocktail_id"]
-                          });
+                        if (alreadySaved[index] == false) {
                           setState(() {
-                            _saved.remove(index);
+                            favoriteList.add(useData[index]['cocktail_id']);
+                            alreadySaved[index] = true;
                           });
-                        } else {
                           await FirebaseFirestore.instance
                               .collection('favorites')
                               .doc(AuthModel().user.email)
                               .collection('カクテル')
                               .doc(useData[index]["cocktail_id"].toString())
                               .set({
-                            'state': 'true',
-                            'id': useData[index]["cocktail_id"]
+                            'id': useData[index]["cocktail_id"],
+                            'digest': useData[index]["cocktail_digest"],
+                            'name': useData[index]["cocktail_name"],
+                            'ename': useData[index]["cocktail_name_english"],
+                            'base': useData[index]["base_name"] == null
+                                ? 'なし'
+                                : useData[index]["base_name"],
+                            'technique': useData[index]["technique_name"],
+                            'taste': useData[index]["taste_name"],
+                            'style': useData[index]["style_name"],
+                            'alcohol': useData[index]["alcohol"].toString(),
+                            'topname': useData[index]["top_name"],
+                            'glass': useData[index]["glass_name"],
+                            'desc': useData[index]["cocktail_desc"],
+                            'recipe': useData[index]["recipe_desc"],
+                            'recipes': useData[index]["recipes"],
                           });
+                        } else {
                           setState(() {
-                            _saved.add(index);
+                            favoriteList.remove(useData[index]['cocktail_id']);
+                            alreadySaved[index] = false;
                           });
+                          await FirebaseFirestore.instance
+                              .collection('favorites')
+                              .doc(AuthModel().user.email)
+                              .collection('カクテル')
+                              .doc(useData[index]["cocktail_id"].toString())
+                              .delete();
                         }
-
-                        print(alreadySaved);
                       } catch (e) {
                         print("${e.toString()}");
                       }
                     },
-                    icon: alreadySaved
+                    icon: alreadySaved[index]
                         ? Icon(
                             Icons.favorite,
                             color: Colors.red,

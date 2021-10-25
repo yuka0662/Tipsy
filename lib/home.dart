@@ -6,6 +6,9 @@ import './API/osakeAPI.dart';
 import './API/snacksAPI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 
 void main() => runApp(Home());
 
@@ -279,6 +282,12 @@ class _RecipeDetailState extends State {
     getMessage();
   }
 
+  void showTopSnacmBar(BuildContext context) => Flushbar(
+        message: '通報しました。',
+        duration: Duration(seconds: 4),
+        flushbarPosition: FlushbarPosition.TOP,
+      )..show(context);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -402,6 +411,50 @@ class _RecipeDetailState extends State {
                         '${document['nickname']}さん\n${document['comment']}',
                         style: TextStyle(fontSize: 15),
                       ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("このコメントを通報しますか？"),
+                                content: Text(
+                                    "ニックネーム：${document['nickname']}さん\nコメント：${document['comment']}"),
+                                actions: <Widget>[
+                                  // ボタン領域
+                                  FlatButton(
+                                    child: Text("キャンセル"),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  FlatButton(
+                                    child: Text("通報する"),
+                                    onPressed: () async {
+                                      try {
+                                        var data = {
+                                          'comment': document['comment'],
+                                          'email': document['email'],
+                                        };
+                                        await FirebaseFirestore.instance
+                                            .collection('com_notice')
+                                            .doc()
+                                            .set(data);
+                                      } catch (e) {
+                                        print("${e.toString()}");
+                                      }
+                                      Navigator.pop(context);
+                                      showTopSnacmBar(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          "通報",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
                     ),
                   );
                 })?.toList() ??
@@ -430,6 +483,7 @@ class _RecipeDetailState extends State {
                     var data = {
                       'nickname': record['nickname'],
                       'comment': _text,
+                      'email': _email,
                     };
                     await FirebaseFirestore.instance
                         .collection('comments')

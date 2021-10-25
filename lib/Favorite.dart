@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import './Color.dart';
-
+import './main.dart';
+import './home.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class Favorite extends StatelessWidget {
   @override
@@ -10,25 +13,6 @@ class Favorite extends StatelessWidget {
       home: DefaultTabController(
         length: choices2.length,
         child: Scaffold(
-          appBar:PreferredSize(
-            preferredSize: Size.fromHeight(25.0),
-            child: AppBar(
-              title: Text('お気に入り',
-                style: TextStyle(
-                  color: HexColor('212738')
-                ),
-              ),
-              backgroundColor: Colors.grey[50],
-              foregroundColor: HexColor('212738'),
-              actions: <Widget>[
-                FloatingActionButton.extended(
-                  onPressed: () => {},
-                  backgroundColor: Colors.blue,
-                  label: const Text('選択'),
-                )
-              ],
-            ),
-          ),
           body: Center(
             child: ChoiceCard2(),
           ),
@@ -63,15 +47,26 @@ class _ChoiceCardState2 extends State<ChoiceCard2> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: TabBar(
-          unselectedLabelColor: Colors.grey,
-          labelColor: HexColor('43AA8B'),
-          indicatorColor: HexColor('43AA8B'),
-          tabs: choices2.map((Choice2 choice) {
-            return Tab(
-              text: choice.label,
-            );
-          }).toList(),
+        appBar: AppBar(
+          title: Center(
+              child: Text(
+            'お気に入り',
+            style: TextStyle(color: HexColor('43AA8B')),
+          )),
+          bottom: PreferredSize(
+            child: TabBar(
+              unselectedLabelColor: Colors.grey,
+              labelColor: HexColor('43AA8B'),
+              indicatorColor: HexColor('43AA8B'),
+              tabs: choices2.map((Choice2 choice) {
+                return Tab(
+                  text: choice.label,
+                );
+              }).toList(),
+            ),
+            preferredSize: Size.fromHeight(15.0),
+          ),
+          backgroundColor: HexColor('f5f5f5'),
         ),
         body: TabBarView(children: choices2.map((tab) => tab.widget).toList()),
       ),
@@ -92,15 +87,144 @@ class LikeSnacks extends StatelessWidget {
   }
 }
 
-class LikeCocktail extends StatelessWidget {
+//お気に入りに追加したカクテル一覧表示
+class LikeCocktail extends StatefulWidget {
+  @override
+  _LikeCocktailState createState() => new _LikeCocktailState();
+}
+
+class _LikeCocktailState extends State {
+  var favoriteLists;
+  Future getState() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('favorites')
+        .doc(AuthModel().user.email)
+        .collection('カクテル')
+        .snapshots()) {
+      favoriteLists = [];
+      for (var like in snapshot.docs) {
+        setState(() {
+          favoriteLists.add(like.data());
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getState();
+  }
+
+  void showTopSnacmBar(BuildContext context) => Flushbar(
+        message: '削除しました。',
+        duration: Duration(seconds: 4),
+        flushbarPosition: FlushbarPosition.TOP,
+      )..show(context);
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Center(
-          child: Text('お気に入りのカクテル一覧表示！！'),
-        )
-      ],
+    return ListView.builder(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
+      itemCount: favoriteLists == null ? 0 : favoriteLists.length,
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RecipeDetail(
+                        favoriteLists[index]['id'],
+                        favoriteLists[index]['name'],
+                        favoriteLists[index]['ename'],
+                        favoriteLists[index]['base'],
+                        favoriteLists[index]['technique'],
+                        favoriteLists[index]['taste'],
+                        favoriteLists[index]['style'],
+                        favoriteLists[index]['alcohol'],
+                        favoriteLists[index]['topname'],
+                        favoriteLists[index]['glass'],
+                        favoriteLists[index]['digest'],
+                        favoriteLists[index]['desc'],
+                        favoriteLists[index]['recipe'],
+                        favoriteLists[index]['recipes'],
+                        AuthModel().user.email)));
+          },
+          child: Card(
+            child: Row(
+              children: <Widget>[
+                CachedNetworkImage(
+                  width: 150,
+                  height: 150,
+                  imageUrl:
+                      'https://dm58o2i5oqos8.cloudfront.net/photos/${favoriteLists[index]["id"]}.jpg',
+                  errorWidget: (conte, url, dynamic error) =>
+                      Image.asset('assets/InPreparation_sp.png'),
+                ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          favoriteLists[index]['digest'],
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          favoriteLists[index]['name'],
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  child: Text('削除'),
+                  style: TextButton.styleFrom(
+                    primary: HexColor('43AA8B'),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("このお気に入りを削除しますか？"),
+                          actions: <Widget>[
+                            // ボタン領域
+                            FlatButton(
+                              child: Text("キャンセル"),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            FlatButton(
+                              child: Text("削除する"),
+                              onPressed: () async {
+                                try {
+                                  await FirebaseFirestore.instance
+                                      .collection('favorites')
+                                      .doc(AuthModel().user.email)
+                                      .collection('カクテル')
+                                      .doc(
+                                          favoriteLists[index]["id"].toString())
+                                      .delete();
+                                } catch (e) {
+                                  print("${e.toString()}");
+                                }
+                                Navigator.pop(context);
+                                //showTopSnacmBar(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
