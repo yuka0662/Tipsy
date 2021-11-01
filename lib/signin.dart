@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './main.dart';
 import './Color.dart';
 import 'package:intl/intl.dart';
+// import 'validatable.dart';
 
 class MyAuthPage extends StatefulWidget {
   @override
@@ -13,9 +14,11 @@ class MyAuthPage extends StatefulWidget {
 class _MyAuthPageState extends State<MyAuthPage> {
   // メッセージ表示用
   String infoText = '';
+  String notmatch = '';
   // 入力したメールアドレス・パスワード
   String email = '';
   String password = '';
+  
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +99,6 @@ class _MyAuthPageState extends State<MyAuthPage> {
                                 .signInWithEmailAndPassword(
                                     email: this.email, password: this.password))
                             .user;
-                        
                         // ログインに成功した場合
                         // ホーム画面へ遷移
                         await Navigator.of(context).pushReplacement(
@@ -152,10 +154,13 @@ class SigninPage extends StatefulWidget {
 class _SigninPageState extends State<SigninPage> {
   // メッセージ表示用
   String infoText = '';
+  String notMatch = '';
   // 入力したメールアドレス・パスワード・アカウント名
   String email = '';
   String password = '';
-  String name = '';
+  String password_confirm = '';
+  var _password = TextEditingController();
+  var _password_confirm = TextEditingController();
   //誕生日表示用
   String bday = '';
 
@@ -213,40 +218,66 @@ class _SigninPageState extends State<SigninPage> {
                   child:
                       // パスワード入力
                       TextFormField(
-                    decoration: InputDecoration(
+                        controller: _password,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'パスワード(必須)'),
-                    obscureText: true,
-                    onChanged: (String value) {
-                      setState(() {
-                        password = value;
-                      });
-                    },
+                        obscureText: true,
+                        validator: (value) {
+                          if(value == null || value.isEmpty){
+                            return "パスワードを入力してください";
+                          }
+                          if(value.length <=8){
+                            return "8文字以上入力してください";
+                          }
+                          return null;
+                        },
+                        onChanged: (String value) {
+                          setState(() {
+                            password = value;
+                          });
+                        },
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        '※コメントを投稿する際に使用する名前です',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      // ニックネームの入力
+                      // Text(
+                      //   '※コメントを投稿する際に使用する名前です',
+                      //   style: TextStyle(color: Colors.white),
+                      // ),
+                      // パスワード確認の入力
                       TextFormField(
-                        decoration: InputDecoration(
+                          controller: _password_confirm,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          // controller: password_confirm,
+                          decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            labelText: 'アカウント名(必須)'),
-                        onChanged: (String value) {
-                          setState(() {
-                            name = value;
-                          });
-                        },
+                            labelText: 'パスワード確認'),
+                          obscureText: true,
+                          validator: (value){
+                            if(value != password){
+                              String Error_pass = "パスワードが一致しません";
+                              return Error_pass;
+                              // return Error;
+                            }
+                            return null;
+                          },
+                          onChanged: (String value) {
+                            setState(() {
+                              password_confirm = value;
+                            });
+                          },
                       ),
                     ],
                   ),
+                ),
+                Container(
+                  child: Text(notMatch,style: TextStyle(color: Colors.white),),
                 ),
                 Container(
                   decoration: BoxDecoration(color: Colors.white),
@@ -311,9 +342,11 @@ class _SigninPageState extends State<SigninPage> {
                     onPressed: () async {
                       if (email != '' &&
                           password != '' &&
-                          name != '' &&
+                          password_confirm != '' &&
                           _labelText != '' &&
-                          _type != '') {
+                          _type != '' &&
+                          password == password_confirm
+                        ) {
                         try {
                           // メール/パスワードでユーザー登録
                           final user = (await FirebaseAuth.instance
@@ -323,7 +356,7 @@ class _SigninPageState extends State<SigninPage> {
                               .user;
                           var data = {
                             'email': email,
-                            'nickname': name,
+                            'password_confirm': password_confirm,
                             'birthday': _labelText,
                             'gender': _type
                           };

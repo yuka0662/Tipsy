@@ -9,10 +9,11 @@ import 'package:tipsy/main.dart';
 //import 'package:flutter/rendering.dart';
 import './Color.dart';
 import './Search.dart';
-import './signin.dart';
-import './home.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import './Newpost.dart';
+// import './signin.dart';
+// import './home.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 //import 'dart:math';
 
@@ -54,9 +55,21 @@ class RecipepostList extends StatelessWidget
             title: Text('tipsy'),
             backgroundColor: HexColor('212738'),
           ),
-          body: Center
-          (
-            child: ChoiceCard2(),
+          body: 
+          ChoiceCard2(),
+          floatingActionButton: FloatingActionButton.extended(
+            //新規投稿ボタンのタップ時のイベント,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Newpost(),
+                ));
+            },
+            tooltip: 'Increment',
+            backgroundColor: HexColor('43AA8B'),
+            icon: Icon(Icons.add),
+            label: const Text('レシピ追加'),
           ),
         ),
       ),
@@ -171,16 +184,6 @@ class PostCocktail extends StatelessWidget
           ],
         );
   }
-
-   Widget _ImageItem(String name)
-  {
-    var imageItem = "images/" + name + ".jpg";
-    return Container
-    (
-      height: 100,
-      child: Image.asset(imageItem, fit: BoxFit.cover,),
-    );
-  }
 }
 
 
@@ -244,17 +247,6 @@ class PostSnacks extends StatelessWidget
           ],
         );
   }
-
-   Widget _ImageItem(String name)
-  {
-    var imageItem = "images/" + name + ".jpg";
-    return SizedBox
-    (
-      height: 200,
-      //width: 200,
-      child: Image.asset(imageItem, fit: BoxFit.contain,),
-    );
-  }
 }
 
 class PostAlcohol extends StatelessWidget
@@ -269,6 +261,7 @@ class PostAlcohol extends StatelessWidget
         (
           child: const Text('編集'),
           value: '編集',
+          
         ),
         new PopupMenuItem<String>
         (
@@ -310,9 +303,13 @@ class PostAlcohol extends StatelessWidget
           ],
         );
   }
+}
 
-   Widget _ImageItem(String name)
-  {
+class _ImageItem extends StatelessWidget
+{
+  final String name;
+  _ImageItem(this.name);
+  Widget build(BuildContext context){
     var imageItem = "images/" + name + ".jpg";
     return Container
     (
