@@ -182,6 +182,7 @@ class RecipeDetail extends StatefulWidget {
       this._desc,
       this._recipe,
       this._recipes,
+      this._favorite,
       this._email);
   final int _id;
   final String _cocktailname;
@@ -197,6 +198,7 @@ class RecipeDetail extends StatefulWidget {
   final String _desc;
   final String _recipe;
   final List _recipes;
+  final bool _favorite;
   final String _email;
 
   @override
@@ -215,6 +217,7 @@ class RecipeDetail extends StatefulWidget {
       _desc,
       _recipe,
       _recipes,
+      _favorite,
       _email);
 }
 
@@ -234,6 +237,7 @@ class _RecipeDetailState extends State {
       this._desc,
       this._recipe,
       this._recipes,
+      this._favorite,
       this._email);
   final int _id;
   final String _cocktailname;
@@ -249,6 +253,7 @@ class _RecipeDetailState extends State {
   final String _desc;
   final String _recipe;
   final List _recipes;
+  final bool _favorite;
   final String _email;
 
   String _text = '';
@@ -280,6 +285,7 @@ class _RecipeDetailState extends State {
   void initState() {
     super.initState();
     getMessage();
+    changeState();
   }
 
   void showTopSnacmBar(BuildContext context) => Flushbar(
@@ -287,6 +293,12 @@ class _RecipeDetailState extends State {
         duration: Duration(seconds: 4),
         flushbarPosition: FlushbarPosition.TOP,
       )..show(context);
+
+  var alreadySaved;
+
+  void changeState(){
+    alreadySaved = _favorite;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -511,13 +523,63 @@ class _RecipeDetailState extends State {
       floatingActionButton: Container(
         margin: EdgeInsets.only(right: 160),
         child: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(
-            Icons.favorite_border,
-          ),
+          onPressed: () async {
+            try {
+              if (alreadySaved == false) {
+                setState(() {
+                  alreadySaved = !alreadySaved;
+                  print(alreadySaved);
+                });
+                await FirebaseFirestore.instance
+                    .collection('favorites')
+                    .doc(_email)
+                    .collection('カクテル')
+                    .doc(_id.toString())
+                    .set({
+                  'id': _id,
+                  'digest': _digest,
+                  'name': _cocktailname,
+                  'ename': _englishname,
+                  'base': _base == null ? 'なし' : _base,
+                  'technique': _technique,
+                  'taste': _taste,
+                  'style': _style,
+                  'alcohol': _alcohol.toString(),
+                  'topname': _topname,
+                  'glass': _glass,
+                  'desc': _desc,
+                  'recipe': _recipe,
+                  'recipes': _recipes,
+                  'state': alreadySaved
+                });
+              } else {
+                setState(() {
+                  alreadySaved = !alreadySaved;
+                });
+                await FirebaseFirestore.instance
+                    .collection('favorites')
+                    .doc(_email)
+                    .collection('カクテル')
+                    .doc(_id.toString())
+                    .delete();
+              }
+            } catch (e) {
+              print("${e.toString()}");
+            }
+          },
+          child: alreadySaved
+              ? Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                )
+              : Icon(
+                  Icons.favorite_border,
+                  color: Colors.black,
+                ),
           backgroundColor: Colors.grey,
         ),
       ),
     );
+    print(alreadySaved);
   }
 }

@@ -125,17 +125,18 @@ class _CocktailAllState extends State<CocktailsAll> {
     getState();
   }
 
-  var alreadySaved;
+  var alreadySaved = [];
 
   @override
   Widget build(BuildContext context) {
-    alreadySaved = [];
+    print(favoriteList);
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
       //スクロール可能な可変リストを作る
       itemCount: useData == null ? 0 : useData.length, //受け取る数の定義
       itemBuilder: (BuildContext context, int index) {
         alreadySaved.add(favoriteList.contains(useData[index]["cocktail_id"]));
+        print(alreadySaved);
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -158,6 +159,7 @@ class _CocktailAllState extends State<CocktailsAll> {
                         useData[index]["cocktail_desc"],
                         useData[index]["recipe_desc"],
                         useData[index]["recipes"],
+                        alreadySaved[index],
                         AuthModel().user.email)));
           },
           child: Card(
@@ -220,6 +222,7 @@ class _CocktailAllState extends State<CocktailsAll> {
                             'desc': useData[index]["cocktail_desc"],
                             'recipe': useData[index]["recipe_desc"],
                             'recipes': useData[index]["recipes"],
+                            'state':alreadySaved[index]
                           });
                         } else {
                           setState(() {

@@ -116,111 +116,123 @@ class _LikeCocktailState extends State {
     getState();
   }
 
-  void showTopSnacmBar(BuildContext context) => Flushbar(
-        message: '削除しました。',
-        duration: Duration(seconds: 4),
-        flushbarPosition: FlushbarPosition.TOP,
-      )..show(context);
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
       itemCount: favoriteLists == null ? 0 : favoriteLists.length,
       itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => RecipeDetail(
-                        favoriteLists[index]['id'],
-                        favoriteLists[index]['name'],
-                        favoriteLists[index]['ename'],
-                        favoriteLists[index]['base'],
-                        favoriteLists[index]['technique'],
-                        favoriteLists[index]['taste'],
-                        favoriteLists[index]['style'],
-                        favoriteLists[index]['alcohol'],
-                        favoriteLists[index]['topname'],
-                        favoriteLists[index]['glass'],
-                        favoriteLists[index]['digest'],
-                        favoriteLists[index]['desc'],
-                        favoriteLists[index]['recipe'],
-                        favoriteLists[index]['recipes'],
-                        AuthModel().user.email)));
+        return Dismissible(
+          key: ObjectKey(favoriteLists[index]),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            alignment: Alignment.centerRight,
+            color: Colors.redAccent[700],
+            child: Padding(
+                padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                child: Icon(Icons.delete, color: Colors.white)),
+          ),
+          confirmDismiss: (DismissDirection direction) async {
+            return await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("確認"),
+                  content: Text("削除します。よろしいですか？"),
+                  actions: [
+                    FlatButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop(true);
+                          await FirebaseFirestore.instance
+                              .collection('favorites')
+                              .doc(AuthModel().user.email)
+                              .collection('カクテル')
+                              .doc(favoriteLists[index]["id"].toString())
+                              .delete();
+                        },
+                        child: const Text("削除")),
+                    FlatButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text("キャンセル"),
+                    ),
+                  ],
+                );
+              },
+            );
           },
-          child: Card(
-            child: Row(
-              children: <Widget>[
-                CachedNetworkImage(
-                  width: 150,
-                  height: 150,
-                  imageUrl:
-                      'https://dm58o2i5oqos8.cloudfront.net/photos/${favoriteLists[index]["id"]}.jpg',
-                  errorWidget: (conte, url, dynamic error) =>
-                      Image.asset('assets/InPreparation_sp.png'),
-                ),
-                Flexible(
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text(
-                          favoriteLists[index]['digest'],
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RecipeDetail(
+                          favoriteLists[index]['id'],
                           favoriteLists[index]['name'],
-                          style: TextStyle(fontSize: 16),
+                          favoriteLists[index]['ename'],
+                          favoriteLists[index]['base'],
+                          favoriteLists[index]['technique'],
+                          favoriteLists[index]['taste'],
+                          favoriteLists[index]['style'],
+                          favoriteLists[index]['alcohol'],
+                          favoriteLists[index]['topname'],
+                          favoriteLists[index]['glass'],
+                          favoriteLists[index]['digest'],
+                          favoriteLists[index]['desc'],
+                          favoriteLists[index]['recipe'],
+                          favoriteLists[index]['recipes'],
+                          favoriteLists[index]['state'],
+                          AuthModel().user.email)));
+            },
+            child: Card(
+              child: Row(
+                children: <Widget>[
+                  CachedNetworkImage(
+                    width: 150,
+                    height: 150,
+                    imageUrl:
+                        'https://dm58o2i5oqos8.cloudfront.net/photos/${favoriteLists[index]["id"]}.jpg',
+                    errorWidget: (conte, url, dynamic error) =>
+                        Image.asset('assets/InPreparation_sp.png'),
+                  ),
+                  Flexible(
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            favoriteLists[index]['digest'],
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
-                      ),
-                    ],
+                        Center(
+                          child: Text(
+                            favoriteLists[index]['name'],
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                TextButton(
-                  child: Text('削除'),
-                  style: TextButton.styleFrom(
-                    primary: HexColor('43AA8B'),
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("このお気に入りを削除しますか？"),
-                          actions: <Widget>[
-                            // ボタン領域
-                            FlatButton(
-                              child: Text("キャンセル"),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                            FlatButton(
-                              child: Text("削除する"),
-                              onPressed: () async {
-                                try {
-                                  await FirebaseFirestore.instance
-                                      .collection('favorites')
-                                      .doc(AuthModel().user.email)
-                                      .collection('カクテル')
-                                      .doc(
-                                          favoriteLists[index]["id"].toString())
-                                      .delete();
-                                } catch (e) {
-                                  print("${e.toString()}");
-                                }
-                                Navigator.pop(context);
-                                //showTopSnacmBar(context);
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+                  /*
+                  TextButton(
+                    child: Text('削除'),
+                    style: TextButton.styleFrom(
+                      primary: HexColor('43AA8B'),
+                    ),
+                    onPressed: () async {
+                      try {
+                        await FirebaseFirestore.instance
+                            .collection('favorites')
+                            .doc(AuthModel().user.email)
+                            .collection('カクテル')
+                            .doc(favoriteLists[index]["id"].toString())
+                            .delete();
+                      } catch (e) {
+                        print("${e.toString()}");
+                      }
+                    },
+                  ),*/
+                ],
+              ),
             ),
           ),
         );
