@@ -97,13 +97,13 @@ class _MyAuthPageState extends State<MyAuthPage> {
                         // メール/パスワードでログイン
                         final user = (await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
-                                    email: this.email, password: this.password))
-                            .user;
+                                    email: this.email, password: this.password));
+                        
                         // ログインに成功した場合
                         // ホーム画面へ遷移
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) {
-                            return MyHomePage();
+                            return MyHomePage(user.user.email);
                           }),
                         );
                       } catch (e) {
@@ -355,14 +355,13 @@ class _SigninPageState extends State<SigninPage> {
                                       password: this.password))
                               .user;
                           var data = {
-                            'email': email,
-                            'password_confirm': password_confirm,
+                            'nickname':'',
                             'birthday': _labelText,
                             'gender': _type
                           };
                           await FirebaseFirestore.instance
                               .collection('users')
-                              .doc()
+                              .doc(email)
                               .set(data);
                           // ユーザー登録に成功した場合
                           // ログイン画面へ遷移

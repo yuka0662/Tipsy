@@ -47,7 +47,7 @@ class Choice2 {
 }
 
 final List<Choice2> choices2 = [
-  Choice2('おつまみ', LikeSnacks()),
+  //Choice2('おつまみ', LikeSnacks()),
   Choice2('カクテル', LikeCocktail()),
   Choice2('お酒', LikeSake()),
 ];
