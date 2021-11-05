@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './Color.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-//import 'dart:math';
+import './Newpost.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 class RecipepostList extends StatelessWidget {
   @override
@@ -109,17 +108,6 @@ class PostCocktail extends StatelessWidget {
       ],
     );
   }
-
-  Widget _ImageItem(String name) {
-    var imageItem = "images/" + name + ".jpg";
-    return Container(
-      height: 100,
-      child: Image.asset(
-        imageItem,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
 }
 
 class PostSnacks extends StatelessWidget {
@@ -170,28 +158,34 @@ class PostSnacks extends StatelessWidget {
       ],
     );
   }
-
-  Widget _ImageItem(String name) {
-    var imageItem = "images/" + name + ".jpg";
-    return SizedBox(
-      height: 200,
-      //width: 200,
-      child: Image.asset(
-        imageItem,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
 }
 
 class PostAlcohol extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final button = new PopupMenuButton(
-        itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-              new PopupMenuItem<String>(
-                child: const Text('編集'),
-                value: '編集',
+      itemBuilder: (BuildContext context) => <PopupMenuItem<String>>
+      [
+        new PopupMenuItem<String>
+        (
+          child: const Text('編集'),
+          value: '編集',
+          
+        ),
+        new PopupMenuItem<String>
+        (
+          child: const Text('削除'),
+          value: '削除',
+        )
+      ]
+    );
+    return ListView(
+          children: <Widget>[
+            Container
+            (
+               decoration: new BoxDecoration
+              (
+                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
               ),
               new PopupMenuItem<String>(
                 child: const Text('削除'),
@@ -227,8 +221,13 @@ class PostAlcohol extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _ImageItem(String name) {
+class _ImageItem extends StatelessWidget
+{
+  final String name;
+  _ImageItem(this.name);
+  Widget build(BuildContext context){
     var imageItem = "images/" + name + ".jpg";
     return Container(
       height: 100,
