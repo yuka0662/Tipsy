@@ -6,6 +6,9 @@ import './API/osakeAPI.dart';
 import './API/snacksAPI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 
 void main() => runApp(Home());
 
@@ -179,6 +182,7 @@ class RecipeDetail extends StatefulWidget {
       this._desc,
       this._recipe,
       this._recipes,
+      this._favorite,
       this._email);
   final int _id;
   final String _cocktailname;
@@ -194,6 +198,7 @@ class RecipeDetail extends StatefulWidget {
   final String _desc;
   final String _recipe;
   final List _recipes;
+  final bool _favorite;
   final String _email;
 
   @override
@@ -212,6 +217,7 @@ class RecipeDetail extends StatefulWidget {
       _desc,
       _recipe,
       _recipes,
+      _favorite,
       _email);
 }
 
@@ -231,6 +237,7 @@ class _RecipeDetailState extends State {
       this._desc,
       this._recipe,
       this._recipes,
+      this._favorite,
       this._email);
   final int _id;
   final String _cocktailname;
@@ -246,6 +253,7 @@ class _RecipeDetailState extends State {
   final String _desc;
   final String _recipe;
   final List _recipes;
+  final bool _favorite;
   final String _email;
 
   String _text = '';
@@ -264,7 +272,7 @@ class _RecipeDetailState extends State {
         .doc('id')
         .collection(_id.toString())
         .snapshots()) {
-          messageList = [];
+      messageList = [];
       for (var message in snapshot.docs) {
         setState(() {
           messageList.add(message.data());
@@ -277,6 +285,19 @@ class _RecipeDetailState extends State {
   void initState() {
     super.initState();
     getMessage();
+    changeState();
+  }
+
+  void showTopSnacmBar(BuildContext context) => Flushbar(
+        message: '通報しました。',
+        duration: Duration(seconds: 4),
+        flushbarPosition: FlushbarPosition.TOP,
+      )..show(context);
+
+  var alreadySaved;
+
+  void changeState(){
+    alreadySaved = _favorite;
   }
 
   @override
@@ -391,20 +412,65 @@ class _RecipeDetailState extends State {
                   decoration: TextDecoration.none)),
           Column(
             children: messageList?.map((document) {
-              return Container(
-                decoration: new BoxDecoration(
-                  border: new Border(
-                    bottom: new BorderSide(color: Colors.grey),
-                  ),
-                ),
-                child: ListTile(
-                  title: Text(
-                    '${document['nickname']}さん\n${document['comment']}',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                ),
-              );
-            })?.toList() ?? [],
+                  return Container(
+                    decoration: new BoxDecoration(
+                      border: new Border(
+                        bottom: new BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        '${document['nickname']}さん\n${document['comment']}',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("このコメントを通報しますか？"),
+                                content: Text(
+                                    "ニックネーム：${document['nickname']}さん\nコメント：${document['comment']}"),
+                                actions: <Widget>[
+                                  // ボタン領域
+                                  FlatButton(
+                                    child: Text("キャンセル"),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  FlatButton(
+                                    child: Text("通報する"),
+                                    onPressed: () async {
+                                      try {
+                                        var data = {
+                                          'comment': document['comment'],
+                                          'email': document['email'],
+                                        };
+                                        await FirebaseFirestore.instance
+                                            .collection('com_notice')
+                                            .doc()
+                                            .set(data);
+                                      } catch (e) {
+                                        print("${e.toString()}");
+                                      }
+                                      Navigator.pop(context);
+                                      showTopSnacmBar(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          "通報",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  );
+                })?.toList() ??
+                [],
           ),
           Row(children: [
             Expanded(
@@ -420,25 +486,24 @@ class _RecipeDetailState extends State {
               child: IconButton(
                 onPressed: () async {
                   try {
-                    await for (var snapshot in FirebaseFirestore.instance
+                    DocumentSnapshot docSnapshot = await FirebaseFirestore
+                        .instance
                         .collection('users')
-                        .snapshots()) {
-                      for (var document in snapshot.docs) {
-                        if (document.id == _email) {
-                          var data = {
-                            'nickname': document['nickname'],
-                            'comment': _text,
-                          };
-                          await FirebaseFirestore.instance
-                              .collection('comments')
-                              .doc('id')
-                              .collection(_id.toString())
-                              .doc()
-                              .set(data);
-                          myController.clear();
-                        }
-                      }
-                    }
+                        .doc(_email)
+                        .get();
+                    Map<String, dynamic> record = docSnapshot.data();
+                    var data = {
+                      'nickname': record['nickname'],
+                      'comment': _text,
+                      'email': _email,
+                    };
+                    await FirebaseFirestore.instance
+                        .collection('comments')
+                        .doc('id')
+                        .collection(_id.toString())
+                        .doc()
+                        .set(data);
+                    myController.clear();
                   } catch (e) {
                     print("${e.toString()}");
                   }
@@ -458,13 +523,63 @@ class _RecipeDetailState extends State {
       floatingActionButton: Container(
         margin: EdgeInsets.only(right: 160),
         child: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(
-            Icons.favorite_border,
-          ),
+          onPressed: () async {
+            try {
+              if (alreadySaved == false) {
+                setState(() {
+                  alreadySaved = !alreadySaved;
+                  print(alreadySaved);
+                });
+                await FirebaseFirestore.instance
+                    .collection('favorites')
+                    .doc(_email)
+                    .collection('カクテル')
+                    .doc(_id.toString())
+                    .set({
+                  'id': _id,
+                  'digest': _digest,
+                  'name': _cocktailname,
+                  'ename': _englishname,
+                  'base': _base == null ? 'なし' : _base,
+                  'technique': _technique,
+                  'taste': _taste,
+                  'style': _style,
+                  'alcohol': _alcohol.toString(),
+                  'topname': _topname,
+                  'glass': _glass,
+                  'desc': _desc,
+                  'recipe': _recipe,
+                  'recipes': _recipes,
+                  'state': alreadySaved
+                });
+              } else {
+                setState(() {
+                  alreadySaved = !alreadySaved;
+                });
+                await FirebaseFirestore.instance
+                    .collection('favorites')
+                    .doc(_email)
+                    .collection('カクテル')
+                    .doc(_id.toString())
+                    .delete();
+              }
+            } catch (e) {
+              print("${e.toString()}");
+            }
+          },
+          child: alreadySaved
+              ? Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                )
+              : Icon(
+                  Icons.favorite_border,
+                  color: Colors.black,
+                ),
           backgroundColor: Colors.grey,
         ),
       ),
     );
+    print(alreadySaved);
   }
 }

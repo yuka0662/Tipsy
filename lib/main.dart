@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              title: Text('ユーザー情報の閲覧'),//・変更
+              title: Text('ユーザー情報の閲覧・変更'), //・変更
               leading: Icon(Icons.account_circle),
               onTap: () {
                 Navigator.push(context,
@@ -201,141 +201,132 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class UserPage extends StatefulWidget {
+//ユーザー情報の閲覧・変更も可能(現状：性別が変えられない)
+class UserPage extends StatelessWidget {
   UserPage(this._email);
   final String _email;
 
-  @override
-  State<StatefulWidget> createState() {
-    return _UserState(_email);
+  String _type,birthday;
+  String nickname;
+
+  var record;
+  Future getUser() async {
+    var docSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(_email).get();
+    record = docSnapshot.data();
+    _type = record['gender'];
+    nickname = record['nickname'];
+    birthday = record['birthday'];
   }
-}
-
-//Drawerの移動先
-class _UserState extends State {
-  _UserState(this._email);
-  final String _email;
-
-  String nickname, birthday, _type;
-
-  void _handleRadio(String e) => setState(() {
-        _type = e;
-      });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ユーザー情報の閲覧'),//・変更
+        title: Text('ユーザー情報の閲覧・変更'),
         backgroundColor: HexColor('212738'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return new Text('');
-            default:
-              return ListView(
-                children: snapshot.data.docs.map((DocumentSnapshot document) {
-                  if (document.id == _email) {
-                    nickname = document['nickname'];
-                    _type = document['gender'];
-                    return Column(children: <Widget>[
-                      //ここにimagepickerの追加
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          initialValue: nickname,
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.face),
-                            labelText: 'ユーザー名',
-                          ),
-                          onChanged: (String value) {
-                            setState(() {
-                              nickname = value;
-                            });
-                          },
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          enabled: false,
-                          initialValue: _email,
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.markunread),
-                            labelText: 'メールアドレス',
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: TextFormField(
-                          enabled: false,
-                          //databaseから値を取ってくる
-                          initialValue: document['birthday'],
-                          decoration: const InputDecoration(
-                            labelText: '生年月日',
-                          ),
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(children: <Widget>[
-                          Text('性別',
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.grey)),
-                        ]),
-                      ),
-                      Row(children: <Widget>[
-                        new Radio(
-                          activeColor: Colors.blue,
-                          value: 'men',
-                          groupValue: _type,
-                          onChanged: _handleRadio,
-                        ),
-                        new Text('男性'),
-                        new Radio(
-                          activeColor: Colors.blue,
-                          value: 'women',
-                          groupValue: _type,
-                          onChanged: _handleRadio,
-                        ),
-                        new Text('女性'),
-                        new Radio(
-                          activeColor: Colors.blue,
-                          value: 'other',
-                          groupValue: _type,
-                          onChanged: _handleRadio,
-                        ),
-                        new Text('その他'),
-                      ]),
-                      /*
-                      Container(
-                        child: RaisedButton(
-                          onPressed: () async {
-                            try {
-                              var data = {
-                                'nickname': nickname,
-                                'birthday': document['birthday'],
-                                'gender': _type
-                              };
-                              await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(_email)
-                                  .update(data);
-                              Navigator.pop(context); // 呼び出し元に戻る
-                            } catch (e) {}
-                          },
-                          child: Text('変更'),
-                        ),
-                      ),*/
-                    ]);
-                  }
-                }).toList(),
-              );
+      body: FutureBuilder(
+        future: getUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView(children: <Widget>[
+              //ここにimagepickerの追加
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  initialValue: nickname,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.face),
+                    labelText: 'ユーザー名',
+                  ),
+                  onChanged: (String value) {
+                    nickname = value;
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  enabled: false,
+                  initialValue: _email,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.markunread),
+                    labelText: 'メールアドレス',
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  enabled: false,
+                  //databaseから値を取ってくる
+                  initialValue: birthday,
+                  decoration: const InputDecoration(
+                    labelText: '生年月日',
+                  ),
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(children: <Widget>[
+                  Text('性別',
+                      style: TextStyle(fontSize: 15, color: Colors.grey)),
+                ]),
+              ),
+              Row(children: <Widget>[
+                new Radio(
+                  activeColor: Colors.blue,
+                  value: 'men',
+                  groupValue: _type,
+                  onChanged: (String e) {
+                      _type = e;
+                  },
+                ),
+                new Text('男性'),
+                new Radio(
+                  activeColor: Colors.blue,
+                  value: 'women',
+                  groupValue: _type,
+                  onChanged:(String e) {
+                      _type = e;
+                  },
+                ),
+                new Text('女性'),
+                new Radio(
+                  activeColor: Colors.blue,
+                  value: 'other',
+                  groupValue: _type,
+                  onChanged:(String e) {
+                      _type = e;
+                  },
+                ),
+                new Text('その他'),
+              ]),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+                child: RaisedButton(
+                  onPressed: () async {
+                    try {
+                      var data = {
+                        'nickname': nickname,
+                        'birthday': record['birthday'],
+                        'gender': _type
+                      };
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(_email)
+                          .update(data);
+                      Navigator.pop(context); // 呼び出し元に戻る
+                    } catch (e) {}
+                  },
+                  child: Text('変更'),
+                ),
+              ),
+            ]);
+          } else {
+            return Text('');
           }
         },
       ),
