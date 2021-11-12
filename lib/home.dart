@@ -580,6 +580,5 @@ class _RecipeDetailState extends State {
         ),
       ),
     );
-    print(alreadySaved);
   }
 }
