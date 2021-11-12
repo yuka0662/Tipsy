@@ -201,136 +201,148 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-//ユーザー情報の閲覧・変更も可能(現状：性別が変えられない)
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
+  @override
   UserPage(this._email);
   final String _email;
+  _UserPageState createState() => new _UserPageState(_email);
+}
 
-  String _type,birthday;
-  String nickname;
+//ユーザー情報の閲覧・変更も可能(現状：性別が変えられない)
+class _UserPageState extends State {
+  _UserPageState(this._email);
+  final String _email;
 
-  var record;
+  String _type, nickname, birthday, nname;
+
+  void _handle(String e) {
+    setState(() {
+      _type = e;
+    });
+  }
+
+  void _changeuser(String e) {
+    setState(() {
+      nickname = e;
+    });
+  }
+
   Future getUser() async {
-    var docSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(_email).get();
-    record = docSnapshot.data();
-    _type = record['gender'];
-    nickname = record['nickname'];
-    birthday = record['birthday'];
+    var docRef = FirebaseFirestore.instance.collection('users').doc(_email);
+    docRef.get().then((doc) {
+      //if (doc.exists) {
+      setState(() {
+        nickname = doc.get('nickname');
+        birthday = doc.get('birthday');
+        _type = doc.get('gender');
+      });
+      //}
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('ユーザー情報の閲覧・変更'),
-        backgroundColor: HexColor('212738'),
-      ),
-      body: FutureBuilder(
-        future: getUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView(children: <Widget>[
-              //ここにimagepickerの追加
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  initialValue: nickname,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.face),
-                    labelText: 'ユーザー名',
-                  ),
-                  onChanged: (String value) {
-                    nickname = value;
-                  },
+    if (nickname != null) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text('ユーザー情報の閲覧・変更'),
+            backgroundColor: HexColor('212738'),
+          ),
+          body: ListView(children: <Widget>[
+            //ここにimagepickerの追加
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                initialValue: nickname,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.face),
+                  labelText: 'ユーザー名',
+                ),
+                onChanged: _changeuser,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                enabled: false,
+                initialValue: _email,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.markunread),
+                  labelText: 'メールアドレス',
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  enabled: false,
-                  initialValue: _email,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.markunread),
-                    labelText: 'メールアドレス',
-                  ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                enabled: false,
+                //databaseから値を取ってくる
+                initialValue: birthday,
+                decoration: const InputDecoration(
+                  labelText: '生年月日',
                 ),
+                style: TextStyle(fontSize: 20),
               ),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  enabled: false,
-                  //databaseから値を取ってくる
-                  initialValue: birthday,
-                  decoration: const InputDecoration(
-                    labelText: '生年月日',
-                  ),
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(children: <Widget>[
-                  Text('性別',
-                      style: TextStyle(fontSize: 15, color: Colors.grey)),
-                ]),
-              ),
-              Row(children: <Widget>[
-                new Radio(
-                  activeColor: Colors.blue,
-                  value: 'men',
-                  groupValue: _type,
-                  onChanged: (String e) {
-                      _type = e;
-                  },
-                ),
-                new Text('男性'),
-                new Radio(
-                  activeColor: Colors.blue,
-                  value: 'women',
-                  groupValue: _type,
-                  onChanged:(String e) {
-                      _type = e;
-                  },
-                ),
-                new Text('女性'),
-                new Radio(
-                  activeColor: Colors.blue,
-                  value: 'other',
-                  groupValue: _type,
-                  onChanged:(String e) {
-                      _type = e;
-                  },
-                ),
-                new Text('その他'),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(children: <Widget>[
+                Text('性別', style: TextStyle(fontSize: 15, color: Colors.grey)),
               ]),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-                child: RaisedButton(
-                  onPressed: () async {
-                    try {
-                      var data = {
-                        'nickname': nickname,
-                        'birthday': record['birthday'],
-                        'gender': _type
-                      };
-                      await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(_email)
-                          .update(data);
-                      Navigator.pop(context); // 呼び出し元に戻る
-                    } catch (e) {}
-                  },
-                  child: Text('変更'),
-                ),
+            ),
+            Row(children: <Widget>[
+              new Radio(
+                activeColor: Colors.blue,
+                value: 'men',
+                groupValue: _type,
+                onChanged: _handle,
               ),
-            ]);
-          } else {
-            return Text('');
-          }
-        },
-      ),
-    );
+              new Text('男性'),
+              new Radio(
+                activeColor: Colors.blue,
+                value: 'women',
+                groupValue: _type,
+                onChanged: _handle,
+              ),
+              new Text('女性'),
+              new Radio(
+                activeColor: Colors.blue,
+                value: 'other',
+                groupValue: _type,
+                onChanged: _handle,
+              ),
+              new Text('その他'),
+            ]),
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+              child: RaisedButton(
+                onPressed: () async {
+                  try {
+                    var data = {
+                      'nickname': nickname,
+                      'birthday': birthday,
+                      'gender': _type
+                    };
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(_email)
+                        .update(data);
+                    Navigator.pop(context); // 呼び出し元に戻る
+                  } catch (e) {}
+                },
+                child: Text('変更'),
+              ),
+            ),
+          ]));
+    } else {
+      return Text('');
+    }
   }
 }
 

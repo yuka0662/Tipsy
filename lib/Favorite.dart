@@ -4,7 +4,6 @@ import './main.dart';
 import './home.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:another_flushbar/flushbar.dart';
 
 class Favorite extends StatelessWidget {
   @override
@@ -212,25 +211,6 @@ class _LikeCocktailState extends State {
                       ],
                     ),
                   ),
-                  /*
-                  TextButton(
-                    child: Text('削除'),
-                    style: TextButton.styleFrom(
-                      primary: HexColor('43AA8B'),
-                    ),
-                    onPressed: () async {
-                      try {
-                        await FirebaseFirestore.instance
-                            .collection('favorites')
-                            .doc(AuthModel().user.email)
-                            .collection('カクテル')
-                            .doc(favoriteLists[index]["id"].toString())
-                            .delete();
-                      } catch (e) {
-                        print("${e.toString()}");
-                      }
-                    },
-                  ),*/
                 ],
               ),
             ),
