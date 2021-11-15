@@ -180,19 +180,6 @@ class PostAlcohol extends StatelessWidget {
       ]
     );
     return ListView(
-          children: <Widget>[
-            Container
-            (
-               decoration: new BoxDecoration
-              (
-                  border: new Border(bottom: new BorderSide(color: Colors.grey),),
-              ),
-              new PopupMenuItem<String>(
-                child: const Text('削除'),
-                value: '削除',
-              )
-            ]);
-    return ListView(
       children: <Widget>[
         Container(
           decoration: new BoxDecoration(
