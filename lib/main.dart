@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Home(),
     Liquor(),
     Favorite(),
-    Timer(),
+    TimerStartPage(),
   ];
 
   void _onItemTapped(int index) {

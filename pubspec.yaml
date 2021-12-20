@@ -37,12 +37,15 @@ dependencies:
     sdk: flutter
 
   #追加
-  url_launcher: ^3.0.3
+  url_launcher: ^6.0.17
   provider: ^5.0.0
   http: ^0.13.3
   cached_network_image: ^3.1.0
   top_snackbar_flutter: ^1.0.1
   another_flushbar: ^1.10.24
+  flutter_local_notifications: ^5.0.0+4
+  #flutter_ringtone_player: ^3.1.0
+  timezone: ^0.7.0
 
 dev_dependencies:
   #追加
