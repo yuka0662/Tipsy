@@ -71,6 +71,17 @@ flutter:
     - images/fauchon_apple.jpg
     - images/karaage.jpg
     - images/logo.png
+    - images/kanchan/k_bikini.PNG
+    - images/kanchan/k_magician.PNG
+    - images/kanchan/k_maid.PNG
+    - images/kanchan/k_onepiece.PNG
+    - images/kanchan/k_ribbon.PNG
+    - images/kanchan/k_sailor.PNG
+    - images/kanchan/k_strawhat.PNG
+    - images/kanchan/k_suit.PNG
+    - images/kanchan/k_sunglasses.PNG
+    - images/kanchan/k_witch.PNG
+    - images/kanchan/kanchan.PNG
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

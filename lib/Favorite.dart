@@ -30,9 +30,8 @@ class Choice2 {
 }
 
 final List<Choice2> choices2 = [
-  //Choice2('おつまみ', LikeSnacks()),
   Choice2('カクテル', LikeCocktail()),
-  Choice2('お酒', LikeSake()),
+  Choice2('おつまみ', LikeSnacks()),
 ];
 
 class ChoiceCard2 extends StatefulWidget {
@@ -217,19 +216,6 @@ class _LikeCocktailState extends State {
           ),
         );
       },
-    );
-  }
-}
-
-class LikeSake extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Center(
-          child: Text('お気に入りのお酒一覧表示！！'),
-        )
-      ],
     );
   }
 }

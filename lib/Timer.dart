@@ -19,50 +19,13 @@ class TimerStartState extends State {
   List<DropdownMenuItem<int>> _items = List();
   var val = 0;
   DateTime time;
-  //給水回数
-  int cnt;
-  //合計取得
-  int sum;
-  Future getTimer() async {
-    var docRef = FirebaseFirestore.instance
-        .collection('timer')
-        .doc(AuthModel().user.email);
-    docRef.get().then((doc) {
-      //if (doc.exists) {
-      setState(() {
-        sum = doc.get('point');
-        cnt = doc.get('ws_cnt');
-      });
-      //}
-    });
-  }
-
-  void pushWithReloadByReturn(BuildContext context) async {
-    // [*2]
-    final result = await Navigator.push(
-      // [*3]
-      context,
-      new MaterialPageRoute<bool>(
-        // [*4]
-        builder: (BuildContext context) => TimerPage(time, sum, cnt),
-      ),
-    );
-
-    if (result) {
-      // [*5]
-      setState(() {
-        getTimer();
-      });
-      // notifyListeners();
-    }
-  }
 
   /// 初期化処理
   @override
   void initState() {
     super.initState();
     setItems();
-    getTimer();
+    //getTimer();
   }
 
   void setItems() {
@@ -117,7 +80,6 @@ class TimerStartState extends State {
               height: 100,
               child: Image.asset(''),
             ),*/
-            //Text('${sum.toString()}pt,${cnt.toString()}回'),
             Text('※給水時間を設定してください'),
             DropdownButton(
               itemHeight: 50,
@@ -167,7 +129,6 @@ class TimerStartState extends State {
                                   break;
                                 default:
                               }
-                              pushWithReloadByReturn(context);
                             })),
                   ],
                 ),
@@ -393,7 +354,7 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
                         ],
                       );
                     });
-                Navigator.pop(context, true);
+                Navigator.pop(context);
               },
               child: Text(
                 "終了",
