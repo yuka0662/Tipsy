@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './Color.dart';
 import './home.dart';
-import './Search.dart';
+//import './Search.dart';
 import './Liquor.dart';
 import './Favorite.dart';
+import './DressUp.dart';
 import './Timer.dart';
 import './Newpost.dart';
 import './RecipepostList.dart';
@@ -82,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Home(),
     Liquor(),
     Favorite(),
+    DressUp(),
     TimerStartPage(),
   ];
 
@@ -187,6 +189,8 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.liquor), title: Text('お酒診断')),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), title: Text('お気に入り')),
+          BottomNavigationBarItem(
+              icon: Text('肝',style: TextStyle(color: Colors.white,fontSize: 20),), title: Text('着せ替え')),
           BottomNavigationBarItem(
               icon: Icon(Icons.access_time), title: Text('タイマー')),
         ],
