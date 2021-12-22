@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import './Color.dart';
+import './main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:tipsy/Top.dart';
 
 class Liquor extends StatefulWidget {
   @override
-  Lstate createState() => new Lstate();
+  Listate createState() => new Listate();
 }
 
 class Start extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String text = 'Start';
-    String text1 = 'あなた好みのお酒をおすすめします！';
+    String text1 = 'あなた好みのお酒をおすすめします!';
 
     return Scaffold(
       body: Center(
@@ -66,8 +68,32 @@ class Start extends StatelessWidget {
   }
 }
 
-class Lstate extends State {
+class Listate extends State {
+  //質問と選択肢を昇順で取得
+  var liquor;
+  Future getState() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('liqueur')
+        .orderBy('id')
+        .snapshots()) {
+      liquor = liquor ?? [];
+      for (var like in snapshot.docs) {
+        setState(() {
+          liquor.add(like.data());
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getState();
+  }
+
+/*
   List<String> qlist = [
+    
     '1.普段どれくらいお酒を飲みますか？',
     '2.普段どんなお酒を飲みますか？',
     '3.好みの味はどれですか？',
@@ -78,8 +104,8 @@ class Lstate extends State {
     '8.好きなおやつのジャンルは？',
     '9.重要視しているものは？',
     '10.どうやって飲む？'
+    
   ];
-
   List<List<String>> alist = [
     ['毎日', '週に3－4日', '週に1－2日', '時々'],
     ['醸造酒(日本酒、ビール、ワイン等)', '蒸留酒(焼酎、ウイスキー等)', '混成酒(果実酒、リキュール等)'],
@@ -92,6 +118,7 @@ class Lstate extends State {
     ['色', '香り', '味', '特になし'],
     ['ペースが速め', '味わって飲む', 'ゆっくり飲む']
   ];
+  */
 
   var res = 0;
   var _cnt = 0;
@@ -100,75 +127,110 @@ class Lstate extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(padding: EdgeInsets.all(20)),
-            Container(
-              height: 100,
-              child: Image.asset('images/logo.png'),
-            ),
-            Container(
-              height: 70,
-              child: Center(
-                child: Text(
-                  qlist[_cnt],
-                  style: TextStyle(fontSize: 20),
+    if (liquor != null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(padding: EdgeInsets.all(20)),
+              Container(
+                height: 100,
+                child: Image.asset('images/logo.png'),
+              ),
+              Container(
+                height: 70,
+                child: Center(
+                  child: Text(
+                    liquor[_cnt]['question'].toString(),
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 30.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    for (int i = 0; i < alist[_cnt].length; i++)
-                      SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: RaisedButton(
-                              color: HexColor('212738'),
-                              child: Text(alist[_cnt][res + i],
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.white)),
-                              onPressed: () {
-                                if (_cnt + 1 < qlist.length) {
-                                  setState(() {
-                                    ra = Random().nextInt(alist[_cnt].length);
-                                    a = a + ra;
-                                    _cnt++;
-                                    res = 0;
-                                  });
-                                } else {
-                                  setState(() {
-                                    a = a % 6;
-                                  });
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Ans(a),
-                                    ),
-                                  );
-                                }
-                              })),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 30.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (int i = 1; i < liquor[_cnt].length - 1; i++)
+                        SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: RaisedButton(
+                                color: HexColor('212738'),
+                                child: Text(
+                                    liquor[_cnt]['option${i}'].toString(),
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.white)),
+                                onPressed: () {
+                                  if (_cnt + 1 < liquor.length) {
+                                    setState(() {
+                                      ra =
+                                          Random().nextInt(liquor[_cnt].length);
+                                      a = a + ra;
+                                      _cnt++;
+                                      res = 0;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      a = a % 16;
+                                    });
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Ans(a),
+                                      ),
+                                    );
+                                  }
+                                })),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container();
+    }
   }
 }
 
-class Ans extends StatelessWidget {
+class Ans extends StatefulWidget {
+  @override
+  Ans_state createState() => new Ans_state(_a);
   Ans(this._a);
   final int _a;
+}
 
+class Ans_state extends State {
+  Ans_state(this._a);
+  final int _a;
+
+  var lans;
+  Future getansState() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('liquor_ans')
+        .orderBy('id')
+        .snapshots()) {
+      lans = lans ?? [];
+      for (var like in snapshot.docs) {
+        setState(() {
+          lans.add(like.data());
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getansState();
+  }
+
+/*
   List<List<String>> rlist = [
     [
       "あなたは誰とでも仲良くなれる「ビール」タイプ",
@@ -195,6 +257,7 @@ class Ans extends StatelessWidget {
       "あなたはウイスキーのように大人な魅力のある人ですね。ウイスキーは芳醇な香りとアルコール度数の高さが魅力的なお酒です。あなたの魅力で皆を惑わせるのが得意なようです。"
     ]
   ];
+  */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,7 +273,7 @@ class Ans extends StatelessWidget {
           height: 100,
           child: Flexible(
             child: Text(
-              rlist[_a][0],
+              lans[_a]['name'],
               style: TextStyle(fontSize: 20),
             ),
           ),
@@ -218,7 +281,7 @@ class Ans extends StatelessWidget {
         Expanded(
             child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Text(rlist[_a][1],
+                child: Text(lans[_a]['ans'],
                     style: TextStyle(fontSize: 15, letterSpacing: 4.0)))),
         RaisedButton(
             color: HexColor('212738'),
