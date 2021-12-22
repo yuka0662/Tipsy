@@ -46,6 +46,7 @@ dependencies:
   flutter_local_notifications: ^5.0.0+4
   #flutter_ringtone_player: ^3.1.0
   timezone: ^0.7.0
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   #追加
@@ -82,6 +83,10 @@ flutter:
     - images/kanchan/k_sunglasses.PNG
     - images/kanchan/k_witch.PNG
     - images/kanchan/kanchan.PNG
+    - images/top/tokusyu_1.png
+    - images/top/tokusyu_2.png
+    - images/top/tokusyu_3.jpg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
