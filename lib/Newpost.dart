@@ -117,7 +117,7 @@ class _State extends State
                           labelText: 'レシピ名',
                           hintText: 'レシピ名を入力してください'
                         ),
-                        autovalidate: false,  //入力変化しても自動でチェックしない
+                        //autovalidate: false,  //入力変化しても自動でチェックしない
                         validator: (value)
                         {
                           if(value.isEmpty)
