@@ -39,17 +39,17 @@ class _DressUpState extends State {
   @override
   Widget build(BuildContext context) {
     //肝ちゃん着せ替えアイテム画像
-    var list = [
-      _photoItem("k_bikini", "ビキニ" /*,"着せ替え衣装のみの画像"*/),
-      _photoItem("k_magician", "マジシャン"),
-      _photoItem("k_maid", "メイド服"),
-      _photoItem("k_onepiece", "ワンピース"),
-      _photoItem("k_ribbon", "頭リボン"),
-      _photoItem("k_sailor", "セーラー"),
-      _photoItem("k_strawhat", "麦わら帽子"),
-      _photoItem("k_suit", "スーツ"),
-      _photoItem("k_sunglasses", "サングラス"),
-      _photoItem("k_witch", "魔女"),
+    var list = [ 
+      _photoItem("k_bikini", "ビキニ" , "bikini"),
+      _photoItem("k_magician", "マジシャン", "magician"),
+      _photoItem("k_maid", "メイド服", "maid"),
+      _photoItem("k_onepiece", "ワンピース", "onepiece"),
+      _photoItem("k_ribbon", "頭リボン", "ribbon"),
+      _photoItem("k_sailor", "セーラー", "sailor"),
+      _photoItem("k_strawhat", "麦わら帽子", "strawhat"),
+      _photoItem("k_suit", "スーツ", "suit"),
+      _photoItem("k_sunglasses", "サングラス", "sunglasses"),
+      _photoItem("k_witch", "魔女", "witch"),
     ];
     return Scaffold(
         body: Column(
@@ -77,9 +77,9 @@ class _DressUpState extends State {
     ));
   }
 
-  Widget _photoItem(String image, String name /**,String selectimage */) {
+  Widget _photoItem(String image, String name, String selectimage) {
     var assetsImage = "images/kanchan/" + image + ".PNG";
-    //var dressupImage = "images/kanchan/" + selectImage + ".PNG";
+    var dressupImage = "images/dress/" + selectimage + ".PNG";
     return GestureDetector(
       onTap: () {
         //tap処理
@@ -95,7 +95,7 @@ class _DressUpState extends State {
                       child: Column(
                         children: [
                           Image.asset(
-                            assetsImage /**dressupImage */,
+                            dressupImage,
                           ),
                           Text("500pt使って購入しますか？"),
                         ],
@@ -122,7 +122,7 @@ class _DressUpState extends State {
               });
       },
       child: Image.asset(
-        assetsImage /**dressupImage */,
+        dressupImage,
         fit: BoxFit.cover,
       ),
     );
