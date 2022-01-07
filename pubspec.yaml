@@ -37,12 +37,16 @@ dependencies:
     sdk: flutter
 
   #追加
-  url_launcher: ^3.0.3
+  url_launcher: ^6.0.17
   provider: ^5.0.0
   http: ^0.13.3
   cached_network_image: ^3.1.0
   top_snackbar_flutter: ^1.0.1
   another_flushbar: ^1.10.24
+  flutter_local_notifications: ^5.0.0+4
+  #flutter_ringtone_player: ^3.1.0
+  timezone: ^0.7.0
+  carousel_slider: ^4.0.0
 
 dev_dependencies:
   #追加
@@ -68,6 +72,21 @@ flutter:
     - images/fauchon_apple.jpg
     - images/karaage.jpg
     - images/logo.png
+    - images/kanchan/k_bikini.PNG
+    - images/kanchan/k_magician.PNG
+    - images/kanchan/k_maid.PNG
+    - images/kanchan/k_onepiece.PNG
+    - images/kanchan/k_ribbon.PNG
+    - images/kanchan/k_sailor.PNG
+    - images/kanchan/k_strawhat.PNG
+    - images/kanchan/k_suit.PNG
+    - images/kanchan/k_sunglasses.PNG
+    - images/kanchan/k_witch.PNG
+    - images/kanchan/kanchan.PNG
+    - images/top/tokusyu_1.png
+    - images/top/tokusyu_2.png
+    - images/top/tokusyu_3.jpg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -143,7 +143,7 @@ class Listate extends State {
                 child: Center(
                   child: Text(
                     liquor[_cnt]['question'].toString(),
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 30),
                   ),
                 ),
               ),
@@ -153,7 +153,7 @@ class Listate extends State {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      for (int i = 1; i < liquor[_cnt].length - 1; i++)
+                      for (int i = 1; i < liquor[_cnt].length / 2; i++)
                         SizedBox(
                             width: double.infinity,
                             height: 50,
@@ -166,15 +166,12 @@ class Listate extends State {
                                 onPressed: () {
                                   if (_cnt + 1 < liquor.length) {
                                     setState(() {
-                                      ra =
-                                          Random().nextInt(liquor[_cnt].length);
-                                      a = a + ra;
-                                      _cnt++;
-                                      res = 0;
+                                      ra = liquor[_cnt]['next${i}'];
+                                      _cnt = ra;
                                     });
                                   } else {
                                     setState(() {
-                                      a = a % 16;
+                                      a = 1;
                                     });
                                     Navigator.push(
                                       context,

@@ -151,13 +151,6 @@ class _ListState extends State<_List> {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () => {},
-                  icon: Icon(
-                    Icons.favorite_border,
-                    color: Colors.black,
-                  ),
-                ),
               ],
             ),
           ),
@@ -259,21 +252,6 @@ class _TaskDetailState extends State {
                     fontWeight: FontWeight.normal)),
           ],
         ),
-      ),
-      floatingActionButton: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            margin: EdgeInsets.only(right: 160),
-            child: FloatingActionButton(
-              onPressed: () {},
-              child: Icon(
-                Icons.favorite_border,
-              ),
-              backgroundColor: Colors.grey,
-            ),
-          ),
-        ],
       ),
     );
   }
