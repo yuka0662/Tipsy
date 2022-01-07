@@ -164,10 +164,9 @@ class Listate extends State {
                                     style: TextStyle(
                                         fontSize: 15, color: Colors.white)),
                                 onPressed: () {
-                                  if (_cnt + 1 < liquor.length) {
+                                  if (100 > liquor[_cnt]['next${i}']) {
                                     setState(() {
-                                      ra = liquor[_cnt]['next${i}'];
-                                      _cnt = ra;
+                                      _cnt++;
                                     });
                                   } else {
                                     setState(() {
@@ -190,7 +189,7 @@ class Listate extends State {
         ),
       );
     } else {
-      return Container();
+      return Text("");
     }
   }
 }
@@ -257,48 +256,52 @@ class Ans_state extends State {
   */
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Padding(padding: EdgeInsets.fromLTRB(20, 20, 20, 20)),
-        Container(
-          height: 100,
-          child: Image.asset('images/logo.png'),
-        ),
-        Container(
-          padding: EdgeInsets.all(20),
-          height: 100,
-          child: Flexible(
-            child: Text(
-              lans[_a]['name'],
-              style: TextStyle(fontSize: 20),
+    if (lans != null) {
+      return Scaffold(
+          body: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Padding(padding: EdgeInsets.fromLTRB(20, 20, 20, 20)),
+          Container(
+            height: 100,
+            child: Image.asset('images/logo.png'),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            height: 100,
+            child: Flexible(
+              child: Text(
+                lans[_a]['name'],
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ),
-        ),
-        Expanded(
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Text(lans[_a]['ans'],
-                    style: TextStyle(fontSize: 15, letterSpacing: 4.0)))),
-        RaisedButton(
-            color: HexColor('212738'),
-            child: Text('もう一度診断する',
-                style: TextStyle(fontSize: 15, color: Colors.white)),
-            onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Start(),
-                ),
-              );
-              Navigator.pop(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Start(),
-                ),
-              );
-            }),
-      ]),
-    ));
+          Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: Text(lans[_a]['ans'],
+                      style: TextStyle(fontSize: 15, letterSpacing: 4.0)))),
+          RaisedButton(
+              color: HexColor('212738'),
+              child: Text('もう一度診断する',
+                  style: TextStyle(fontSize: 15, color: Colors.white)),
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Start(),
+                  ),
+                );
+                Navigator.pop(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Start(),
+                  ),
+                );
+              }),
+        ]),
+      ));
+    } else {
+      return Text("");
+    }
   }
 }

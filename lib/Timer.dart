@@ -7,8 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Color.dart';
 import 'main.dart';
 
-var _dropdownValue;
-
 class TimerStartPage extends StatefulWidget {
   @override
   TimerStartPage();
@@ -17,6 +15,7 @@ class TimerStartPage extends StatefulWidget {
 
 class TimerStartState extends State {
   List<DropdownMenuItem<int>> _items = List();
+  int _dropdownValue;
   var val = 0;
   DateTime time;
 
@@ -25,7 +24,24 @@ class TimerStartState extends State {
   void initState() {
     super.initState();
     setItems();
-    //getTimer();
+    _dropdownValue = _items[0].value;
+    getTimer();
+  }
+
+  int point;
+  int cnt;
+  Future getTimer() async {
+    var docRef = FirebaseFirestore.instance
+        .collection('timer')
+        .doc(AuthModel().user.email);
+    docRef.get().then((doc) {
+      //if (doc.exists) {
+      setState(() {
+        point = doc.get('point');
+        cnt = doc.get('ws_cnt');
+      });
+      //}
+    });
   }
 
   void setItems() {
@@ -69,7 +85,6 @@ class TimerStartState extends State {
 
   @override
   Widget build(BuildContext context) {
-    _dropdownValue = _items[0].value;
     return Scaffold(
       body: Center(
         child: Column(
@@ -129,6 +144,9 @@ class TimerStartState extends State {
                                   break;
                                 default:
                               }
+                              Navigator.push(context,
+                                MaterialPageRoute(
+                                  builder: (context) => TimerPage(time, point, cnt),),);
                             })),
                   ],
                 ),
@@ -265,7 +283,8 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Text('' /*'給水目安となる時間を選択してください\n展示期間中は10秒カウントしか\nできないようになっています。'*/,
+          child: Text(
+              '' /*'給水目安となる時間を選択してください\n展示期間中は10秒カウントしか\nできないようになっています。'*/,
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center),
         ),
