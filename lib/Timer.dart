@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Color.dart';
 import 'main.dart';
 
-var _dropdownValue;
+//var _dropdownValue;
 
 class TimerStartPage extends StatefulWidget {
   @override
@@ -17,6 +17,7 @@ class TimerStartPage extends StatefulWidget {
 
 class TimerStartState extends State {
   List<DropdownMenuItem<int>> _items = List();
+  int _dropdownValue;
   var val = 0;
   DateTime time;
 
@@ -25,6 +26,7 @@ class TimerStartState extends State {
   void initState() {
     super.initState();
     setItems();
+    _dropdownValue = _items[0].value;
     getTimer();
   }
 
@@ -85,7 +87,6 @@ class TimerStartState extends State {
 
   @override
   Widget build(BuildContext context) {
-    _dropdownValue = _items[0].value;
     return Scaffold(
       body: Center(
         child: Column(
