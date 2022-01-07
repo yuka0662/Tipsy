@@ -25,7 +25,23 @@ class TimerStartState extends State {
   void initState() {
     super.initState();
     setItems();
-    //getTimer();
+    getTimer();
+  }
+
+  int point;
+  int cnt;
+  Future getTimer() async {
+    var docRef = FirebaseFirestore.instance
+        .collection('timer')
+        .doc(AuthModel().user.email);
+    docRef.get().then((doc) {
+      //if (doc.exists) {
+      setState(() {
+        point = doc.get('point');
+        cnt = doc.get('ws_cnt');
+      });
+      //}
+    });
   }
 
   void setItems() {
@@ -129,6 +145,9 @@ class TimerStartState extends State {
                                   break;
                                 default:
                               }
+                              Navigator.push(context,
+                                MaterialPageRoute(
+                                  builder: (context) => TimerPage(time, point, cnt),),);
                             })),
                   ],
                 ),
@@ -265,7 +284,8 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Text('' /*'給水目安となる時間を選択してください\n展示期間中は10秒カウントしか\nできないようになっています。'*/,
+          child: Text(
+              '' /*'給水目安となる時間を選択してください\n展示期間中は10秒カウントしか\nできないようになっています。'*/,
               style: TextStyle(fontSize: 20),
               textAlign: TextAlign.center),
         ),
