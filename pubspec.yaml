@@ -82,7 +82,25 @@ flutter:
     - images/kanchan/k_suit.PNG
     - images/kanchan/k_sunglasses.PNG
     - images/kanchan/k_witch.PNG
+
+    - images/dress/bikini.PNG
+    - images/dress/magician.PNG
+    - images/dress/maid.PNG
+    - images/dress/onepiece.PNG
+    - images/dress/ribbon.PNG
+    - images/dress/sailor.PNG
+    - images/dress/strawhat.PNG
+    - images/dress/suit.PNG
+    - images/dress/sunglasses.PNG
+    - images/dress/witch.PNG
+
     - images/kanchan/kanchan.PNG
+
+    - images/timer/barrel.PNG
+    - images/timer/crush.PNG
+    - images/timer/grape.PNG
+    - images/timer/wine.PNG
+
     - images/top/tokusyu_1.png
     - images/top/tokusyu_2.png
     - images/top/tokusyu_3.jpg

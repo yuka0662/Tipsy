@@ -17,6 +17,7 @@ class TimerStartState extends State {
   List<DropdownMenuItem<int>> _items = List();
   int _dropdownValue;
   var val = 0;
+  var step;
   DateTime time;
 
   /// 初期化処理
@@ -90,7 +91,7 @@ class TimerStartState extends State {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(padding: EdgeInsets.all(20)),
+            Padding(padding: EdgeInsets.fromLTRB(20, 150, 20, 20)),
             /*Container(
               height: 100,
               child: Image.asset(''),
@@ -125,28 +126,37 @@ class TimerStartState extends State {
                                 case 0:
                                   time = DateTime.utc(0, 0, 0)
                                       .add(Duration(seconds: 10));
+                                  step = 10;
                                   break;
                                 case 1:
                                   time = DateTime.utc(0, 0, 0)
                                       .add(Duration(minutes: 30));
+                                  step = 30;
                                   break;
                                 case 2:
                                   time = DateTime.utc(0, 0, 0)
                                       .add(Duration(hours: 1));
+                                  step = 60;
                                   break;
                                 case 3:
                                   time = DateTime.utc(0, 0, 0)
                                       .add(Duration(hours: 1, minutes: 30));
+                                  step = 90;
                                   break;
                                 case 4:
                                   time = DateTime.utc(0, 0, 0)
                                       .add(Duration(hours: 2));
+                                  step = 120;
                                   break;
                                 default:
                               }
-                              Navigator.push(context,
+                              Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                  builder: (context) => TimerPage(time, point, cnt),),);
+                                  builder: (context) =>
+                                      TimerPage(time, step, point, cnt),
+                                ),
+                              );
                             })),
                   ],
                 ),
@@ -162,11 +172,11 @@ class TimerStartState extends State {
 /// タイマーページ
 class TimerPage extends StatefulWidget {
   final DateTime _time;
-  final int _sum, _cnt;
-  const TimerPage(this._time, this._sum, this._cnt);
+  final int _sum, _cnt, _step;
+  const TimerPage(this._time,this._step, this._sum, this._cnt);
   @override
   _TimerPageState createState() =>
-      _TimerPageState(this._time, this._sum, this._cnt);
+      _TimerPageState(this._time, this._step, this._sum, this._cnt);
 }
 
 /// タイマーページの状態を管理するクラス
@@ -174,8 +184,8 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
   //設定時刻
   DateTime _time;
   //合計給水回数,合計ポイント
-  int _sum, _cnt;
-  _TimerPageState(this._time, this._sum, this._cnt);
+  int _sum, _cnt, _step;
+  _TimerPageState(this._time, this._step, this._sum, this._cnt);
   //経過時間
   DateTime _timenow;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -194,6 +204,9 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
   int sum = 0;
   int cnt = 0;
   Timer _edittimer;
+  //初めに表示される画像
+  String selectImage = "images/timer/grape.PNG";
+  var step;
 
   /// 初期化処理
   @override
@@ -206,6 +219,7 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
   // タイマーを開始する
   void _startTimer() {
     _timenow = _time;
+    step = _step / 4;
     if (_timer != null && _timer.isActive) _timer.cancel();
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       if (mounted) {
@@ -283,11 +297,9 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Text(
-              '' /*'給水目安となる時間を選択してください\n展示期間中は10秒カウントしか\nできないようになっています。'*/,
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center),
+          child: Image.asset(selectImage,height: 100,),
         ),
+        Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 50),),
         Text(
           DateFormat.Hms().format(_timenow),
           style: Theme.of(context).textTheme.headline2,
