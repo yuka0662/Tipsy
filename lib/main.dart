@@ -10,6 +10,7 @@ import './Timer.dart';
 import './Newpost.dart';
 import './RecipepostList.dart';
 import './signin.dart';
+import './Knowledge.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/recipepostlist': (BuildContext context) => RecipepostList(),
+        '/knowledge': (BuildContext context) => Knowledge(),
         '/password': (BuildContext context) => PasswordPage(),
       },
       home: _LoginCheck(),
@@ -148,6 +150,14 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/recipepostlist');
+              },
+            ),
+            ListTile(
+              title: Text('雑学一覧'),
+              leading: Icon(Icons.menu_book),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/knowledge');
               },
             ),
             ListTile(
@@ -349,7 +359,6 @@ class _UserPageState extends State {
     }
   }
 }
-
 class PasswordPage extends StatefulWidget {
   @override
   _PasswordPageState createState() => _PasswordPageState();

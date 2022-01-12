@@ -174,7 +174,6 @@ class PostAlcohol extends StatelessWidget {
         (
           child: const Text('編集'),
           value: '編集',
-          
         ),
         new PopupMenuItem<String>
         (
