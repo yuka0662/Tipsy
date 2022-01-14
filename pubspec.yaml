@@ -71,7 +71,10 @@ flutter:
     - images/fauchon_straight.jpg
     - images/fauchon_apple.jpg
     - images/karaage.jpg
+
     - images/logo.png
+    - images/FavoriteLiquor.PNG
+
     - images/kanchan/k_bikini.PNG
     - images/kanchan/k_magician.PNG
     - images/kanchan/k_maid.PNG
