@@ -129,14 +129,12 @@ class _CocktailAllState extends State<CocktailsAll> {
 
   @override
   Widget build(BuildContext context) {
-    print(favoriteList);
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
       //スクロール可能な可変リストを作る
       itemCount: useData == null ? 0 : useData.length, //受け取る数の定義
       itemBuilder: (BuildContext context, int index) {
         alreadySaved.add(favoriteList.contains(useData[index]["cocktail_id"]));
-        print(alreadySaved);
         return InkWell(
           onTap: () {
             Navigator.push(

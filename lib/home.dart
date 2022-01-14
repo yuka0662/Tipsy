@@ -519,14 +519,13 @@ class _RecipeDetailState extends State {
         ]),
       ),
       floatingActionButton: Container(
-        margin: EdgeInsets.only(right: 160),
+        //margin: EdgeInsets.only(right: 160),
         child: FloatingActionButton(
           onPressed: () async {
             try {
               if (alreadySaved == false) {
                 setState(() {
                   alreadySaved = !alreadySaved;
-                  print(alreadySaved);
                 });
                 await FirebaseFirestore.instance
                     .collection('favorites')

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,6 +20,7 @@ class TimerStartState extends State {
   var val = 0;
   var step;
   DateTime time;
+  String selectImage = "images/kanchan/kanchan.PNG";
 
   /// 初期化処理
   @override
@@ -27,6 +29,7 @@ class TimerStartState extends State {
     setItems();
     _dropdownValue = _items[0].value;
     getTimer();
+    getKanchan();
   }
 
   int point;
@@ -40,6 +43,19 @@ class TimerStartState extends State {
       setState(() {
         point = doc.get('point');
         cnt = doc.get('ws_cnt');
+      });
+      //}
+    });
+  }
+
+  Future getKanchan() async {
+    var docRef = FirebaseFirestore.instance
+        .collection('kanchan')
+        .doc(AuthModel().user.email);
+    docRef.get().then((doc) {
+      //if (doc.exists) {
+      setState(() {
+        selectImage = doc.get('dress');
       });
       //}
     });
@@ -89,13 +105,15 @@ class TimerStartState extends State {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          //mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(padding: EdgeInsets.fromLTRB(20, 150, 20, 20)),
-            /*Container(
-              height: 100,
-              child: Image.asset(''),
-            ),*/
+            //Padding(padding: EdgeInsets.all(10)),
+            Container(
+              height: 200,
+              child: Image.asset(selectImage),
+            ),
+            //Padding(padding: EdgeInsets.all(20)),
             Text('※給水時間を設定してください'),
             DropdownButton(
               itemHeight: 50,
@@ -107,61 +125,52 @@ class TimerStartState extends State {
                 });
               },
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 30.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                        width: double.infinity,
-                        height: 90,
-                        child: RaisedButton(
-                            color: HexColor('212738'),
-                            child: Text('開始',
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white)),
-                            onPressed: () async {
-                              switch (_dropdownValue) {
-                                case 0:
-                                  time = DateTime.utc(0, 0, 0)
-                                      .add(Duration(seconds: 10));
-                                  step = 10;
-                                  break;
-                                case 1:
-                                  time = DateTime.utc(0, 0, 0)
-                                      .add(Duration(minutes: 30));
-                                  step = 30;
-                                  break;
-                                case 2:
-                                  time = DateTime.utc(0, 0, 0)
-                                      .add(Duration(hours: 1));
-                                  step = 60;
-                                  break;
-                                case 3:
-                                  time = DateTime.utc(0, 0, 0)
-                                      .add(Duration(hours: 1, minutes: 30));
-                                  step = 90;
-                                  break;
-                                case 4:
-                                  time = DateTime.utc(0, 0, 0)
-                                      .add(Duration(hours: 2));
-                                  step = 120;
-                                  break;
-                                default:
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TimerPage(time, step, point, cnt),
-                                ),
-                              );
-                            })),
-                  ],
-                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 30.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 90,
+                child: RaisedButton(
+                    color: HexColor('212738'),
+                    child: Text('開始',
+                        style: TextStyle(fontSize: 20, color: Colors.white)),
+                    onPressed: () async {
+                      switch (_dropdownValue) {
+                        case 0:
+                          time =
+                              DateTime.utc(0, 0, 0).add(Duration(seconds: 10));
+                          step = 10;
+                          break;
+                        case 1:
+                          time =
+                              DateTime.utc(0, 0, 0).add(Duration(minutes: 30));
+                          step = 1800;
+                          break;
+                        case 2:
+                          time = DateTime.utc(0, 0, 0).add(Duration(hours: 1));
+                          step = 3600;
+                          break;
+                        case 3:
+                          time = DateTime.utc(0, 0, 0)
+                              .add(Duration(hours: 1, minutes: 30));
+                          step = 5400;
+                          break;
+                        case 4:
+                          time = DateTime.utc(0, 0, 0).add(Duration(hours: 2));
+                          step = 7200;
+                          break;
+                        default:
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TimerPage(time, step, point, cnt),
+                        ),
+                      );
+                    }),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -173,7 +182,7 @@ class TimerStartState extends State {
 class TimerPage extends StatefulWidget {
   final DateTime _time;
   final int _sum, _cnt, _step;
-  const TimerPage(this._time,this._step, this._sum, this._cnt);
+  const TimerPage(this._time, this._step, this._sum, this._cnt);
   @override
   _TimerPageState createState() =>
       _TimerPageState(this._time, this._step, this._sum, this._cnt);
@@ -204,9 +213,15 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
   int sum = 0;
   int cnt = 0;
   Timer _edittimer;
-  //初めに表示される画像
-  String selectImage = "images/timer/grape.PNG";
-  var step;
+  //画像を変える秒数
+  int step;
+  //切り替える画像
+  List images = [
+    'images/timer/grape.PNG',
+    'images/timer/crush.PNG',
+    'images/timer/barrel.PNG',
+    'images/timer/wine.PNG'
+  ];
 
   /// 初期化処理
   @override
@@ -214,12 +229,12 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
     super.initState();
     _startTimer();
     WidgetsBinding.instance.addObserver(this);
+    step = (_step / 3.5).round();
   }
 
   // タイマーを開始する
   void _startTimer() {
     _timenow = _time;
-    step = _step / 4;
     if (_timer != null && _timer.isActive) _timer.cancel();
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       if (mounted) {
@@ -297,9 +312,26 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Center(
-          child: Image.asset(selectImage,height: 100,),
+          child: CarouselSlider.builder(
+            options: CarouselOptions(
+              height: 100,
+              initialPage: 0, //LIstに入れた画像どれから表示するのかindex
+              viewportFraction: 1, //表示する画像サイズの割合(小さいと次の画像が少し見える)0.8～1がおススメ
+              enableInfiniteScroll:
+                  false, //最初と最後のスライドをつなげるかfalseだとつなげない(デフォルトはtrue)
+              autoPlay: true, //自動でスライド
+              autoPlayInterval: Duration(seconds: step),
+              autoPlayAnimationDuration: Duration(milliseconds: 1),
+            ),
+            itemCount: images == null ? 0 : 4, //Listのlength
+            itemBuilder: (BuildContext context, int index, int index2) {
+              return Image.asset(images[index]); //List内の画像表示
+            },
+          ),
         ),
-        Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 50),),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
+        ),
         Text(
           DateFormat.Hms().format(_timenow),
           style: Theme.of(context).textTheme.headline2,
