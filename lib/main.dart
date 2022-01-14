@@ -142,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/password');
               },
             ),
+            /*
             ListTile(
               title: Text('レシピ投稿一覧'),
               leading: Icon(Icons.menu_book),
@@ -150,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pushNamed(context, '/recipepostlist');
               },
             ),
+            */
             ListTile(
               title: Text('ログアウト'),
               leading: Icon(Icons.logout),
@@ -167,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       //タブによって表示内容が変わる(body部分)
       body: _pageWidgets.elementAt(_currentIndex),
+      /*
       floatingActionButton: FloatingActionButton.extended(
         //新規投稿ボタンのタップ時のイベント,
         onPressed: () {
@@ -181,6 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
         icon: Icon(Icons.add),
         label: const Text('レシピ追加'),
       ),
+      */
       //下のナビゲーションバー
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

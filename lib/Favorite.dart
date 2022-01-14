@@ -31,7 +31,7 @@ class Choice2 {
 
 final List<Choice2> choices2 = [
   Choice2('カクテル', LikeCocktail()),
-  Choice2('おつまみ', LikeSnacks()),
+  //Choice2('おつまみ', LikeSnacks()),
 ];
 
 class ChoiceCard2 extends StatefulWidget {
