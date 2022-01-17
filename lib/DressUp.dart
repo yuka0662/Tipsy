@@ -183,6 +183,9 @@ class _DressUpState extends State {
                                 .collection('flag')
                                 .doc(id.toString())
                                 .update(data);
+                            setState(() {
+                             point = point-needpoint; 
+                            });
                             Navigator.pop(context);
                           }
                         },

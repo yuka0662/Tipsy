@@ -47,6 +47,7 @@ dependencies:
   #flutter_ringtone_player: ^3.1.0
   timezone: ^0.7.0
   carousel_slider: ^4.0.0
+  bubble: ^1.2.1
 
 dev_dependencies:
   #追加
