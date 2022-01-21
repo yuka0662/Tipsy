@@ -333,7 +333,9 @@ class Listate extends State {
         ),
       );
     } else {
-      return Text("");
+      return Scaffold(
+        body: Text(''),
+      );
     }
   }
 }
@@ -419,7 +421,9 @@ class Ans_state extends State {
         ]),
       ));
     } else {
-      return Text("");
+      return Scaffold(
+        body: Text(''),
+      );
     }
   }
 }

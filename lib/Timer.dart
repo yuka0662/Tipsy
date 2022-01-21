@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bubble/bubble.dart';
 import 'Color.dart';
 import 'main.dart';
 
@@ -20,6 +22,9 @@ class TimerStartState extends State {
   var val = 0;
   var step;
   DateTime time;
+  List comments;
+  var random = math.Random();
+  var comment;
   String selectImage = "images/kanchan/kanchan.PNG";
 
   /// 初期化処理
@@ -30,6 +35,7 @@ class TimerStartState extends State {
     _dropdownValue = _items[0].value;
     getTimer();
     getKanchan();
+    getcomment();
   }
 
   int point;
@@ -48,6 +54,19 @@ class TimerStartState extends State {
     });
   }
 
+  Future getcomment() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('kanncome')
+        .snapshots()) {
+      comments = [];
+      for (var comment in snapshot.docs) {
+        setState(() {
+          comments.add(comment.data()['comment']);
+        });
+      }
+        }
+  }
+
   Future getKanchan() async {
     var docRef = FirebaseFirestore.instance
         .collection('kanchan')
@@ -60,7 +79,7 @@ class TimerStartState extends State {
       //}
     });
   }
-
+  
   void setItems() {
     _items
       ..add(DropdownMenuItem(
@@ -102,6 +121,8 @@ class TimerStartState extends State {
 
   @override
   Widget build(BuildContext context) {
+    if (comments != null) {
+    comment = comments[random.nextInt(comments.length)];
     return Scaffold(
       body: Center(
         child: Column(
@@ -109,6 +130,7 @@ class TimerStartState extends State {
           //mainAxisAlignment: MainAxisAlignment.start,
           children: [
             //Padding(padding: EdgeInsets.all(10)),
+            Bubble(child: Text(comment.replaceAll('\\n','\n')),),
             Container(
               height: 200,
               child: Image.asset(selectImage),
@@ -175,6 +197,11 @@ class TimerStartState extends State {
         ),
       ),
     );
+    }else{
+      return Scaffold(
+        body: Text(''),
+      );
+    }
   }
 }
 
@@ -383,8 +410,8 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
                                       onTap: () async {
                                         try {
                                           var data = {
-                                            'point': _sum + sum,
-                                            'ws_cnt': _cnt + cnt,
+                                            'point': _sum == null ? sum :_sum + sum,
+                                            'ws_cnt': _cnt == null ? cnt : _cnt + cnt,
                                           };
                                           await FirebaseFirestore.instance
                                               .collection('timer')

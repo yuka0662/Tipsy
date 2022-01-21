@@ -18,7 +18,6 @@ class _MyAuthPageState extends State<MyAuthPage> {
   // 入力したメールアドレス・パスワード
   String email = '';
   String password = '';
-  
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +95,9 @@ class _MyAuthPageState extends State<MyAuthPage> {
                       try {
                         // メール/パスワードでログイン
                         final user = (await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: this.email, password: this.password));
-                        
+                            .signInWithEmailAndPassword(
+                                email: this.email, password: this.password));
+
                         // ログインに成功した場合
                         // ホーム画面へ遷移
                         await Navigator.of(context).pushReplacement(
@@ -181,6 +180,18 @@ class _SigninPageState extends State<SigninPage> {
     }
   }
 
+  Future setBuyFlag(int id) async {
+    var data = {
+      'flag': false,
+    };
+    await FirebaseFirestore.instance
+        .collection('buy_flag')
+        .doc(email)
+        .collection('flag')
+        .doc(id.toString())
+        .set(data);
+  }
+
   String _type;
   void _handleRadio(String e) => setState(() {
         _type = e;
@@ -218,27 +229,27 @@ class _SigninPageState extends State<SigninPage> {
                   child:
                       // パスワード入力
                       TextFormField(
-                        controller: _password,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: InputDecoration(
+                    controller: _password,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'パスワード(必須)'),
-                        obscureText: true,
-                        validator: (value) {
-                          if(value == null || value.isEmpty){
-                            return "パスワードを入力してください";
-                          }
-                          if(value.length <=8){
-                            return "8文字以上入力してください";
-                          }
-                          return null;
-                        },
-                        onChanged: (String value) {
-                          setState(() {
-                            password = value;
-                          });
-                        },
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "パスワードを入力してください";
+                      }
+                      if (value.length <= 8) {
+                        return "8文字以上入力してください";
+                      }
+                      return null;
+                    },
+                    onChanged: (String value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
                   ),
                 ),
                 Container(
@@ -251,33 +262,36 @@ class _SigninPageState extends State<SigninPage> {
                       // ),
                       // パスワード確認の入力
                       TextFormField(
-                          controller: _password_confirm,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          // controller: password_confirm,
-                          decoration: InputDecoration(
+                        controller: _password_confirm,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        // controller: password_confirm,
+                        decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
                             labelText: 'パスワード確認'),
-                          obscureText: true,
-                          validator: (value){
-                            if(value != password){
-                              String Error_pass = "パスワードが一致しません";
-                              return Error_pass;
-                              // return Error;
-                            }
-                            return null;
-                          },
-                          onChanged: (String value) {
-                            setState(() {
-                              password_confirm = value;
-                            });
-                          },
+                        obscureText: true,
+                        validator: (value) {
+                          if (value != password) {
+                            String Error_pass = "パスワードが一致しません";
+                            return Error_pass;
+                            // return Error;
+                          }
+                          return null;
+                        },
+                        onChanged: (String value) {
+                          setState(() {
+                            password_confirm = value;
+                          });
+                        },
                       ),
                     ],
                   ),
                 ),
                 Container(
-                  child: Text(notMatch,style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    notMatch,
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 Container(
                   decoration: BoxDecoration(color: Colors.white),
@@ -345,8 +359,7 @@ class _SigninPageState extends State<SigninPage> {
                           password_confirm != '' &&
                           _labelText != '' &&
                           _type != '' &&
-                          password == password_confirm
-                        ) {
+                          password == password_confirm) {
                         try {
                           // メール/パスワードでユーザー登録
                           final user = (await FirebaseAuth.instance
@@ -355,7 +368,7 @@ class _SigninPageState extends State<SigninPage> {
                                       password: this.password))
                               .user;
                           var data = {
-                            'nickname':'',
+                            'nickname': '',
                             'birthday': _labelText,
                             'gender': _type
                           };
@@ -363,6 +376,10 @@ class _SigninPageState extends State<SigninPage> {
                               .collection('users')
                               .doc(email)
                               .set(data);
+
+                          for (int i = 0; i < 10; i++) {
+                            setBuyFlag(i);
+                          }
                           // ユーザー登録に成功した場合
                           // ログイン画面へ遷移
                           await Navigator.of(context).pushReplacement(
