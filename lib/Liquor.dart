@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import './Color.dart';
@@ -8,12 +7,150 @@ import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:tipsy/Top.dart';
 
 var logo = 'images/FavoriteLiquor.PNG'; //診断のロゴ
-double lhei0 = 200; //ロゴの高さ(スタート画面専用)
+double lhei0 = 400; //ロゴの高さ(スタート画面専用)
 double lhei = 150; //ロゴの高さ数値
 
 class Liquor extends StatefulWidget {
   @override
   Listate createState() => new Listate();
+}
+
+class LiquorStart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: DefaultTabController(
+        length: licho.length,
+        child: Scaffold(
+          body: Center(
+            child: Licho2(),
+          ),
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class Licho {
+  String label;
+  Widget widget;
+
+  Licho(this.label, this.widget);
+}
+
+final List<Licho> licho = [Licho('お酒診断', Start()), Licho('診断履歴', LiquorLog())];
+
+class Licho2 extends StatefulWidget {
+  @override
+  _LiquorCardState createState() => _LiquorCardState();
+}
+
+class _LiquorCardState extends State<Licho2> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: //AppBar(
+            //bottom:
+            PreferredSize(
+          child: TabBar(
+            unselectedLabelColor: Colors.grey,
+            labelColor: HexColor('43AA8B'),
+            indicatorColor: HexColor('43AA8B'),
+            tabs: licho.map((Licho licho2) {
+              return Tab(
+                text: licho2.label,
+              );
+            }).toList(),
+          ),
+          preferredSize: Size.fromHeight(15.0),
+        ),
+        backgroundColor: HexColor('f5f5f5'),
+        //),
+        body: TabBarView(children: licho.map((tab) => tab.widget).toList()),
+      ),
+    );
+  }
+}
+
+class LiquorLog extends StatefulWidget {
+  @override
+  _LiquorLogState createState() => _LiquorLogState();
+}
+
+class _LiquorLogState extends State {
+  var keepans;
+  Future getanskeep() async {
+    await for (var snapshot in FirebaseFirestore.instance
+        .collection('ans_keep')
+        .doc(AuthModel().user.email)
+        .collection('ans_no')
+        .snapshots()) {
+      keepans = keepans ?? [];
+      for (var ans in snapshot.docs) {
+        setState(() {
+          keepans.add(ans.data());
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getanskeep();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 60),
+        itemCount: keepans == null ? 0 : keepans.length,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Ans(int.parse(FirebaseFirestore.instance
+                      .collection('ans_keep')
+                      .doc(AuthModel().user.email)
+                      .collection('ans_no')
+                      .doc(index.toString())
+                      .id)),
+                ),
+              );
+            },
+            child: Card(
+              child: Row(
+                children: <Widget>[
+                  CachedNetworkImage(
+                    width: 150,
+                    height: 150,
+                    imageUrl: keepans[index]['image'],
+                    errorWidget: (conte, url, dynamic error) =>
+                        Image.asset('assets/InPreparation_sp.png'),
+                  ),
+                  Flexible(
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            keepans[index]['name'],
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }
 
 //診断スタート画面

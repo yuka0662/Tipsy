@@ -159,7 +159,9 @@ class _DressUpState extends State {
                           ),
                           Text("${needpoint}pt使って購入しますか？"),
                           Text(
-                            point >= needpoint ? '' : emessage,
+                            (point == null ? 0 : point) >= needpoint
+                                ? ''
+                                : emessage,
                             style: TextStyle(color: Colors.red),
                           ),
                         ],
