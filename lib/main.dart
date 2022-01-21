@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
   final _pageWidgets = [
     Home(),
-    Start(),
+    LiquorStart(),
     Favorite(),
     DressUp(),
     TimerStartPage(),
@@ -194,7 +194,11 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), title: Text('お気に入り')),
           BottomNavigationBarItem(
-              icon: Text('肝',style: TextStyle(color: Colors.white,fontSize: 20),), title: Text('着せ替え')),
+              icon: Text(
+                '肝',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              title: Text('着せ替え')),
           BottomNavigationBarItem(
               icon: Icon(Icons.access_time), title: Text('タイマー')),
         ],
