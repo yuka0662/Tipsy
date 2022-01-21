@@ -410,8 +410,8 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
                                       onTap: () async {
                                         try {
                                           var data = {
-                                            'point': _sum + sum,
-                                            'ws_cnt': _cnt + cnt,
+                                            'point': _sum == null ? sum :_sum + sum,
+                                            'ws_cnt': _cnt == null ? cnt : _cnt + cnt,
                                           };
                                           await FirebaseFirestore.instance
                                               .collection('timer')

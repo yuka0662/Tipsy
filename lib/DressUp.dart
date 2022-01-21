@@ -15,7 +15,6 @@ class _DressUpState extends State {
   String selectImage = "images/kanchan/kanchan.PNG";
   var emessage = 'ポイントが足りません';
   List flags;
-  var executed;
 
   Future getKanchan() async {
     var docRef = FirebaseFirestore.instance
@@ -43,18 +42,6 @@ class _DressUpState extends State {
     });
   }
 
-  Future setBuyFlag(int id) async {
-    var data = {
-      'flag': false,
-    };
-    await FirebaseFirestore.instance
-        .collection('buy_flag')
-        .doc(AuthModel().user.email)
-        .collection('flag')
-        .doc(id.toString())
-        .set(data);
-  }
-
   Future getBuyFlag() async {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('buy_flag')
@@ -67,7 +54,6 @@ class _DressUpState extends State {
           flags.add(flag.data());
         });
       }
-      executed = flags.contains(true);
     }
   }
 
@@ -78,11 +64,6 @@ class _DressUpState extends State {
     getPoint();
     getKanchan();
     getBuyFlag();
-    if (executed == false) {
-      for (int i = 0; i < 10; i++) {
-        setBuyFlag(i);
-      }
-    }
   }
 
   @override
@@ -138,79 +119,83 @@ class _DressUpState extends State {
     var assetsImage = "images/kanchan/" + image + ".PNG";
     var dressupImage = "images/dress/" + selectimage + ".PNG";
     return GestureDetector(
-      onTap: () async {
-        //tap処理
-        flag == false
-            ? showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(name),
-                    content: Container(
-                      height: 250,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            child: Image.asset(
-                              dressupImage,
+        onTap: () async {
+          //tap処理
+          flag == false
+              ? showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(name),
+                      content: Container(
+                        height: 250,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 200,
+                              child: Image.asset(
+                                dressupImage,
+                              ),
                             ),
-                          ),
-                          Text("${needpoint}pt使って購入しますか？"),
-                          Text(
-                            point >= needpoint ? '' : emessage,
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ],
+                            Text("${needpoint}pt使って購入しますか？"),
+                            Text(
+                              point >= needpoint ? '' : emessage,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    actions: [
-                      SimpleDialogOption(
-                        child: Text('はい'),
-                        onPressed: () async {
-                          if (point >= needpoint) {
-                            await FirebaseFirestore.instance
-                                .collection('timer')
-                                .doc(AuthModel().user.email)
-                                .update({'point': point - needpoint});
-                            var data = {
-                              'flag': true,
-                            };
-                            await FirebaseFirestore.instance
-                                .collection('buy_flag')
-                                .doc(AuthModel().user.email)
-                                .collection('flag')
-                                .doc(id.toString())
-                                .update(data);
-                            setState(() {
-                             point = point-needpoint; 
-                            });
+                      actions: [
+                        SimpleDialogOption(
+                          child: Text('はい'),
+                          onPressed: () async {
+                            if (point >= needpoint) {
+                              await FirebaseFirestore.instance
+                                  .collection('timer')
+                                  .doc(AuthModel().user.email)
+                                  .update({'point': point - needpoint});
+                              var data = {
+                                'flag': true,
+                              };
+                              await FirebaseFirestore.instance
+                                  .collection('buy_flag')
+                                  .doc(AuthModel().user.email)
+                                  .collection('flag')
+                                  .doc(id.toString())
+                                  .update(data);
+                              setState(() {
+                                point = point - needpoint;
+                              });
+                               Navigator.pop(context);
+                            }
+                          },
+                        ),
+                        SimpleDialogOption(
+                          child: Text('いいえ'),
+                          onPressed: () {
                             Navigator.pop(context);
-                          }
-                        },
-                      ),
-                      SimpleDialogOption(
-                        child: Text('いいえ'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                })
-            : setState(() {
-                selectImage = assetsImage;
-              });
-        await FirebaseFirestore.instance
-            .collection('kanchan')
-            .doc(AuthModel().user.email)
-            .set({'dress': selectImage});
-      },
-      child: Image.asset(
-        dressupImage,
-        fit: BoxFit.cover,
-      ),
-    );
+                          },
+                        ),
+                      ],
+                    );
+                  })
+              : setState(() {
+                  selectImage = assetsImage;
+                });
+          await FirebaseFirestore.instance
+              .collection('kanchan')
+              .doc(AuthModel().user.email)
+              .set({'dress': selectImage});
+        },
+        child: ColorFiltered(
+          colorFilter: flag == false
+              ? ColorFilter.mode(Colors.grey, BlendMode.srcIn)
+              : ColorFilter.mode(Colors.grey, BlendMode.dst),
+          child: Image.asset(
+            dressupImage,
+            fit: BoxFit.cover,
+          ),
+        ));
   }
 }

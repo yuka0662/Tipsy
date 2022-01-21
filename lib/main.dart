@@ -349,7 +349,9 @@ class _UserPageState extends State {
             ),
           ]));
     } else {
-      return Text('');
+      return Scaffold(
+        body: Text(''),
+      );
     }
   }
 }
