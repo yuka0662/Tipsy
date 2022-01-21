@@ -15,7 +15,6 @@ class _DressUpState extends State {
   String selectImage = "images/kanchan/kanchan.PNG";
   var emessage = 'ポイントが足りません';
   List flags;
-  var executed;
 
   Future getKanchan() async {
     var docRef = FirebaseFirestore.instance
@@ -43,18 +42,6 @@ class _DressUpState extends State {
     });
   }
 
-  Future setBuyFlag(int id) async {
-    var data = {
-      'flag': false,
-    };
-    await FirebaseFirestore.instance
-        .collection('buy_flag')
-        .doc(AuthModel().user.email)
-        .collection('flag')
-        .doc(id.toString())
-        .set(data);
-  }
-
   Future getBuyFlag() async {
     await for (var snapshot in FirebaseFirestore.instance
         .collection('buy_flag')
@@ -67,7 +54,6 @@ class _DressUpState extends State {
           flags.add(flag.data());
         });
       }
-      executed = flags.contains(true);
     }
   }
 
@@ -78,11 +64,6 @@ class _DressUpState extends State {
     getPoint();
     getKanchan();
     getBuyFlag();
-    if (executed == false) {
-      for (int i = 0; i < 10; i++) {
-        setBuyFlag(i);
-      }
-    }
   }
 
   @override
@@ -186,7 +167,7 @@ class _DressUpState extends State {
                               setState(() {
                                 point = point - needpoint;
                               });
-                              Navigator.pop(context);
+                               Navigator.pop(context);
                             }
                           },
                         ),
