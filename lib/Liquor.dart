@@ -114,12 +114,13 @@ class _LiquorLogState extends State {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Ans(int.parse(FirebaseFirestore.instance
-                      .collection('ans_keep')
-                      .doc(AuthModel().user.email)
-                      .collection('ans_no')
-                      .doc(index.toString())
-                      .id)),
+                  builder: (context) => Ans(keepans[index]['id']),
+                ),
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Ans(keepans[index]['id']),
                 ),
               );
             },
@@ -312,6 +313,7 @@ class Listate extends State {
                                         .collection('ans_no')
                                         .doc(a.toString())
                                         .set({
+                                      'id': a,
                                       'name': lans[a]['name'],
                                       'image': lans[a]['images'],
                                       'detail': lans[a]['ans']
