@@ -47,6 +47,7 @@ class _DressUpState extends State {
         .collection('buy_flag')
         .doc(AuthModel().user.email)
         .collection('flag')
+        .orderBy('id')
         .snapshots()) {
       flags = [];
       for (var flag in snapshot.docs) {
@@ -82,6 +83,8 @@ class _DressUpState extends State {
         _photoItem(
             "k_sunglasses", "サングラス", "sunglasses", flags[8]['flag'], 8, 250),
         _photoItem("k_witch", "魔女", "witch", flags[9]['flag'], 9, 300),
+        _photoItem("k_ninja", "忍者", "ninja", flags[10]['flag'], 10, 400),
+        _photoItem("k_ojaru", "おじゃる", "ojaru", flags[11]['flag'], 10, 1000)
       ];
       return Scaffold(
           body: Column(

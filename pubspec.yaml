@@ -85,6 +85,8 @@ flutter:
     - images/kanchan/k_suit.PNG
     - images/kanchan/k_sunglasses.PNG
     - images/kanchan/k_witch.PNG
+    - images/kanchan/k_ninja.PNG
+    - images/kanchan/k_ojaru.PNG
 
     - images/dress/bikini.PNG
     - images/dress/magician.PNG
@@ -96,6 +98,8 @@ flutter:
     - images/dress/suit.PNG
     - images/dress/sunglasses.PNG
     - images/dress/witch.PNG
+    - images/dress/ninja.PNG
+    - images/dress/ojaru.PNG
 
     - images/kanchan/kanchan.PNG
 

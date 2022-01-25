@@ -341,7 +341,7 @@ class _TimerPageState extends State<TimerPage> with WidgetsBindingObserver {
         Center(
           child: CarouselSlider.builder(
             options: CarouselOptions(
-              height: 100,
+              height: 150,
               initialPage: 0, //LIstに入れた画像どれから表示するのかindex
               viewportFraction: 1, //表示する画像サイズの割合(小さいと次の画像が少し見える)0.8～1がおススメ
               enableInfiniteScroll:

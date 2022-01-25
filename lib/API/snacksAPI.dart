@@ -36,7 +36,7 @@ class _OrecipeDetailState extends State {
         .collection('snacks')
         .doc(_doc)
         .collection('material')
-        .orderBy('name')
+        .orderBy('id')
         .snapshots()) {
       materials = [];
       for (var material in snapshot.docs) {
@@ -72,7 +72,7 @@ class _OrecipeDetailState extends State {
 
   @override
   Widget build(BuildContext context) {
-    if (materials == null) {
+    if (materials == null && procedures == null) {
       return Scaffold(
         body: Text(''),
       );
@@ -95,7 +95,7 @@ class _OrecipeDetailState extends State {
                 letterSpacing: 5.0,
                 color: Colors.black,
                 decoration: TextDecoration.none)),
-        for (int i = 0; i < materials.length - 1; i++)
+        for (int i = 0; i < materials.length; i++)
           Container(
             decoration: BoxDecoration(
                 border: const Border(
@@ -104,17 +104,18 @@ class _OrecipeDetailState extends State {
               width: 1,
             ))),
             child: ListTile(
-                title: Row(
+                title: Flexible(
+                    child: Row(
               children: [
                 Container(
-                  width: 250,
+                  width: 200,
                   child: Text(
                     materials[i]["name"],
                   ),
                 ),
-                Text(materials[i]["amount"])
+                Text(materials[i]["amount"]),
               ],
-            )),
+            ))),
           ),
         Text('\n手順',
             style: TextStyle(

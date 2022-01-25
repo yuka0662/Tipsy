@@ -182,6 +182,7 @@ class _SigninPageState extends State<SigninPage> {
 
   Future setBuyFlag(int id) async {
     var data = {
+      'id': id,
       'flag': false,
     };
     await FirebaseFirestore.instance

@@ -3,7 +3,6 @@ import './Top.dart';
 import './Color.dart';
 import './API/cocktails.dart';
 import './API/osakeAPI.dart';
-import './API/snacksAPI.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -294,7 +293,7 @@ class _RecipeDetailState extends State {
 
   var alreadySaved;
 
-  void changeState(){
+  void changeState() {
     alreadySaved = _favorite;
   }
 
@@ -418,7 +417,7 @@ class _RecipeDetailState extends State {
                     ),
                     child: ListTile(
                       title: Text(
-                        '${document['nickname']}さん\n${document['comment']}',
+                        '${document['nickname'] == "" ? '匿名' : document['nickname']}さん\n${document['comment']}',
                         style: TextStyle(fontSize: 15),
                       ),
                       trailing: GestureDetector(
