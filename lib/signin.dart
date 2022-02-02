@@ -378,7 +378,7 @@ class _SigninPageState extends State<SigninPage> {
                               .doc(email)
                               .set(data);
 
-                          for (int i = 0; i < 10; i++) {
+                          for (int i = 0; i < 12; i++) {
                             setBuyFlag(i);
                           }
                           // ユーザー登録に成功した場合
